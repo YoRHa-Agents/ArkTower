@@ -84,5 +84,6 @@ Six field groups added for agent-oriented dispatch:
 - `docs/format.html` — Task format specification page (YAML+MD format, field reference, state machine, dual-format task examples with tabs)
 - `docs/demo.html` — Interactive client-side demo (task pool simulation, lifecycle controls, pre-analysis)
 - `docs/docs.html` — Documentation hub (architecture, API reference, CLI, evaluation, configuration)
+- `docs/banner.svg` — README top banner (800×200 SVG, NieR:Automata Tower aesthetic; referenced from `README.md`)
 
-> Last modified: 2026-04-14T22:00:00Z (enriched task fields added)
+> Last modified: 2026-04-14T23:45:00Z (README banner SVG)
