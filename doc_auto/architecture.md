@@ -1,12 +1,14 @@
 # ArkTower Architecture Summary
 
-> Last modified: 2026-04-14T20:30:00Z
+> Last modified: 2026-04-14T12:00:00Z
 
 _GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`. `docs/format.html` SPEC.004 task examples use tabbed `.task.md` / `.task.json` views (`.format-tabs` in `docs/shared.css`). SPEC.005 JSON Schema uses pretty-printed JSON in `<pre><code class="json-schema-code">` with `white-space: pre` (see `docs/shared.css`)._
 
 ## Overview
 
 ArkTower is an agent-oriented task pool system built with Python 3.11+. It formats, normalizes, and pre-analyzes tasks for AI agent dispatch without executing them.
+
+The canonical **layered architecture** diagram for GitHub and docs is **`docs/architecture.svg`** (700×480 SVG: external consumers, MCP/REST/CLI/NiceGUI, task service with EventBus, state machine, SQLite). The README embeds this asset under **ARCHITECTURE.DIAGRAM** instead of ASCII box art so layout stays aligned across viewers.
 
 ## Tech Stack
 
@@ -85,5 +87,4 @@ Six field groups added for agent-oriented dispatch:
 - `docs/demo.html` — Interactive client-side demo (task pool simulation, lifecycle controls, pre-analysis)
 - `docs/docs.html` — Documentation hub (architecture, API reference, CLI, evaluation, configuration)
 - `docs/banner.svg` — README top banner (800×200 SVG, NieR:Automata Tower aesthetic; referenced from `README.md`)
-
-> Last modified: 2026-04-14T23:45:00Z (README banner SVG)
+- `docs/architecture.svg` — README architecture diagram (700×480 SVG; layered MCP/REST/CLI/dashboard → task service → state machine → SQLite; referenced from `README.md`)
