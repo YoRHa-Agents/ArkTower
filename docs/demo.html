@@ -723,13 +723,18 @@
     }
 
     var priority = 'medium';
-    for (var p in PRIORITY_WORDS) {
+    var PRIORITY_ORDER_LIST = ['critical', 'high', 'low'];
+    for (var pi = 0; pi < PRIORITY_ORDER_LIST.length; pi++) {
+      var p = PRIORITY_ORDER_LIST[pi];
+      var found = false;
       for (var w = 0; w < PRIORITY_WORDS[p].length; w++) {
         if (lower.indexOf(PRIORITY_WORDS[p][w]) !== -1) {
           priority = p;
+          found = true;
           break;
         }
       }
+      if (found) { break; }
     }
 
     var complexity = 'medium';

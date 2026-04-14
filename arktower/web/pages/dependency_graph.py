@@ -6,9 +6,8 @@ from nicegui import ui
 
 from arktower.core.models import TaskFilter
 from arktower.core.task_service import TaskService
-from arktower.web.components.status_badge import STATUS_COLORS
 from arktower.web.i18n import t
-from arktower.web.theme import get_colors, get_theme_mode
+from arktower.web.theme import get_colors, get_status_colors, get_theme_mode
 
 
 def render_dependency_graph(svc: TaskService) -> None:
@@ -32,8 +31,9 @@ def render_dependency_graph(svc: TaskService) -> None:
         "}}}}%%",
         "graph TD",
     ]
+    status_colors = get_status_colors()
     for task in tasks:
-        colors = STATUS_COLORS.get(task.status.value, {"border": c["border"]})
+        colors = status_colors.get(task.status.value, {"border": c["border"]})
         short_id = task.id[:8]
         label = task.title[:30].replace('"', "'")
         mermaid_lines.append(f'    {short_id}["{label}"]')
