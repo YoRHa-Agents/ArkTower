@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,31 +18,35 @@
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#8801; MENU</button>
     <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="format.html">Format</a></li>
-      <li><a href="demo.html">Demo</a></li>
-      <li><a href="docs.html">Docs</a></li>
-      <li><a href="#capabilities">Capabilities</a></li>
-      <li><a href="#status">Status</a></li>
-      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
+      <li><a href="format.html" data-i18n="nav.format">Format</a></li>
+      <li><a href="demo.html" data-i18n="nav.demo">Demo</a></li>
+      <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+      <li><a href="#capabilities" data-i18n="nav.capabilities">Capabilities</a></li>
+      <li><a href="#status" data-i18n="nav.status">Status</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub &#8599;</a></li>
     </ul>
+    <div class="nav-controls">
+      <button type="button" id="langToggle" aria-label="Toggle language">EN</button>
+      <button type="button" id="themeToggle" aria-label="Toggle theme">&#9788;</button>
+    </div>
   </div>
 </nav>
 
 <!-- Hero -->
 <header class="hero">
   <div class="container">
-    <div class="hero-serial">SN: ARK-TWR-001 &nbsp;│&nbsp; BUILD 0.1.0 &nbsp;│&nbsp; PYTHON 3.11+</div>
+    <div class="hero-serial" data-i18n="hero.serial">SN: ARK-TWR-001 | BUILD 0.1.0 | PYTHON 3.11+</div>
     <h1 class="hero-title"><span class="accent">Ark</span>Tower</h1>
-    <p class="hero-subtitle">Agent-Oriented Task Pool System</p>
-    <div class="hero-badge">[SYSTEM ONLINE]</div>
+    <p class="hero-subtitle" data-i18n="hero.subtitle">Agent-Oriented Task Pool System</p>
+    <div class="hero-badge" data-i18n="hero.badge">[SYSTEM ONLINE]</div>
     <div class="hero-meta">
-      <div class="hero-meta-item">TESTS: <span>293 PASSED</span></div>
-      <div class="hero-meta-item">COVERAGE: <span>71%</span></div>
-      <div class="hero-meta-item">EVAL SCORE: <span>0.9179</span></div>
-      <div class="hero-meta-item">LICENSE: <span>MIT</span></div>
+      <div class="hero-meta-item" data-i18n="hero.tests">TESTS: <span>293 PASSED</span></div>
+      <div class="hero-meta-item" data-i18n="hero.coverage">COVERAGE: <span>71%</span></div>
+      <div class="hero-meta-item" data-i18n="hero.eval">EVAL SCORE: <span>0.9179</span></div>
+      <div class="hero-meta-item" data-i18n="hero.license">LICENSE: <span>MIT</span></div>
     </div>
   </div>
 </header>
@@ -51,22 +55,22 @@
 <section id="overview">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SEC 001 — PRIMARY DIRECTIVE</div>
-      <h2 class="section-title">[SYSTEM.OVERVIEW]</h2>
+      <div class="section-label" data-i18n="overview.label">SEC 001 -- PRIMARY DIRECTIVE</div>
+      <h2 class="section-title" data-i18n="overview.title">[SYSTEM.OVERVIEW]</h2>
     </div>
     <div class="about-content">
-      <p>
+      <p data-i18n="overview.p1">
         ArkTower provides a <strong>universal task pool</strong> where tasks are uniformly structured,
-        pre-decomposed, and ready for agent dispatch or automatic claiming. It does not execute tasks itself — it
+        pre-decomposed, and ready for agent dispatch or automatic claiming. It does not execute tasks itself -- it
         serves as the <strong>foundation for agent-driven workflows</strong>.
       </p>
-      <p>
+      <p data-i18n="overview.p2">
         Tasks enter the system as structured YAML frontmatter + Markdown body
         (<span class="inline-code">.task.md</span>), pass through a <strong>10-state lifecycle</strong> with
         named triggers, undergo <strong>automatic pre-analysis</strong> for complexity scoring and tag extraction,
         and are dispatched to AI agents based on capability matching.
       </p>
-      <p>
+      <p data-i18n="overview.p3">
         The system integrates natively with <strong>Cursor</strong>, <strong>Claude</strong>, and any
         <strong>MCP-compatible</strong> client via 12 dedicated tools. A real-time REST API, WebSocket events, CLI,
         and NiceGUI web dashboard provide full operational control.
@@ -79,49 +83,49 @@
 <section id="capabilities">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SEC 002 — OPERATIONAL PARAMETERS</div>
-      <h2 class="section-title">[CAPABILITIES]</h2>
-      <p class="section-desc">Core system capabilities and integration interfaces.</p>
+      <div class="section-label" data-i18n="cap.label">SEC 002 -- OPERATIONAL PARAMETERS</div>
+      <h2 class="section-title" data-i18n="cap.title">[CAPABILITIES]</h2>
+      <p class="section-desc" data-i18n="cap.desc">Core system capabilities and integration interfaces.</p>
     </div>
     <div class="feature-grid">
       <div class="feature-card" data-index="01">
-        <h3>10-State Lifecycle</h3>
-        <p>Full state machine with 15 named triggers — submit, enqueue, claim, complete, block, unblock, cancel, timeout, review, approve, reject, fail, and more. Every transition audited.</p>
+        <h3 data-i18n="cap.01.h">10-State Lifecycle</h3>
+        <p data-i18n="cap.01.p">Full state machine with 15 named triggers -- submit, enqueue, claim, complete, block, unblock, cancel, timeout, review, approve, reject, fail, and more. Every transition audited.</p>
         <span class="feature-tag">STATE_MACHINE</span>
       </div>
       <div class="feature-card" data-index="02">
-        <h3>MCP Server</h3>
-        <p>12 tools registered for Cursor and Claude integration. Create, claim, complete, search tasks directly from your IDE via stdio transport.</p>
+        <h3 data-i18n="cap.02.h">MCP Server</h3>
+        <p data-i18n="cap.02.p">12 tools registered for Cursor and Claude integration. Create, claim, complete, search tasks directly from your IDE via stdio transport.</p>
         <span class="feature-tag">12 TOOLS</span>
       </div>
       <div class="feature-card" data-index="03">
-        <h3>REST API + WebSocket</h3>
-        <p>Full CRUD via FastAPI at <span class="inline-code">/api/v1/*</span>. Real-time events pushed over WebSocket for live dashboard updates and agent coordination.</p>
+        <h3 data-i18n="cap.03.h">REST API + WebSocket</h3>
+        <p data-i18n="cap.03.p">Full CRUD via FastAPI at <span class="inline-code">/api/v1/*</span>. Real-time events pushed over WebSocket for live dashboard updates and agent coordination.</p>
         <span class="feature-tag">FASTAPI</span>
       </div>
       <div class="feature-card" data-index="04">
-        <h3>Pre-Analysis Engine</h3>
-        <p>Automatic complexity scoring (heuristic) and keyword-based tag extraction on task submission. Agents receive enriched, analysis-ready task data.</p>
+        <h3 data-i18n="cap.04.h">Pre-Analysis Engine</h3>
+        <p data-i18n="cap.04.p">Automatic complexity scoring (heuristic) and keyword-based tag extraction on task submission. Agents receive enriched, analysis-ready task data.</p>
         <span class="feature-tag">ANALYSIS</span>
       </div>
       <div class="feature-card" data-index="05">
-        <h3>SQLite Local-First</h3>
-        <p>WAL mode for concurrent reads, FTS5 full-text search, JSON1 extension, migration runner. Zero external database dependencies.</p>
+        <h3 data-i18n="cap.05.h">SQLite Local-First</h3>
+        <p data-i18n="cap.05.p">WAL mode for concurrent reads, FTS5 full-text search, JSON1 extension, migration runner. Zero external database dependencies.</p>
         <span class="feature-tag">SQLITE_WAL</span>
       </div>
       <div class="feature-card" data-index="06">
-        <h3>NiceGUI Dashboard</h3>
-        <p>Real-time web dashboard with YoRHa Tower theme. Pool overview, task board, detail views, analytics charts, and dependency graph visualization.</p>
+        <h3 data-i18n="cap.06.h">NiceGUI Dashboard</h3>
+        <p data-i18n="cap.06.p">Real-time web dashboard with YoRHa Tower theme. Pool overview, task board, detail views, analytics charts, and dependency graph visualization.</p>
         <span class="feature-tag">NICEGUI</span>
       </div>
       <div class="feature-card" data-index="07">
-        <h3>CLI Interface</h3>
-        <p>Rich terminal interface via Typer. Task CRUD, pool operations, server management, and evaluation commands. JSON output mode for scripting.</p>
+        <h3 data-i18n="cap.07.h">CLI Interface</h3>
+        <p data-i18n="cap.07.p">Rich terminal interface via Typer. Task CRUD, pool operations, server management, and evaluation commands. JSON output mode for scripting.</p>
         <span class="feature-tag">TYPER+RICH</span>
       </div>
       <div class="feature-card" data-index="08">
-        <h3>Self-Evaluation System</h3>
-        <p>8-dimension benchmarking framework with weighted scoring, gap detection, golden task validation, and quality gates. Drives iteration cycles.</p>
+        <h3 data-i18n="cap.08.h">Self-Evaluation System</h3>
+        <p data-i18n="cap.08.p">8-dimension benchmarking framework with weighted scoring, gap detection, golden task validation, and quality gates. Drives iteration cycles.</p>
         <span class="feature-tag">8 DIMENSIONS</span>
       </div>
     </div>
@@ -132,46 +136,84 @@
 <section id="architecture">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SEC 003 — SYSTEM TOPOLOGY</div>
-      <h2 class="section-title">[ARCHITECTURE]</h2>
-      <p class="section-desc">Multi-layer architecture with unified task service facade.</p>
+      <div class="section-label" data-i18n="arch.label">SEC 003 -- SYSTEM TOPOLOGY</div>
+      <h2 class="section-title" data-i18n="arch.title">[ARCHITECTURE]</h2>
+      <p class="section-desc" data-i18n="arch.desc">Multi-layer architecture with unified task service facade.</p>
     </div>
-    <div class="arch-diagram">╔════════════════════════════════════════════════════════════════════╗
-║                     <span class="layer-label">[EXTERNAL CONSUMERS]</span>                          ║
-║   Cursor (MCP)  │  OpenClaw  │  REST API  │  Dashboard  │  CLI   ║
-╠════════════════════════════════════════════════════════════════════╣
-║                                                                    ║
-║   ┌────────────┐  ┌────────────┐  ┌─────────┐  ┌──────────────┐  ║
-║   │ MCP Server │  │ REST API   │  │   CLI   │  │   NiceGUI    │  ║
-║   │  (stdio)   │  │ (FastAPI)  │  │ (Typer) │  │  Dashboard   │  ║
-║   └─────┬──────┘  └─────┬──────┘  └────┬────┘  └──────┬───────┘  ║
-║         └───────────────┬┘──────────────┘──────────────┘          ║
-║                         │                                          ║
-║              ┌──────────▼──────────┐                               ║
-║              │    <span class="layer-label">Task Service</span>     │◄──── EventBus (pub/sub)       ║
-║              └──────────┬──────────┘                               ║
-║              ┌──────────▼──────────┐                               ║
-║              │   <span class="layer-label">State Machine</span>     │  15 triggers × 10 states      ║
-║              └──────────┬──────────┘                               ║
-║              ┌──────────▼──────────┐                               ║
-║              │  <span class="layer-label">SQLite (WAL mode)</span>  │  FTS5 · JSON1 · Indexes      ║
-║              └─────────────────────┘                               ║
-║                                                                    ║
-╚════════════════════════════════════════════════════════════════════╝</div>
+
+    <div class="arch-native">
+      <!-- Layer 1: External Consumers -->
+      <div class="arch-layer">
+        <div class="arch-layer-title" data-i18n="arch.consumers">[EXTERNAL CONSUMERS]</div>
+        <div class="arch-layer-items">
+          <span>Cursor (MCP)</span>
+          <span>OpenClaw</span>
+          <span>REST API</span>
+          <span data-i18n="arch.dashboard">Dashboard</span>
+          <span>CLI</span>
+        </div>
+      </div>
+
+      <div class="arch-vline"></div>
+
+      <!-- Layer 2: Interface Modules -->
+      <div class="arch-boxes">
+        <div class="arch-box">
+          <div class="arch-box-name">MCP Server</div>
+          <div class="arch-box-sub">(stdio)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">REST API</div>
+          <div class="arch-box-sub">(FastAPI)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">CLI</div>
+          <div class="arch-box-sub">(Typer)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">NiceGUI</div>
+          <div class="arch-box-sub" data-i18n="arch.dashboard">Dashboard</div>
+        </div>
+      </div>
+
+      <div class="arch-vline"></div>
+
+      <!-- Layer 3: Task Service -->
+      <div class="arch-center-box">
+        <span class="arch-box-name" data-i18n="arch.service">Task Service</span>
+        <span class="arch-annotation">&#9668; EventBus (pub/sub)</span>
+      </div>
+
+      <div class="arch-vline"></div>
+
+      <!-- Layer 4: State Machine -->
+      <div class="arch-center-box">
+        <span class="arch-box-name" data-i18n="arch.machine">State Machine</span>
+        <span class="arch-annotation">15 triggers &times; 10 states</span>
+      </div>
+
+      <div class="arch-vline"></div>
+
+      <!-- Layer 5: Storage -->
+      <div class="arch-center-box">
+        <span class="arch-box-name">SQLite (WAL mode)</span>
+        <span class="arch-annotation">FTS5 &middot; JSON1 &middot; Indexes</span>
+      </div>
+    </div>
 
     <div style="margin-top: 40px;">
-      <div class="section-label" style="margin-bottom: 16px;">TASK LIFECYCLE FLOW</div>
+      <div class="section-label" style="margin-bottom: 16px;" data-i18n="arch.lifecycle">TASK LIFECYCLE FLOW</div>
       <div class="lifecycle-flow">
         <span class="lifecycle-node">submitted</span>
-        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-arrow">&rarr;</span>
         <span class="lifecycle-node">queued</span>
-        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-arrow">&rarr;</span>
         <span class="lifecycle-node active">in_progress</span>
-        <span class="lifecycle-arrow">→</span>
-        <span class="lifecycle-branch">[ review │ input_required │ blocked ]</span>
-        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-arrow">&rarr;</span>
+        <span class="lifecycle-branch">[ review | input_required | blocked ]</span>
+        <span class="lifecycle-arrow">&rarr;</span>
         <span class="lifecycle-node">completed</span>
-        <span class="lifecycle-branch">│ failed │ canceled │ timed_out</span>
+        <span class="lifecycle-branch">| failed | canceled | timed_out</span>
       </div>
     </div>
   </div>
@@ -181,9 +223,9 @@
 <section id="init">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SEC 004 — DEPLOYMENT PROTOCOL</div>
-      <h2 class="section-title">[INITIALIZATION]</h2>
-      <p class="section-desc">Get operational in under 60 seconds.</p>
+      <div class="section-label" data-i18n="init.label">SEC 004 -- DEPLOYMENT PROTOCOL</div>
+      <h2 class="section-title" data-i18n="init.title">[INITIALIZATION]</h2>
+      <p class="section-desc" data-i18n="init.desc">Get operational in under 60 seconds.</p>
     </div>
 
     <div class="code-block">
@@ -240,62 +282,62 @@
 <section id="status">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SEC 005 — SYSTEM DIAGNOSTICS</div>
-      <h2 class="section-title">[SYSTEM.STATUS]</h2>
-      <p class="section-desc">Self-evaluation scores across 8 agent-oriented capability dimensions.</p>
+      <div class="section-label" data-i18n="status.label">SEC 005 -- SYSTEM DIAGNOSTICS</div>
+      <h2 class="section-title" data-i18n="status.title">[SYSTEM.STATUS]</h2>
+      <p class="section-desc" data-i18n="status.desc">Self-evaluation scores across 8 agent-oriented capability dimensions.</p>
     </div>
 
     <div class="status-grid">
       <div class="status-row">
         <span class="status-label">lifecycle_correctness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">search_effectiveness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">analysis_accuracy</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">archive_integrity</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">concurrency_safety</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">api_completeness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:#DAD4BB;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:var(--text);"></div></div>
         <span class="status-value status-good">0.95</span>
       </div>
       <div class="status-row">
         <span class="status-label">task_format_quality</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:#DAD4BB;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:var(--text);"></div></div>
         <span class="status-value status-good">0.87</span>
       </div>
       <div class="status-row">
         <span class="status-label">dispatch_reliability</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:#D4A853;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:var(--yellow);"></div></div>
         <span class="status-value status-warn">0.71</span>
       </div>
     </div>
 
     <div class="status-overall">
       <div>
-        <div class="status-overall-label">Composite Score</div>
-        <div class="status-overall-gate">GATE: STANDARD (≥ 0.85) — PASSED</div>
+        <div class="status-overall-label" data-i18n="status.composite">Composite Score</div>
+        <div class="status-overall-gate" data-i18n="status.gate">GATE: STANDARD (&ge; 0.85) -- PASSED</div>
       </div>
       <div style="text-align: right;">
         <div class="status-overall-value">0.9179</div>
-        <div class="status-overall-gate">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
+        <div class="status-overall-gate" data-i18n="status.weighted">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
       </div>
     </div>
   </div>
@@ -304,23 +346,146 @@
 <!-- Footer -->
 <footer>
   <div class="container">
-    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <p class="footer-quote" data-i18n="footer.quote">"Glory to Mankind." -- YoRHa</p>
     <div class="footer-links">
-      <a href="format.html">Format</a>
-      <a href="demo.html">Demo</a>
-      <a href="docs.html">Documentation</a>
-      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="format.html" data-i18n="nav.format">Format</a>
+      <a href="demo.html" data-i18n="nav.demo">Demo</a>
+      <a href="docs.html" data-i18n="footer.documentation">Documentation</a>
+      <a href="https://github.com" target="_blank" rel="noopener" data-i18n="footer.github">GitHub Repository</a>
     </div>
-    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+    <p class="footer-copy">ArkTower v0.1.0 | MIT License | Python 3.11+</p>
   </div>
 </footer>
 
 <script>
+(function() {
+  'use strict';
+
+  var T = {
+    'nav.home': { en: 'Home', zh: '\u9996\u9875' },
+    'nav.format': { en: 'Format', zh: '\u683C\u5F0F' },
+    'nav.demo': { en: 'Demo', zh: '\u6F14\u793A' },
+    'nav.docs': { en: 'Docs', zh: '\u6587\u6863' },
+    'nav.capabilities': { en: 'Capabilities', zh: '\u529F\u80FD' },
+    'nav.status': { en: 'Status', zh: '\u72B6\u6001' },
+    'hero.serial': { en: 'SN: ARK-TWR-001 | BUILD 0.1.0 | PYTHON 3.11+', zh: 'SN: ARK-TWR-001 | \u7248\u672C 0.1.0 | PYTHON 3.11+' },
+    'hero.subtitle': { en: 'Agent-Oriented Task Pool System', zh: '\u9762\u5411\u667A\u80FD\u4F53\u7684\u4EFB\u52A1\u6C60\u7CFB\u7EDF' },
+    'hero.badge': { en: '[SYSTEM ONLINE]', zh: '[\u7CFB\u7EDF\u5728\u7EBF]' },
+    'hero.tests': { en: 'TESTS: <span>293 PASSED</span>', zh: '\u6D4B\u8BD5: <span>293 \u901A\u8FC7</span>' },
+    'hero.coverage': { en: 'COVERAGE: <span>71%</span>', zh: '\u8986\u76D6\u7387: <span>71%</span>' },
+    'hero.eval': { en: 'EVAL SCORE: <span>0.9179</span>', zh: '\u8BC4\u4F30\u5206\u6570: <span>0.9179</span>' },
+    'hero.license': { en: 'LICENSE: <span>MIT</span>', zh: '\u8BB8\u53EF\u8BC1: <span>MIT</span>' },
+    'overview.label': { en: 'SEC 001 -- PRIMARY DIRECTIVE', zh: 'SEC 001 -- \u4E3B\u8981\u6307\u4EE4' },
+    'overview.title': { en: '[SYSTEM.OVERVIEW]', zh: '[\u7CFB\u7EDF\u6982\u8FF0]' },
+    'overview.p1': {
+      en: 'ArkTower provides a <strong>universal task pool</strong> where tasks are uniformly structured, pre-decomposed, and ready for agent dispatch or automatic claiming. It does not execute tasks itself -- it serves as the <strong>foundation for agent-driven workflows</strong>.',
+      zh: 'ArkTower \u63D0\u4F9B\u4E00\u4E2A<strong>\u7EDF\u4E00\u4EFB\u52A1\u6C60</strong>\uFF0C\u4EFB\u52A1\u7ED3\u6784\u5316\u3001\u9884\u5206\u89E3\uFF0C\u5E76\u53EF\u4F9B\u667A\u80FD\u4F53\u8C03\u5EA6\u6216\u81EA\u52A8\u8BA4\u9886\u3002\u5B83\u672C\u8EAB\u4E0D\u6267\u884C\u4EFB\u52A1\u2014\u2014\u800C\u662F\u4F5C\u4E3A<strong>\u667A\u80FD\u4F53\u9A71\u52A8\u5DE5\u4F5C\u6D41\u7684\u57FA\u7840</strong>\u3002'
+    },
+    'overview.p2': {
+      en: 'Tasks enter the system as structured YAML frontmatter + Markdown body (<span class="inline-code">.task.md</span>), pass through a <strong>10-state lifecycle</strong> with named triggers, undergo <strong>automatic pre-analysis</strong> for complexity scoring and tag extraction, and are dispatched to AI agents based on capability matching.',
+      zh: '\u4EFB\u52A1\u4EE5 YAML \u5143\u6570\u636E + Markdown \u6B63\u6587\u7684\u7ED3\u6784\u5316\u683C\u5F0F (<span class="inline-code">.task.md</span>) \u8FDB\u5165\u7CFB\u7EDF\uFF0C\u7ECF\u8FC7\u542B\u547D\u540D\u89E6\u53D1\u5668\u7684 <strong>10 \u72B6\u6001\u751F\u547D\u5468\u671F</strong>\uFF0C\u8FDB\u884C<strong>\u81EA\u52A8\u9884\u5206\u6790</strong>\uFF08\u590D\u6742\u5EA6\u8BC4\u5206\u548C\u6807\u7B7E\u63D0\u53D6\uFF09\uFF0C\u5E76\u6839\u636E\u80FD\u529B\u5339\u914D\u5206\u914D\u7ED9 AI \u667A\u80FD\u4F53\u3002'
+    },
+    'overview.p3': {
+      en: 'The system integrates natively with <strong>Cursor</strong>, <strong>Claude</strong>, and any <strong>MCP-compatible</strong> client via 12 dedicated tools. A real-time REST API, WebSocket events, CLI, and NiceGUI web dashboard provide full operational control.',
+      zh: '\u7CFB\u7EDF\u901A\u8FC7 12 \u4E2A\u4E13\u7528\u5DE5\u5177\u4E0E <strong>Cursor</strong>\u3001<strong>Claude</strong> \u53CA\u4EFB\u4F55 <strong>MCP \u517C\u5BB9</strong>\u5BA2\u6237\u7AEF\u539F\u751F\u96C6\u6210\u3002\u5B9E\u65F6 REST API\u3001WebSocket \u4E8B\u4EF6\u3001CLI \u548C NiceGUI \u7F51\u9875\u4EEA\u8868\u677F\u63D0\u4F9B\u5168\u9762\u7684\u8FD0\u8425\u63A7\u5236\u3002'
+    },
+    'cap.label': { en: 'SEC 002 -- OPERATIONAL PARAMETERS', zh: 'SEC 002 -- \u8FD0\u884C\u53C2\u6570' },
+    'cap.title': { en: '[CAPABILITIES]', zh: '[\u529F\u80FD\u7279\u6027]' },
+    'cap.desc': { en: 'Core system capabilities and integration interfaces.', zh: '\u6838\u5FC3\u7CFB\u7EDF\u529F\u80FD\u4E0E\u96C6\u6210\u63A5\u53E3\u3002' },
+    'cap.01.h': { en: '10-State Lifecycle', zh: '10\u72B6\u6001\u751F\u547D\u5468\u671F' },
+    'cap.01.p': { en: 'Full state machine with 15 named triggers -- submit, enqueue, claim, complete, block, unblock, cancel, timeout, review, approve, reject, fail, and more. Every transition audited.', zh: '\u5B8C\u6574\u72B6\u6001\u673A\uFF0C\u542B 15 \u4E2A\u547D\u540D\u89E6\u53D1\u5668\u2014\u2014\u63D0\u4EA4\u3001\u5165\u961F\u3001\u8BA4\u9886\u3001\u5B8C\u6210\u3001\u963B\u585E\u3001\u89E3\u9664\u3001\u53D6\u6D88\u3001\u8D85\u65F6\u3001\u5BA1\u6838\u3001\u6279\u51C6\u3001\u62D2\u7EDD\u3001\u5931\u8D25\u7B49\u3002\u6BCF\u6B21\u8FC7\u6E21\u5747\u5BA1\u8BA1\u3002' },
+    'cap.02.h': { en: 'MCP Server', zh: 'MCP \u670D\u52A1\u5668' },
+    'cap.02.p': { en: '12 tools registered for Cursor and Claude integration. Create, claim, complete, search tasks directly from your IDE via stdio transport.', zh: '\u4E3A Cursor \u548C Claude \u96C6\u6210\u6CE8\u518C\u4E86 12 \u4E2A\u5DE5\u5177\u3002\u901A\u8FC7 stdio \u4F20\u8F93\u76F4\u63A5\u5728 IDE \u4E2D\u521B\u5EFA\u3001\u8BA4\u9886\u3001\u5B8C\u6210\u3001\u641C\u7D22\u4EFB\u52A1\u3002' },
+    'cap.03.h': { en: 'REST API + WebSocket', zh: 'REST API + WebSocket' },
+    'cap.03.p': { en: 'Full CRUD via FastAPI at <span class="inline-code">/api/v1/*</span>. Real-time events pushed over WebSocket for live dashboard updates and agent coordination.', zh: '\u901A\u8FC7 FastAPI \u5728 <span class="inline-code">/api/v1/*</span> \u63D0\u4F9B\u5B8C\u6574 CRUD\u3002\u5B9E\u65F6\u4E8B\u4EF6\u901A\u8FC7 WebSocket \u63A8\u9001\uFF0C\u7528\u4E8E\u4EEA\u8868\u677F\u66F4\u65B0\u548C\u667A\u80FD\u4F53\u534F\u8C03\u3002' },
+    'cap.04.h': { en: 'Pre-Analysis Engine', zh: '\u9884\u5206\u6790\u5F15\u64CE' },
+    'cap.04.p': { en: 'Automatic complexity scoring (heuristic) and keyword-based tag extraction on task submission. Agents receive enriched, analysis-ready task data.', zh: '\u4EFB\u52A1\u63D0\u4EA4\u65F6\u81EA\u52A8\u8FDB\u884C\u590D\u6742\u5EA6\u8BC4\u5206\uFF08\u542F\u53D1\u5F0F\uFF09\u548C\u5173\u952E\u8BCD\u6807\u7B7E\u63D0\u53D6\u3002\u667A\u80FD\u4F53\u83B7\u5F97\u5BCC\u5316\u7684\u3001\u53EF\u5206\u6790\u7684\u4EFB\u52A1\u6570\u636E\u3002' },
+    'cap.05.h': { en: 'SQLite Local-First', zh: 'SQLite \u672C\u5730\u4F18\u5148' },
+    'cap.05.p': { en: 'WAL mode for concurrent reads, FTS5 full-text search, JSON1 extension, migration runner. Zero external database dependencies.', zh: 'WAL \u6A21\u5F0F\u652F\u6301\u5E76\u53D1\u8BFB\u53D6\uFF0CFTS5 \u5168\u6587\u641C\u7D22\uFF0CJSON1 \u6269\u5C55\uFF0C\u8FC1\u79FB\u8FD0\u884C\u5668\u3002\u96F6\u5916\u90E8\u6570\u636E\u5E93\u4F9D\u8D56\u3002' },
+    'cap.06.h': { en: 'NiceGUI Dashboard', zh: 'NiceGUI \u4EEA\u8868\u677F' },
+    'cap.06.p': { en: 'Real-time web dashboard with YoRHa Tower theme. Pool overview, task board, detail views, analytics charts, and dependency graph visualization.', zh: '\u5B9E\u65F6\u7F51\u9875\u4EEA\u8868\u677F\uFF0C\u91C7\u7528 YoRHa Tower \u4E3B\u9898\u3002\u6C60\u6982\u89C8\u3001\u4EFB\u52A1\u770B\u677F\u3001\u8BE6\u60C5\u89C6\u56FE\u3001\u5206\u6790\u56FE\u8868\u548C\u4F9D\u8D56\u56FE\u53EF\u89C6\u5316\u3002' },
+    'cap.07.h': { en: 'CLI Interface', zh: 'CLI \u547D\u4EE4\u884C' },
+    'cap.07.p': { en: 'Rich terminal interface via Typer. Task CRUD, pool operations, server management, and evaluation commands. JSON output mode for scripting.', zh: '\u901A\u8FC7 Typer \u63D0\u4F9B\u4E30\u5BCC\u7684\u7EC8\u7AEF\u754C\u9762\u3002\u4EFB\u52A1 CRUD\u3001\u6C60\u64CD\u4F5C\u3001\u670D\u52A1\u5668\u7BA1\u7406\u548C\u8BC4\u4F30\u547D\u4EE4\u3002\u652F\u6301 JSON \u8F93\u51FA\u3002' },
+    'cap.08.h': { en: 'Self-Evaluation System', zh: '\u81EA\u8BC4\u4F30\u7CFB\u7EDF' },
+    'cap.08.p': { en: '8-dimension benchmarking framework with weighted scoring, gap detection, golden task validation, and quality gates. Drives iteration cycles.', zh: '8 \u7EF4\u5EA6\u57FA\u51C6\u6D4B\u8BD5\u6846\u67B6\uFF0C\u542B\u52A0\u6743\u8BC4\u5206\u3001\u5DEE\u8DDD\u68C0\u6D4B\u3001\u91D1\u6807\u4EFB\u52A1\u9A8C\u8BC1\u548C\u8D28\u91CF\u95E8\u3002\u9A71\u52A8\u8FED\u4EE3\u5FAA\u73AF\u3002' },
+    'arch.label': { en: 'SEC 003 -- SYSTEM TOPOLOGY', zh: 'SEC 003 -- \u7CFB\u7EDF\u62D3\u6251' },
+    'arch.title': { en: '[ARCHITECTURE]', zh: '[\u67B6\u6784]' },
+    'arch.desc': { en: 'Multi-layer architecture with unified task service facade.', zh: '\u591A\u5C42\u67B6\u6784\uFF0C\u7EDF\u4E00\u4EFB\u52A1\u670D\u52A1\u95E8\u9762\u3002' },
+    'arch.consumers': { en: '[EXTERNAL CONSUMERS]', zh: '[\u5916\u90E8\u6D88\u8D39\u8005]' },
+    'arch.dashboard': { en: 'Dashboard', zh: '\u4EEA\u8868\u677F' },
+    'arch.service': { en: 'Task Service', zh: '\u4EFB\u52A1\u670D\u52A1' },
+    'arch.machine': { en: 'State Machine', zh: '\u72B6\u6001\u673A' },
+    'arch.lifecycle': { en: 'TASK LIFECYCLE FLOW', zh: '\u4EFB\u52A1\u751F\u547D\u5468\u671F\u6D41\u7A0B' },
+    'init.label': { en: 'SEC 004 -- DEPLOYMENT PROTOCOL', zh: 'SEC 004 -- \u90E8\u7F72\u534F\u8BAE' },
+    'init.title': { en: '[INITIALIZATION]', zh: '[\u521D\u59CB\u5316]' },
+    'init.desc': { en: 'Get operational in under 60 seconds.', zh: '60 \u79D2\u5185\u5F00\u59CB\u8FD0\u884C\u3002' },
+    'status.label': { en: 'SEC 005 -- SYSTEM DIAGNOSTICS', zh: 'SEC 005 -- \u7CFB\u7EDF\u8BCA\u65AD' },
+    'status.title': { en: '[SYSTEM.STATUS]', zh: '[\u7CFB\u7EDF\u72B6\u6001]' },
+    'status.desc': { en: 'Self-evaluation scores across 8 agent-oriented capability dimensions.', zh: '8 \u4E2A\u9762\u5411\u667A\u80FD\u4F53\u7684\u80FD\u529B\u7EF4\u5EA6\u81EA\u8BC4\u5206\u6570\u3002' },
+    'status.composite': { en: 'Composite Score', zh: '\u7EFC\u5408\u8BC4\u5206' },
+    'status.gate': { en: 'GATE: STANDARD (\u2265 0.85) -- PASSED', zh: '\u95E8\u69DB: \u6807\u51C6 (\u2265 0.85) -- \u5DF2\u901A\u8FC7' },
+    'status.weighted': { en: 'WEIGHTED AVERAGE / 8 DIMENSIONS', zh: '\u52A0\u6743\u5E73\u5747 / 8 \u7EF4\u5EA6' },
+    'footer.quote': { en: '"Glory to Mankind." -- YoRHa', zh: '"\u4EBA\u7C7B\u306B\u6804\u5149\u3042\u308C\u3002" -- YoRHa' },
+    'footer.documentation': { en: 'Documentation', zh: '\u6587\u6863' },
+    'footer.github': { en: 'GitHub Repository', zh: 'GitHub \u4ED3\u5E93' }
+  };
+
+  function initTheme() {
+    var saved = localStorage.getItem('arktower-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeBtn(saved);
+  }
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('arktower-theme', next);
+    updateThemeBtn(next);
+  }
+
+  function updateThemeBtn(theme) {
+    var btn = document.getElementById('themeToggle');
+    if (btn) { btn.innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;'; }
+  }
+
+  function initLang() {
+    var saved = localStorage.getItem('arktower-lang') || 'en';
+    applyLang(saved);
+  }
+
+  function toggleLang() {
+    var current = localStorage.getItem('arktower-lang') || 'en';
+    var next = current === 'en' ? 'zh' : 'en';
+    localStorage.setItem('arktower-lang', next);
+    applyLang(next);
+  }
+
+  function applyLang(lang) {
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      if (T[key] && T[key][lang]) {
+        els[i].innerHTML = T[key][lang];
+      }
+    }
+    var btn = document.getElementById('langToggle');
+    if (btn) { btn.textContent = lang === 'en' ? '\u4E2D' : 'EN'; }
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('langToggle').addEventListener('click', toggleLang);
+
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', function() {
       document.querySelector('.nav-links').classList.remove('open');
     });
   });
+
+  initTheme();
+  initLang();
+})();
 </script>
 
 </body>

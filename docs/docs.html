@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,261 +17,305 @@
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#8801; MENU</button>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="format.html">Format</a></li>
-      <li><a href="demo.html">Demo</a></li>
-      <li><a href="docs.html" class="active">Docs</a></li>
-      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="format.html" data-i18n="nav.format">Format</a></li>
+      <li><a href="demo.html" data-i18n="nav.demo">Demo</a></li>
+      <li><a href="docs.html" class="active" data-i18n="nav.docs">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub &#8599;</a></li>
     </ul>
+    <div class="nav-controls">
+      <button type="button" id="langToggle" aria-label="Toggle language">EN</button>
+      <button type="button" id="themeToggle" aria-label="Toggle theme">&#9788;</button>
+    </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="container">
-    <div class="hero-serial">[ARCHIVE] SYSTEM DOCUMENTATION</div>
-    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Docs</h1>
-    <p class="hero-subtitle">Technical references, architecture guides, and API specifications</p>
+    <div class="hero-serial" data-i18n="hero.serial">[ARCHIVE] SYSTEM DOCUMENTATION</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower <span data-i18n="hero.titleSuffix">Docs</span></h1>
+    <p class="hero-subtitle" data-i18n="hero.subtitle">Technical references, architecture guides, and API specifications</p>
     <div class="hero-badge">[DOCUMENTATION v0.1.0]</div>
   </div>
 </header>
 
-<!-- DOC.001 — Architecture -->
+<!-- DOC.001 -- Architecture -->
 <section id="architecture">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.001 — SYSTEM TOPOLOGY</div>
-      <h2 class="section-title">[ARCHITECTURE]</h2>
-      <p class="section-desc">Multi-layer architecture with unified task service facade, event bus, and pluggable storage.</p>
+      <div class="section-label" data-i18n="arch.label">DOC.001 -- SYSTEM TOPOLOGY</div>
+      <h2 class="section-title" data-i18n="arch.title">[ARCHITECTURE]</h2>
+      <p class="section-desc" data-i18n="arch.desc">Multi-layer architecture with unified task service facade, event bus, and pluggable storage.</p>
     </div>
 
-    <div class="arch-diagram">╔════════════════════════════════════════════════════════════════════╗
-║                     <span class="layer-label">[EXTERNAL CONSUMERS]</span>                          ║
-║   Cursor (MCP)  │  OpenClaw  │  REST API  │  Dashboard  │  CLI   ║
-╠════════════════════════════════════════════════════════════════════╣
-║                                                                    ║
-║   ┌────────────┐  ┌────────────┐  ┌─────────┐  ┌──────────────┐  ║
-║   │ MCP Server │  │ REST API   │  │   CLI   │  │   NiceGUI    │  ║
-║   │  (stdio)   │  │ (FastAPI)  │  │ (Typer) │  │  Dashboard   │  ║
-║   └─────┬──────┘  └─────┬──────┘  └────┬────┘  └──────┬───────┘  ║
-║         └───────────────┬┘──────────────┘──────────────┘          ║
-║                         │                                          ║
-║              ┌──────────▼──────────┐                               ║
-║              │    <span class="layer-label">Task Service</span>     │◄──── EventBus (pub/sub)       ║
-║              └──────────┬──────────┘                               ║
-║              ┌──────────▼──────────┐                               ║
-║              │   <span class="layer-label">State Machine</span>     │  15 triggers × 10 states      ║
-║              └──────────┬──────────┘                               ║
-║              ┌──────────▼──────────┐                               ║
-║              │  <span class="layer-label">SQLite (WAL mode)</span>  │  FTS5 · JSON1 · Indexes      ║
-║              └─────────────────────┘                               ║
-║                                                                    ║
-╚════════════════════════════════════════════════════════════════════╝</div>
+    <div class="arch-native">
+      <div class="arch-layer">
+        <div class="arch-layer-title" data-i18n="arch.consumers">[EXTERNAL CONSUMERS]</div>
+        <div class="arch-layer-items">
+          <span>Cursor (MCP)</span>
+          <span>OpenClaw</span>
+          <span>REST API</span>
+          <span data-i18n="arch.dashboard">Dashboard</span>
+          <span>CLI</span>
+        </div>
+      </div>
+      <div class="arch-vline"></div>
+      <div class="arch-boxes">
+        <div class="arch-box">
+          <div class="arch-box-name">MCP Server</div>
+          <div class="arch-box-sub">(stdio)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">REST API</div>
+          <div class="arch-box-sub">(FastAPI)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">CLI</div>
+          <div class="arch-box-sub">(Typer)</div>
+        </div>
+        <div class="arch-box">
+          <div class="arch-box-name">NiceGUI</div>
+          <div class="arch-box-sub" data-i18n="arch.dashboard">Dashboard</div>
+        </div>
+      </div>
+      <div class="arch-vline"></div>
+      <div class="arch-center-box">
+        <span class="arch-box-name" data-i18n="arch.service">Task Service</span>
+        <span class="arch-annotation">&#9668; EventBus (pub/sub)</span>
+      </div>
+      <div class="arch-vline"></div>
+      <div class="arch-center-box">
+        <span class="arch-box-name" data-i18n="arch.machine">State Machine</span>
+        <span class="arch-annotation">15 triggers &times; 10 states</span>
+      </div>
+      <div class="arch-vline"></div>
+      <div class="arch-center-box">
+        <span class="arch-box-name">SQLite (WAL mode)</span>
+        <span class="arch-annotation">FTS5 &middot; JSON1 &middot; Indexes</span>
+      </div>
+    </div>
 
     <div class="feature-grid" style="margin-top: 32px;">
       <div class="feature-card" data-index="CORE">
         <h3>arktower/core/</h3>
-        <p>Domain models (Task, TaskStatus, Trigger), StateMachine (15 triggers × 10 states), EventBus, TaskService facade, TaskNormalizer.</p>
+        <p data-i18n="arch.core.p">Domain models (Task, TaskStatus, Trigger), StateMachine (15 triggers &times; 10 states), EventBus, TaskService facade, TaskNormalizer.</p>
         <span class="feature-tag">DOMAIN</span>
       </div>
       <div class="feature-card" data-index="STORE">
         <h3>arktower/store/</h3>
-        <p>TaskRepository protocol, SqliteTaskRepository (CRUD, FTS5, atomic claim), migration runner with 3 migrations.</p>
+        <p data-i18n="arch.store.p">TaskRepository protocol, SqliteTaskRepository (CRUD, FTS5, atomic claim), migration runner with 3 migrations.</p>
         <span class="feature-tag">PERSISTENCE</span>
       </div>
       <div class="feature-card" data-index="API">
         <h3>arktower/api/</h3>
-        <p>FastAPI app factory, REST routes at /api/v1/*, WebSocket manager for real-time events.</p>
+        <p data-i18n="arch.api.p">FastAPI app factory, REST routes at /api/v1/*, WebSocket manager for real-time events.</p>
         <span class="feature-tag">HTTP</span>
       </div>
       <div class="feature-card" data-index="MCP">
         <h3>arktower/mcp/</h3>
-        <p>MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor and Claude.</p>
+        <p data-i18n="arch.mcp.p">MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor and Claude.</p>
         <span class="feature-tag">AI_INTEGRATION</span>
       </div>
       <div class="feature-card" data-index="CLI">
         <h3>arktower/cli/</h3>
-        <p>Typer CLI with Rich output: task, pool, server, eval subcommands. JSON output mode.</p>
+        <p data-i18n="arch.cli.p">Typer CLI with Rich output: task, pool, server, eval subcommands. JSON output mode.</p>
         <span class="feature-tag">TERMINAL</span>
       </div>
       <div class="feature-card" data-index="WEB">
         <h3>arktower/web/</h3>
-        <p>NiceGUI dashboard with YoRHa theme, i18n (EN/ZH), dark/light toggle, pool overview, task board, analytics.</p>
+        <p data-i18n="arch.web.p">NiceGUI dashboard with YoRHa theme, i18n (EN/ZH), dark/light toggle, pool overview, task board, analytics.</p>
         <span class="feature-tag">DASHBOARD</span>
       </div>
     </div>
 
     <div style="margin-top: 24px; text-align: right;">
-      <a href="https://github.com" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:13px;letter-spacing:2px;">VIEW FULL ARCHITECTURE →</a>
+      <a href="https://github.com" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:13px;letter-spacing:2px;" data-i18n="arch.viewfull">VIEW FULL ARCHITECTURE &rarr;</a>
     </div>
   </div>
 </section>
 
-<!-- DOC.002 — API Reference -->
+<!-- DOC.002 -- API Reference -->
 <section id="api">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.002 — INTERFACE PROTOCOLS</div>
-      <h2 class="section-title">[API REFERENCE]</h2>
-      <p class="section-desc">REST API endpoints, MCP tools, and WebSocket events.</p>
+      <div class="section-label" data-i18n="api.label">DOC.002 -- INTERFACE PROTOCOLS</div>
+      <h2 class="section-title" data-i18n="api.title">[API REFERENCE]</h2>
+      <p class="section-desc" data-i18n="api.desc">REST API endpoints, MCP tools, and WebSocket events.</p>
     </div>
 
-    <div class="section-label" style="margin-bottom: 16px;">REST API ENDPOINTS — /api/v1/</div>
+    <div class="section-label" style="margin-bottom: 16px;" data-i18n="api.rest_title">REST API ENDPOINTS -- /api/v1/</div>
     <table class="spec-table">
       <thead>
-        <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+        <tr>
+          <th data-i18n="api.th.method">Method</th>
+          <th data-i18n="api.th.path">Path</th>
+          <th data-i18n="api.th.desc">Description</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td><code>GET</code></td><td>/api/v1/health</td><td>Health check — returns system status</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/tasks</td><td>Create a new task</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/tasks</td><td>List tasks with optional filters (status, priority, tags, search)</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}</td><td>Get full details of a specific task</td></tr>
-        <tr><td><code>PATCH</code></td><td>/api/v1/tasks/{id}</td><td>Update task fields (title, description, priority, tags, etc.)</td></tr>
-        <tr><td><code>DELETE</code></td><td>/api/v1/tasks/{id}</td><td>Delete a task from the pool</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/advance</td><td>Advance task via state machine trigger</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/claim</td><td>Atomically claim a queued task for an agent</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/complete</td><td>Mark task as completed with optional output</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}/history</td><td>Get task event history (audit trail)</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/pool/stats</td><td>Pool statistics — counts by status, priority, queue age</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/pool/next</td><td>Get highest-priority queued task (capability matching)</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/templates</td><td>Create a task template</td></tr>
-        <tr><td><code>GET</code></td><td>/api/v1/templates</td><td>List all task templates</td></tr>
-        <tr><td><code>POST</code></td><td>/api/v1/archives/{id}</td><td>Archive a terminal task to JSON snapshot</td></tr>
-        <tr><td><code>WS</code></td><td>/ws</td><td>WebSocket — real-time task lifecycle events</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/health</td><td data-i18n="api.health">Health check -- returns system status</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks</td><td data-i18n="api.create">Create a new task</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks</td><td data-i18n="api.list">List tasks with optional filters (status, priority, tags, search)</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}</td><td data-i18n="api.get">Get full details of a specific task</td></tr>
+        <tr><td><code>PATCH</code></td><td>/api/v1/tasks/{id}</td><td data-i18n="api.update">Update task fields (title, description, priority, tags, etc.)</td></tr>
+        <tr><td><code>DELETE</code></td><td>/api/v1/tasks/{id}</td><td data-i18n="api.delete">Delete a task from the pool</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/advance</td><td data-i18n="api.advance">Advance task via state machine trigger</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/claim</td><td data-i18n="api.claim">Atomically claim a queued task for an agent</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/complete</td><td data-i18n="api.complete">Mark task as completed with optional output</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}/history</td><td data-i18n="api.history">Get task event history (audit trail)</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/pool/stats</td><td data-i18n="api.stats">Pool statistics -- counts by status, priority, queue age</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/pool/next</td><td data-i18n="api.next">Get highest-priority queued task (capability matching)</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/templates</td><td data-i18n="api.tpl_create">Create a task template</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/templates</td><td data-i18n="api.tpl_list">List all task templates</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/archives/{id}</td><td data-i18n="api.archive">Archive a terminal task to JSON snapshot</td></tr>
+        <tr><td><code>WS</code></td><td>/ws</td><td data-i18n="api.ws">WebSocket -- real-time task lifecycle events</td></tr>
       </tbody>
     </table>
 
-    <div class="section-label" style="margin: 32px 0 16px;">MCP TOOLS — 12 REGISTERED</div>
+    <div class="section-label" style="margin: 32px 0 16px;" data-i18n="api.mcp_title">MCP TOOLS -- 12 REGISTERED</div>
     <table class="spec-table">
       <thead>
-        <tr><th>Tool Name</th><th>Description</th><th>Key Parameters</th></tr>
+        <tr>
+          <th data-i18n="api.th.tool">Tool Name</th>
+          <th data-i18n="api.th.desc">Description</th>
+          <th data-i18n="api.th.params">Key Parameters</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td><code>create_task</code></td><td>Create a new task in the pool</td><td>title, description, priority, tags</td></tr>
-        <tr><td><code>list_tasks</code></td><td>List tasks with optional filters</td><td>status, priority, tags, limit, offset</td></tr>
-        <tr><td><code>get_task</code></td><td>Get full details of a task</td><td>task_id</td></tr>
-        <tr><td><code>claim_task</code></td><td>Claim a queued task for an agent</td><td>task_id, agent_id</td></tr>
-        <tr><td><code>complete_task</code></td><td>Mark a task as completed</td><td>task_id, output</td></tr>
-        <tr><td><code>search_tasks</code></td><td>Full-text search across tasks</td><td>query, limit</td></tr>
-        <tr><td><code>get_pool_stats</code></td><td>Get pool statistics</td><td>(none)</td></tr>
-        <tr><td><code>get_next_task</code></td><td>Get highest-priority queued task</td><td>(none)</td></tr>
-        <tr><td><code>advance_task</code></td><td>Advance via state machine trigger</td><td>task_id, trigger, actor, notes</td></tr>
-        <tr><td><code>fail_task</code></td><td>Mark a task as failed</td><td>task_id, error</td></tr>
-        <tr><td><code>archive_task</code></td><td>Archive a terminal task</td><td>task_id, format</td></tr>
-        <tr><td><code>create_from_template</code></td><td>Create task from a template</td><td>template_name, overrides</td></tr>
+        <tr><td><code>create_task</code></td><td data-i18n="mcp.create">Create a new task in the pool</td><td>title, description, priority, tags</td></tr>
+        <tr><td><code>list_tasks</code></td><td data-i18n="mcp.list">List tasks with optional filters</td><td>status, priority, tags, limit, offset</td></tr>
+        <tr><td><code>get_task</code></td><td data-i18n="mcp.get">Get full details of a task</td><td>task_id</td></tr>
+        <tr><td><code>claim_task</code></td><td data-i18n="mcp.claim">Claim a queued task for an agent</td><td>task_id, agent_id</td></tr>
+        <tr><td><code>complete_task</code></td><td data-i18n="mcp.complete">Mark a task as completed</td><td>task_id, output</td></tr>
+        <tr><td><code>search_tasks</code></td><td data-i18n="mcp.search">Full-text search across tasks</td><td>query, limit</td></tr>
+        <tr><td><code>get_pool_stats</code></td><td data-i18n="mcp.stats">Get pool statistics</td><td>(none)</td></tr>
+        <tr><td><code>get_next_task</code></td><td data-i18n="mcp.next">Get highest-priority queued task</td><td>(none)</td></tr>
+        <tr><td><code>advance_task</code></td><td data-i18n="mcp.advance">Advance via state machine trigger</td><td>task_id, trigger, actor, notes</td></tr>
+        <tr><td><code>fail_task</code></td><td data-i18n="mcp.fail">Mark a task as failed</td><td>task_id, error</td></tr>
+        <tr><td><code>archive_task</code></td><td data-i18n="mcp.archive">Archive a terminal task</td><td>task_id, format</td></tr>
+        <tr><td><code>create_from_template</code></td><td data-i18n="mcp.tpl">Create task from a template</td><td>template_name, overrides</td></tr>
       </tbody>
     </table>
 
-    <div class="section-label" style="margin: 32px 0 16px;">WEBSOCKET EVENTS</div>
+    <div class="section-label" style="margin: 32px 0 16px;" data-i18n="api.ws_title">WEBSOCKET EVENTS</div>
     <div class="feature-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
       <div class="feature-card" data-index="WS">
         <h3>task.transition</h3>
-        <p>Fired on every state machine transition. Payload includes task_id, trigger, from_status, to_status, actor.</p>
+        <p data-i18n="ws.transition">Fired on every state machine transition. Payload includes task_id, trigger, from_status, to_status, actor.</p>
         <span class="feature-tag">LIFECYCLE</span>
       </div>
       <div class="feature-card" data-index="WS">
         <h3>task.created</h3>
-        <p>Fired when a new task is created. Payload includes the full task object.</p>
+        <p data-i18n="ws.created">Fired when a new task is created. Payload includes the full task object.</p>
         <span class="feature-tag">CRUD</span>
       </div>
       <div class="feature-card" data-index="WS">
         <h3>task.updated</h3>
-        <p>Fired on task field updates. Payload includes task_id and changed fields.</p>
+        <p data-i18n="ws.updated">Fired on task field updates. Payload includes task_id and changed fields.</p>
         <span class="feature-tag">CRUD</span>
       </div>
       <div class="feature-card" data-index="WS">
         <h3>task.deleted</h3>
-        <p>Fired when a task is removed from the pool. Payload includes task_id.</p>
+        <p data-i18n="ws.deleted">Fired when a task is removed from the pool. Payload includes task_id.</p>
         <span class="feature-tag">CRUD</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DOC.003 — Evaluation System -->
+<!-- DOC.003 -- Evaluation System -->
 <section id="evaluation">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.003 — QUALITY ASSURANCE</div>
-      <h2 class="section-title">[EVALUATION SYSTEM]</h2>
-      <p class="section-desc">8-dimension self-benchmarking framework with weighted scoring and quality gates.</p>
+      <div class="section-label" data-i18n="eval.label">DOC.003 -- QUALITY ASSURANCE</div>
+      <h2 class="section-title" data-i18n="eval.title">[EVALUATION SYSTEM]</h2>
+      <p class="section-desc" data-i18n="eval.desc">8-dimension self-benchmarking framework with weighted scoring and quality gates.</p>
     </div>
 
     <div class="status-grid">
       <div class="status-row">
         <span class="status-label">lifecycle_correctness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">search_effectiveness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">analysis_accuracy</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">archive_integrity</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">concurrency_safety</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:var(--green);"></div></div>
         <span class="status-value status-perfect">1.00</span>
       </div>
       <div class="status-row">
         <span class="status-label">api_completeness</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:#DAD4BB;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:var(--text);"></div></div>
         <span class="status-value status-good">0.95</span>
       </div>
       <div class="status-row">
         <span class="status-label">task_format_quality</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:#DAD4BB;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:var(--text);"></div></div>
         <span class="status-value status-good">0.87</span>
       </div>
       <div class="status-row">
         <span class="status-label">dispatch_reliability</span>
-        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:#D4A853;"></div></div>
+        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:var(--yellow);"></div></div>
         <span class="status-value status-warn">0.71</span>
       </div>
     </div>
 
     <div class="status-overall" style="margin-bottom: 32px;">
       <div>
-        <div class="status-overall-label">Composite Score</div>
-        <div class="status-overall-gate">GATE: STANDARD (≥ 0.85) — PASSED</div>
+        <div class="status-overall-label" data-i18n="eval.composite">Composite Score</div>
+        <div class="status-overall-gate" data-i18n="eval.gate">GATE: STANDARD (&ge; 0.85) -- PASSED</div>
       </div>
       <div style="text-align: right;">
         <div class="status-overall-value">0.9179</div>
-        <div class="status-overall-gate">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
+        <div class="status-overall-gate" data-i18n="eval.weighted">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
       </div>
     </div>
 
     <table class="spec-table">
       <thead>
-        <tr><th>Dimension</th><th>Weight</th><th>Description</th></tr>
+        <tr>
+          <th data-i18n="eval.th.dim">Dimension</th>
+          <th data-i18n="eval.th.weight">Weight</th>
+          <th data-i18n="eval.th.desc">Description</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td><code>lifecycle_correctness</code></td><td>20%</td><td>State machine transitions, terminal state enforcement, audit trail</td></tr>
-        <tr><td><code>dispatch_reliability</code></td><td>20%</td><td>Lifecycle flows, atomic claims, capability matching, dependency gates</td></tr>
-        <tr><td><code>task_format_quality</code></td><td>15%</td><td>Task model completeness, agent fields, .task.md parser, normalizer</td></tr>
-        <tr><td><code>search_effectiveness</code></td><td>10%</td><td>FTS5 retrieval, tag filtering, combined filter accuracy</td></tr>
-        <tr><td><code>api_completeness</code></td><td>10%</td><td>REST endpoints, MCP tools, health check, authentication</td></tr>
-        <tr><td><code>analysis_accuracy</code></td><td>10%</td><td>Complexity scoring calibration, tag extraction recall</td></tr>
-        <tr><td><code>archive_integrity</code></td><td>10%</td><td>Snapshot roundtrip, export format correctness (JSON/NDJSON/CSV/MD)</td></tr>
-        <tr><td><code>concurrency_safety</code></td><td>5%</td><td>SQLite pragmas, atomic operations, FK enforcement</td></tr>
+        <tr><td><code>lifecycle_correctness</code></td><td>20%</td><td data-i18n="eval.dim.lifecycle">State machine transitions, terminal state enforcement, audit trail</td></tr>
+        <tr><td><code>dispatch_reliability</code></td><td>20%</td><td data-i18n="eval.dim.dispatch">Lifecycle flows, atomic claims, capability matching, dependency gates</td></tr>
+        <tr><td><code>task_format_quality</code></td><td>15%</td><td data-i18n="eval.dim.format">Task model completeness, agent fields, .task.md parser, normalizer</td></tr>
+        <tr><td><code>search_effectiveness</code></td><td>10%</td><td data-i18n="eval.dim.search">FTS5 retrieval, tag filtering, combined filter accuracy</td></tr>
+        <tr><td><code>api_completeness</code></td><td>10%</td><td data-i18n="eval.dim.api">REST endpoints, MCP tools, health check, authentication</td></tr>
+        <tr><td><code>analysis_accuracy</code></td><td>10%</td><td data-i18n="eval.dim.analysis">Complexity scoring calibration, tag extraction recall</td></tr>
+        <tr><td><code>archive_integrity</code></td><td>10%</td><td data-i18n="eval.dim.archive">Snapshot roundtrip, export format correctness (JSON/NDJSON/CSV/MD)</td></tr>
+        <tr><td><code>concurrency_safety</code></td><td>5%</td><td data-i18n="eval.dim.concurrency">SQLite pragmas, atomic operations, FK enforcement</td></tr>
       </tbody>
     </table>
 
-    <div class="section-label" style="margin: 24px 0 16px;">QUALITY GATE THRESHOLDS</div>
+    <div class="section-label" style="margin: 24px 0 16px;" data-i18n="eval.gates_title">QUALITY GATE THRESHOLDS</div>
     <table class="spec-table" style="max-width: 500px;">
       <thead>
-        <tr><th>Gate</th><th>Composite ≥</th><th>Coverage ≥</th></tr>
+        <tr>
+          <th data-i18n="eval.th.gate">Gate</th>
+          <th data-i18n="eval.th.composite">Composite &ge;</th>
+          <th data-i18n="eval.th.coverage">Coverage &ge;</th>
+        </tr>
       </thead>
       <tbody>
         <tr><td><span style="color:var(--green);">Relaxed</span></td><td>0.70</td><td>60%</td></tr>
@@ -282,16 +326,16 @@
   </div>
 </section>
 
-<!-- DOC.004 — CLI Reference -->
+<!-- DOC.004 -- CLI Reference -->
 <section id="cli">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.004 — TERMINAL INTERFACE</div>
-      <h2 class="section-title">[CLI REFERENCE]</h2>
-      <p class="section-desc">All CLI commands via the <span class="inline-code">arktower</span> entry point. Powered by Typer + Rich.</p>
+      <div class="section-label" data-i18n="cli.label">DOC.004 -- TERMINAL INTERFACE</div>
+      <h2 class="section-title" data-i18n="cli.title">[CLI REFERENCE]</h2>
+      <p class="section-desc" data-i18n="cli.desc">All CLI commands via the <span class="inline-code">arktower</span> entry point. Powered by Typer + Rich.</p>
     </div>
 
-    <div class="section-label" style="margin-bottom: 12px;">TASK OPERATIONS</div>
+    <div class="section-label" style="margin-bottom: 12px;" data-i18n="cli.task_ops">TASK OPERATIONS</div>
     <div class="code-block">
       <span class="code-label">arktower task</span>
       <code><span class="comment"># Create a new task</span>
@@ -322,7 +366,7 @@
 <span class="command">arktower task delete &lt;task-id&gt;</span></code>
     </div>
 
-    <div class="section-label" style="margin: 24px 0 12px;">POOL OPERATIONS</div>
+    <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.pool_ops">POOL OPERATIONS</div>
     <div class="code-block">
       <span class="code-label">arktower pool</span>
       <code><span class="comment"># View pool statistics</span>
@@ -335,7 +379,7 @@
 <span class="command">arktower pool stats --json</span></code>
     </div>
 
-    <div class="section-label" style="margin: 24px 0 12px;">SERVER MANAGEMENT</div>
+    <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.server_mgmt">SERVER MANAGEMENT</div>
     <div class="code-block">
       <span class="code-label">arktower server</span>
       <code><span class="comment"># Run database migrations</span>
@@ -351,7 +395,7 @@
 <span class="command">arktower server mcp</span></code>
     </div>
 
-    <div class="section-label" style="margin: 24px 0 12px;">EVALUATION COMMANDS</div>
+    <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.eval_cmds">EVALUATION COMMANDS</div>
     <div class="code-block">
       <span class="code-label">arktower eval</span>
       <code><span class="comment"># Run full evaluation</span>
@@ -372,13 +416,13 @@
   </div>
 </section>
 
-<!-- DOC.005 — Configuration -->
+<!-- DOC.005 -- Configuration -->
 <section id="config">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.005 — SYSTEM CONFIGURATION</div>
-      <h2 class="section-title">[CONFIGURATION]</h2>
-      <p class="section-desc">Integration configuration files for Cursor, NineS, and DevolaFlow.</p>
+      <div class="section-label" data-i18n="config.label">DOC.005 -- SYSTEM CONFIGURATION</div>
+      <h2 class="section-title" data-i18n="config.title">[CONFIGURATION]</h2>
+      <p class="section-desc" data-i18n="config.desc">Integration configuration files for Cursor, NineS, and DevolaFlow.</p>
     </div>
 
     <div class="section-label" style="margin-bottom: 12px;">CURSOR MCP INTEGRATION</div>
@@ -448,45 +492,45 @@ hooks:
   </div>
 </section>
 
-<!-- DOC.006 — Changelog -->
+<!-- DOC.006 -- Changelog -->
 <section id="changelog">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DOC.006 — VERSION HISTORY</div>
-      <h2 class="section-title">[CHANGELOG]</h2>
+      <div class="section-label" data-i18n="changelog.label">DOC.006 -- VERSION HISTORY</div>
+      <h2 class="section-title" data-i18n="changelog.title">[CHANGELOG]</h2>
     </div>
 
     <div class="feature-card" data-index="v0.1.0" style="max-width:800px;">
-      <h3>v0.1.0 — Initial Release</h3>
+      <h3 data-i18n="changelog.v010">v0.1.0 -- Initial Release</h3>
       <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;font-family:var(--font-mono);">2026-04-14</p>
-      <p><strong>Core System</strong></p>
+      <p><strong data-i18n="changelog.core">Core System</strong></p>
       <ul style="list-style:none;padding:0;margin:8px 0 16px;">
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Pydantic v2 task model with 24 fields including agent capability fields</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 10-state lifecycle with 15 named triggers and full transition table</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● EventBus pub/sub for lifecycle events</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● TaskService facade with capability matching dispatch</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● TaskNormalizer for field standardization</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.core1">&bull; Pydantic v2 task model with 24 fields including agent capability fields</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.core2">&bull; 10-state lifecycle with 15 named triggers and full transition table</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.core3">&bull; EventBus pub/sub for lifecycle events</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.core4">&bull; TaskService facade with capability matching dispatch</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.core5">&bull; TaskNormalizer for field standardization</li>
       </ul>
-      <p><strong>Storage</strong></p>
+      <p><strong data-i18n="changelog.storage">Storage</strong></p>
       <ul style="list-style:none;padding:0;margin:8px 0 16px;">
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● SQLite with WAL mode, FTS5 full-text search, JSON1 extension</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Atomic claim operation for concurrent agent access</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Migration runner with 3 migration files</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.store1">&bull; SQLite with WAL mode, FTS5 full-text search, JSON1 extension</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.store2">&bull; Atomic claim operation for concurrent agent access</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.store3">&bull; Migration runner with 3 migration files</li>
       </ul>
-      <p><strong>Interfaces</strong></p>
+      <p><strong data-i18n="changelog.interfaces">Interfaces</strong></p>
       <ul style="list-style:none;padding:0;margin:8px 0 16px;">
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● FastAPI REST API with 15+ endpoints</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● MCP server with 12 tools, 1 resource, 2 prompts</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Typer CLI with Rich terminal output</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● NiceGUI dashboard with YoRHa Tower theme, i18n, dark/light mode</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● WebSocket real-time event broadcasting</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.iface1">&bull; FastAPI REST API with 15+ endpoints</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.iface2">&bull; MCP server with 12 tools, 1 resource, 2 prompts</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.iface3">&bull; Typer CLI with Rich terminal output</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.iface4">&bull; NiceGUI dashboard with YoRHa Tower theme, i18n, dark/light mode</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.iface5">&bull; WebSocket real-time event broadcasting</li>
       </ul>
-      <p><strong>Quality</strong></p>
+      <p><strong data-i18n="changelog.quality">Quality</strong></p>
       <ul style="list-style:none;padding:0;margin:8px 0;">
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 293 tests, 71%+ coverage</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 8-dimension self-evaluation framework (score: 0.9179)</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 12 golden tasks for format validation</li>
-        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● GitHub Pages site with NieR:Automata Tower aesthetic</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.qual1">&bull; 293 tests, 71%+ coverage</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.qual2">&bull; 8-dimension self-evaluation framework (score: 0.9179)</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.qual3">&bull; 12 golden tasks for format validation</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);" data-i18n="changelog.qual4">&bull; GitHub Pages site with NieR:Automata Tower aesthetic</li>
       </ul>
       <span class="feature-tag">INITIAL_RELEASE</span>
     </div>
@@ -495,23 +539,201 @@ hooks:
 
 <footer>
   <div class="container">
-    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <p class="footer-quote" data-i18n="footer.quote">"Glory to Mankind." -- YoRHa</p>
     <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="format.html">Format</a>
-      <a href="demo.html">Demo</a>
-      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="format.html" data-i18n="nav.format">Format</a>
+      <a href="demo.html" data-i18n="nav.demo">Demo</a>
+      <a href="https://github.com" target="_blank" rel="noopener" data-i18n="footer.github">GitHub Repository</a>
     </div>
-    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+    <p class="footer-copy">ArkTower v0.1.0 | MIT License | Python 3.11+</p>
   </div>
 </footer>
 
 <script>
+(function() {
+  'use strict';
+
+  var T = {
+    'nav.home': { en: 'Home', zh: '\u9996\u9875' },
+    'nav.format': { en: 'Format', zh: '\u683C\u5F0F' },
+    'nav.demo': { en: 'Demo', zh: '\u6F14\u793A' },
+    'nav.docs': { en: 'Docs', zh: '\u6587\u6863' },
+    'hero.serial': { en: '[ARCHIVE] SYSTEM DOCUMENTATION', zh: '[\u6863\u6848] \u7CFB\u7EDF\u6587\u6863' },
+    'hero.titleSuffix': { en: 'Docs', zh: '\u6587\u6863' },
+    'hero.subtitle': { en: 'Technical references, architecture guides, and API specifications', zh: '\u6280\u672F\u53C2\u8003\u3001\u67B6\u6784\u6307\u5357\u548C API \u89C4\u8303' },
+    'arch.label': { en: 'DOC.001 -- SYSTEM TOPOLOGY', zh: 'DOC.001 -- \u7CFB\u7EDF\u62D3\u6251' },
+    'arch.title': { en: '[ARCHITECTURE]', zh: '[\u67B6\u6784]' },
+    'arch.desc': { en: 'Multi-layer architecture with unified task service facade, event bus, and pluggable storage.', zh: '\u591A\u5C42\u67B6\u6784\uFF0C\u7EDF\u4E00\u4EFB\u52A1\u670D\u52A1\u95E8\u9762\u3001\u4E8B\u4EF6\u603B\u7EBF\u548C\u53EF\u63D2\u62D4\u5B58\u50A8\u3002' },
+    'arch.consumers': { en: '[EXTERNAL CONSUMERS]', zh: '[\u5916\u90E8\u6D88\u8D39\u8005]' },
+    'arch.dashboard': { en: 'Dashboard', zh: '\u4EEA\u8868\u677F' },
+    'arch.service': { en: 'Task Service', zh: '\u4EFB\u52A1\u670D\u52A1' },
+    'arch.machine': { en: 'State Machine', zh: '\u72B6\u6001\u673A' },
+    'arch.core.p': { en: 'Domain models (Task, TaskStatus, Trigger), StateMachine (15 triggers &times; 10 states), EventBus, TaskService facade, TaskNormalizer.', zh: '\u9886\u57DF\u6A21\u578B (Task, TaskStatus, Trigger)\uFF0CStateMachine (15 \u89E6\u53D1\u5668 &times; 10 \u72B6\u6001)\uFF0CEventBus\uFF0CTaskService \u95E8\u9762\uFF0CTaskNormalizer\u3002' },
+    'arch.store.p': { en: 'TaskRepository protocol, SqliteTaskRepository (CRUD, FTS5, atomic claim), migration runner with 3 migrations.', zh: 'TaskRepository \u534F\u8BAE\uFF0CSqliteTaskRepository (CRUD, FTS5, \u539F\u5B50\u8BA4\u9886)\uFF0C\u542B 3 \u4E2A\u8FC1\u79FB\u7684\u8FC1\u79FB\u8FD0\u884C\u5668\u3002' },
+    'arch.api.p': { en: 'FastAPI app factory, REST routes at /api/v1/*, WebSocket manager for real-time events.', zh: 'FastAPI \u5E94\u7528\u5DE5\u5382\uFF0C/api/v1/* REST \u8DEF\u7531\uFF0C\u5B9E\u65F6\u4E8B\u4EF6 WebSocket \u7BA1\u7406\u5668\u3002' },
+    'arch.mcp.p': { en: 'MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor and Claude.', zh: 'MCP \u670D\u52A1\u5668\uFF0C\u542B 12 \u5DE5\u5177\u30011 \u8D44\u6E90\u30012 \u63D0\u793A\u3002\u901A\u8FC7 stdio \u4F20\u8F93\u652F\u6301 Cursor \u548C Claude\u3002' },
+    'arch.cli.p': { en: 'Typer CLI with Rich output: task, pool, server, eval subcommands. JSON output mode.', zh: 'Typer CLI\uFF0C\u542B Rich \u8F93\u51FA: task, pool, server, eval \u5B50\u547D\u4EE4\u3002\u652F\u6301 JSON \u8F93\u51FA\u3002' },
+    'arch.web.p': { en: 'NiceGUI dashboard with YoRHa theme, i18n (EN/ZH), dark/light toggle, pool overview, task board, analytics.', zh: 'NiceGUI \u4EEA\u8868\u677F\uFF0CYoRHa \u4E3B\u9898\uFF0Ci18n (\u4E2D/\u82F1)\uFF0C\u6697/\u4EAE\u5207\u6362\uFF0C\u6C60\u6982\u89C8\uFF0C\u4EFB\u52A1\u677F\uFF0C\u5206\u6790\u3002' },
+    'arch.viewfull': { en: 'VIEW FULL ARCHITECTURE &rarr;', zh: '\u67E5\u770B\u5B8C\u6574\u67B6\u6784 &rarr;' },
+    'api.label': { en: 'DOC.002 -- INTERFACE PROTOCOLS', zh: 'DOC.002 -- \u63A5\u53E3\u534F\u8BAE' },
+    'api.title': { en: '[API REFERENCE]', zh: '[API \u53C2\u8003]' },
+    'api.desc': { en: 'REST API endpoints, MCP tools, and WebSocket events.', zh: 'REST API \u7AEF\u70B9\u3001MCP \u5DE5\u5177\u548C WebSocket \u4E8B\u4EF6\u3002' },
+    'api.rest_title': { en: 'REST API ENDPOINTS -- /api/v1/', zh: 'REST API \u7AEF\u70B9 -- /api/v1/' },
+    'api.th.method': { en: 'Method', zh: '\u65B9\u6CD5' },
+    'api.th.path': { en: 'Path', zh: '\u8DEF\u5F84' },
+    'api.th.desc': { en: 'Description', zh: '\u63CF\u8FF0' },
+    'api.th.tool': { en: 'Tool Name', zh: '\u5DE5\u5177\u540D' },
+    'api.th.params': { en: 'Key Parameters', zh: '\u5173\u952E\u53C2\u6570' },
+    'api.health': { en: 'Health check -- returns system status', zh: '\u5065\u5EB7\u68C0\u67E5 -- \u8FD4\u56DE\u7CFB\u7EDF\u72B6\u6001' },
+    'api.create': { en: 'Create a new task', zh: '\u521B\u5EFA\u65B0\u4EFB\u52A1' },
+    'api.list': { en: 'List tasks with optional filters (status, priority, tags, search)', zh: '\u5217\u51FA\u4EFB\u52A1\uFF0C\u652F\u6301\u53EF\u9009\u8FC7\u6EE4 (\u72B6\u6001\u3001\u4F18\u5148\u7EA7\u3001\u6807\u7B7E\u3001\u641C\u7D22)' },
+    'api.get': { en: 'Get full details of a specific task', zh: '\u83B7\u53D6\u7279\u5B9A\u4EFB\u52A1\u7684\u5B8C\u6574\u8BE6\u60C5' },
+    'api.update': { en: 'Update task fields (title, description, priority, tags, etc.)', zh: '\u66F4\u65B0\u4EFB\u52A1\u5B57\u6BB5 (\u6807\u9898\u3001\u63CF\u8FF0\u3001\u4F18\u5148\u7EA7\u3001\u6807\u7B7E\u7B49)' },
+    'api.delete': { en: 'Delete a task from the pool', zh: '\u4ECE\u6C60\u4E2D\u5220\u9664\u4EFB\u52A1' },
+    'api.advance': { en: 'Advance task via state machine trigger', zh: '\u901A\u8FC7\u72B6\u6001\u673A\u89E6\u53D1\u5668\u63A8\u8FDB\u4EFB\u52A1' },
+    'api.claim': { en: 'Atomically claim a queued task for an agent', zh: '\u539F\u5B50\u5730\u4E3A\u667A\u80FD\u4F53\u8BA4\u9886\u961F\u5217\u4EFB\u52A1' },
+    'api.complete': { en: 'Mark task as completed with optional output', zh: '\u6807\u8BB0\u4EFB\u52A1\u5B8C\u6210\uFF0C\u53EF\u9644\u8F93\u51FA' },
+    'api.history': { en: 'Get task event history (audit trail)', zh: '\u83B7\u53D6\u4EFB\u52A1\u4E8B\u4EF6\u5386\u53F2 (\u5BA1\u8BA1\u8DDF\u8E2A)' },
+    'api.stats': { en: 'Pool statistics -- counts by status, priority, queue age', zh: '\u6C60\u7EDF\u8BA1 -- \u6309\u72B6\u6001\u3001\u4F18\u5148\u7EA7\u3001\u961F\u5217\u5E74\u9F84\u8BA1\u6570' },
+    'api.next': { en: 'Get highest-priority queued task (capability matching)', zh: '\u83B7\u53D6\u6700\u9AD8\u4F18\u5148\u7EA7\u961F\u5217\u4EFB\u52A1 (\u80FD\u529B\u5339\u914D)' },
+    'api.tpl_create': { en: 'Create a task template', zh: '\u521B\u5EFA\u4EFB\u52A1\u6A21\u677F' },
+    'api.tpl_list': { en: 'List all task templates', zh: '\u5217\u51FA\u6240\u6709\u4EFB\u52A1\u6A21\u677F' },
+    'api.archive': { en: 'Archive a terminal task to JSON snapshot', zh: '\u5C06\u7EC8\u6001\u4EFB\u52A1\u5F52\u6863\u4E3A JSON \u5FEB\u7167' },
+    'api.ws': { en: 'WebSocket -- real-time task lifecycle events', zh: 'WebSocket -- \u5B9E\u65F6\u4EFB\u52A1\u751F\u547D\u5468\u671F\u4E8B\u4EF6' },
+    'api.mcp_title': { en: 'MCP TOOLS -- 12 REGISTERED', zh: 'MCP \u5DE5\u5177 -- 12 \u4E2A\u5DF2\u6CE8\u518C' },
+    'api.ws_title': { en: 'WEBSOCKET EVENTS', zh: 'WEBSOCKET \u4E8B\u4EF6' },
+    'mcp.create': { en: 'Create a new task in the pool', zh: '\u5728\u6C60\u4E2D\u521B\u5EFA\u65B0\u4EFB\u52A1' },
+    'mcp.list': { en: 'List tasks with optional filters', zh: '\u5217\u51FA\u4EFB\u52A1\uFF0C\u652F\u6301\u53EF\u9009\u8FC7\u6EE4' },
+    'mcp.get': { en: 'Get full details of a task', zh: '\u83B7\u53D6\u4EFB\u52A1\u5B8C\u6574\u8BE6\u60C5' },
+    'mcp.claim': { en: 'Claim a queued task for an agent', zh: '\u4E3A\u667A\u80FD\u4F53\u8BA4\u9886\u961F\u5217\u4EFB\u52A1' },
+    'mcp.complete': { en: 'Mark a task as completed', zh: '\u6807\u8BB0\u4EFB\u52A1\u5B8C\u6210' },
+    'mcp.search': { en: 'Full-text search across tasks', zh: '\u8DE8\u4EFB\u52A1\u5168\u6587\u641C\u7D22' },
+    'mcp.stats': { en: 'Get pool statistics', zh: '\u83B7\u53D6\u6C60\u7EDF\u8BA1' },
+    'mcp.next': { en: 'Get highest-priority queued task', zh: '\u83B7\u53D6\u6700\u9AD8\u4F18\u5148\u7EA7\u961F\u5217\u4EFB\u52A1' },
+    'mcp.advance': { en: 'Advance via state machine trigger', zh: '\u901A\u8FC7\u72B6\u6001\u673A\u89E6\u53D1\u5668\u63A8\u8FDB' },
+    'mcp.fail': { en: 'Mark a task as failed', zh: '\u6807\u8BB0\u4EFB\u52A1\u5931\u8D25' },
+    'mcp.archive': { en: 'Archive a terminal task', zh: '\u5F52\u6863\u7EC8\u6001\u4EFB\u52A1' },
+    'mcp.tpl': { en: 'Create task from a template', zh: '\u4ECE\u6A21\u677F\u521B\u5EFA\u4EFB\u52A1' },
+    'ws.transition': { en: 'Fired on every state machine transition. Payload includes task_id, trigger, from_status, to_status, actor.', zh: '\u6BCF\u6B21\u72B6\u6001\u673A\u8FC7\u6E21\u65F6\u89E6\u53D1\u3002\u8D1F\u8F7D\u5305\u542B task_id, trigger, from_status, to_status, actor\u3002' },
+    'ws.created': { en: 'Fired when a new task is created. Payload includes the full task object.', zh: '\u65B0\u4EFB\u52A1\u521B\u5EFA\u65F6\u89E6\u53D1\u3002\u8D1F\u8F7D\u5305\u542B\u5B8C\u6574\u4EFB\u52A1\u5BF9\u8C61\u3002' },
+    'ws.updated': { en: 'Fired on task field updates. Payload includes task_id and changed fields.', zh: '\u4EFB\u52A1\u5B57\u6BB5\u66F4\u65B0\u65F6\u89E6\u53D1\u3002\u8D1F\u8F7D\u5305\u542B task_id \u548C\u53D8\u66F4\u5B57\u6BB5\u3002' },
+    'ws.deleted': { en: 'Fired when a task is removed from the pool. Payload includes task_id.', zh: '\u4EFB\u52A1\u4ECE\u6C60\u4E2D\u79FB\u9664\u65F6\u89E6\u53D1\u3002\u8D1F\u8F7D\u5305\u542B task_id\u3002' },
+    'eval.label': { en: 'DOC.003 -- QUALITY ASSURANCE', zh: 'DOC.003 -- \u8D28\u91CF\u4FDD\u8BC1' },
+    'eval.title': { en: '[EVALUATION SYSTEM]', zh: '[\u8BC4\u4F30\u7CFB\u7EDF]' },
+    'eval.desc': { en: '8-dimension self-benchmarking framework with weighted scoring and quality gates.', zh: '8 \u7EF4\u5EA6\u81EA\u57FA\u51C6\u6D4B\u8BD5\u6846\u67B6\uFF0C\u542B\u52A0\u6743\u8BC4\u5206\u548C\u8D28\u91CF\u95E8\u3002' },
+    'eval.composite': { en: 'Composite Score', zh: '\u7EFC\u5408\u8BC4\u5206' },
+    'eval.gate': { en: 'GATE: STANDARD (\u2265 0.85) -- PASSED', zh: '\u95E8\u69DB: \u6807\u51C6 (\u2265 0.85) -- \u5DF2\u901A\u8FC7' },
+    'eval.weighted': { en: 'WEIGHTED AVERAGE / 8 DIMENSIONS', zh: '\u52A0\u6743\u5E73\u5747 / 8 \u7EF4\u5EA6' },
+    'eval.th.dim': { en: 'Dimension', zh: '\u7EF4\u5EA6' },
+    'eval.th.weight': { en: 'Weight', zh: '\u6743\u91CD' },
+    'eval.th.desc': { en: 'Description', zh: '\u63CF\u8FF0' },
+    'eval.dim.lifecycle': { en: 'State machine transitions, terminal state enforcement, audit trail', zh: '\u72B6\u6001\u673A\u8FC7\u6E21\u3001\u7EC8\u6001\u5F3A\u5236\u3001\u5BA1\u8BA1\u8DDF\u8E2A' },
+    'eval.dim.dispatch': { en: 'Lifecycle flows, atomic claims, capability matching, dependency gates', zh: '\u751F\u547D\u5468\u671F\u6D41\u3001\u539F\u5B50\u8BA4\u9886\u3001\u80FD\u529B\u5339\u914D\u3001\u4F9D\u8D56\u95E8' },
+    'eval.dim.format': { en: 'Task model completeness, agent fields, .task.md parser, normalizer', zh: '\u4EFB\u52A1\u6A21\u578B\u5B8C\u6574\u6027\u3001\u667A\u80FD\u4F53\u5B57\u6BB5\u3001.task.md \u89E3\u6790\u5668\u3001\u89C4\u8303\u5316\u5668' },
+    'eval.dim.search': { en: 'FTS5 retrieval, tag filtering, combined filter accuracy', zh: 'FTS5 \u68C0\u7D22\u3001\u6807\u7B7E\u8FC7\u6EE4\u3001\u7EC4\u5408\u8FC7\u6EE4\u51C6\u786E\u6027' },
+    'eval.dim.api': { en: 'REST endpoints, MCP tools, health check, authentication', zh: 'REST \u7AEF\u70B9\u3001MCP \u5DE5\u5177\u3001\u5065\u5EB7\u68C0\u67E5\u3001\u8BA4\u8BC1' },
+    'eval.dim.analysis': { en: 'Complexity scoring calibration, tag extraction recall', zh: '\u590D\u6742\u5EA6\u8BC4\u5206\u6821\u51C6\u3001\u6807\u7B7E\u63D0\u53D6\u53EC\u56DE\u7387' },
+    'eval.dim.archive': { en: 'Snapshot roundtrip, export format correctness (JSON/NDJSON/CSV/MD)', zh: '\u5FEB\u7167\u5F80\u8FD4\u3001\u5BFC\u51FA\u683C\u5F0F\u6B63\u786E\u6027 (JSON/NDJSON/CSV/MD)' },
+    'eval.dim.concurrency': { en: 'SQLite pragmas, atomic operations, FK enforcement', zh: 'SQLite pragmas\u3001\u539F\u5B50\u64CD\u4F5C\u3001\u5916\u952E\u5F3A\u5236' },
+    'eval.gates_title': { en: 'QUALITY GATE THRESHOLDS', zh: '\u8D28\u91CF\u95E8\u9608\u503C' },
+    'eval.th.gate': { en: 'Gate', zh: '\u95E8\u69DB' },
+    'eval.th.composite': { en: 'Composite \u2265', zh: '\u7EFC\u5408\u5206 \u2265' },
+    'eval.th.coverage': { en: 'Coverage \u2265', zh: '\u8986\u76D6\u7387 \u2265' },
+    'cli.label': { en: 'DOC.004 -- TERMINAL INTERFACE', zh: 'DOC.004 -- \u7EC8\u7AEF\u63A5\u53E3' },
+    'cli.title': { en: '[CLI REFERENCE]', zh: '[CLI \u53C2\u8003]' },
+    'cli.desc': { en: 'All CLI commands via the <span class="inline-code">arktower</span> entry point. Powered by Typer + Rich.', zh: '\u901A\u8FC7 <span class="inline-code">arktower</span> \u5165\u53E3\u7684\u6240\u6709 CLI \u547D\u4EE4\u3002\u57FA\u4E8E Typer + Rich\u3002' },
+    'cli.task_ops': { en: 'TASK OPERATIONS', zh: '\u4EFB\u52A1\u64CD\u4F5C' },
+    'cli.pool_ops': { en: 'POOL OPERATIONS', zh: '\u6C60\u64CD\u4F5C' },
+    'cli.server_mgmt': { en: 'SERVER MANAGEMENT', zh: '\u670D\u52A1\u5668\u7BA1\u7406' },
+    'cli.eval_cmds': { en: 'EVALUATION COMMANDS', zh: '\u8BC4\u4F30\u547D\u4EE4' },
+    'config.label': { en: 'DOC.005 -- SYSTEM CONFIGURATION', zh: 'DOC.005 -- \u7CFB\u7EDF\u914D\u7F6E' },
+    'config.title': { en: '[CONFIGURATION]', zh: '[\u914D\u7F6E]' },
+    'config.desc': { en: 'Integration configuration files for Cursor, NineS, and DevolaFlow.', zh: 'Cursor\u3001NineS \u548C DevolaFlow \u7684\u96C6\u6210\u914D\u7F6E\u6587\u4EF6\u3002' },
+    'changelog.label': { en: 'DOC.006 -- VERSION HISTORY', zh: 'DOC.006 -- \u7248\u672C\u5386\u53F2' },
+    'changelog.title': { en: '[CHANGELOG]', zh: '[\u66F4\u65B0\u65E5\u5FD7]' },
+    'changelog.v010': { en: 'v0.1.0 -- Initial Release', zh: 'v0.1.0 -- \u521D\u59CB\u7248\u672C' },
+    'changelog.core': { en: 'Core System', zh: '\u6838\u5FC3\u7CFB\u7EDF' },
+    'changelog.core1': { en: '\u2022 Pydantic v2 task model with 24 fields including agent capability fields', zh: '\u2022 Pydantic v2 \u4EFB\u52A1\u6A21\u578B\uFF0C\u542B 24 \u4E2A\u5B57\u6BB5\u5305\u62EC\u667A\u80FD\u4F53\u80FD\u529B\u5B57\u6BB5' },
+    'changelog.core2': { en: '\u2022 10-state lifecycle with 15 named triggers and full transition table', zh: '\u2022 10 \u72B6\u6001\u751F\u547D\u5468\u671F\uFF0C15 \u4E2A\u547D\u540D\u89E6\u53D1\u5668\u548C\u5B8C\u6574\u8FC7\u6E21\u8868' },
+    'changelog.core3': { en: '\u2022 EventBus pub/sub for lifecycle events', zh: '\u2022 \u751F\u547D\u5468\u671F\u4E8B\u4EF6\u7684 EventBus \u53D1\u5E03/\u8BA2\u9605' },
+    'changelog.core4': { en: '\u2022 TaskService facade with capability matching dispatch', zh: '\u2022 TaskService \u95E8\u9762\uFF0C\u542B\u80FD\u529B\u5339\u914D\u8C03\u5EA6' },
+    'changelog.core5': { en: '\u2022 TaskNormalizer for field standardization', zh: '\u2022 TaskNormalizer \u5B57\u6BB5\u89C4\u8303\u5316' },
+    'changelog.storage': { en: 'Storage', zh: '\u5B58\u50A8' },
+    'changelog.store1': { en: '\u2022 SQLite with WAL mode, FTS5 full-text search, JSON1 extension', zh: '\u2022 SQLite WAL \u6A21\u5F0F\u3001FTS5 \u5168\u6587\u641C\u7D22\u3001JSON1 \u6269\u5C55' },
+    'changelog.store2': { en: '\u2022 Atomic claim operation for concurrent agent access', zh: '\u2022 \u5E76\u53D1\u667A\u80FD\u4F53\u8BBF\u95EE\u7684\u539F\u5B50\u8BA4\u9886\u64CD\u4F5C' },
+    'changelog.store3': { en: '\u2022 Migration runner with 3 migration files', zh: '\u2022 \u542B 3 \u4E2A\u8FC1\u79FB\u6587\u4EF6\u7684\u8FC1\u79FB\u8FD0\u884C\u5668' },
+    'changelog.interfaces': { en: 'Interfaces', zh: '\u63A5\u53E3' },
+    'changelog.iface1': { en: '\u2022 FastAPI REST API with 15+ endpoints', zh: '\u2022 FastAPI REST API\uFF0C15+ \u7AEF\u70B9' },
+    'changelog.iface2': { en: '\u2022 MCP server with 12 tools, 1 resource, 2 prompts', zh: '\u2022 MCP \u670D\u52A1\u5668\uFF0C12 \u5DE5\u5177\u30011 \u8D44\u6E90\u30012 \u63D0\u793A' },
+    'changelog.iface3': { en: '\u2022 Typer CLI with Rich terminal output', zh: '\u2022 Typer CLI\uFF0CRich \u7EC8\u7AEF\u8F93\u51FA' },
+    'changelog.iface4': { en: '\u2022 NiceGUI dashboard with YoRHa Tower theme, i18n, dark/light mode', zh: '\u2022 NiceGUI \u4EEA\u8868\u677F\uFF0CYoRHa Tower \u4E3B\u9898\u3001\u56FD\u9645\u5316\u3001\u6697/\u4EAE\u6A21\u5F0F' },
+    'changelog.iface5': { en: '\u2022 WebSocket real-time event broadcasting', zh: '\u2022 WebSocket \u5B9E\u65F6\u4E8B\u4EF6\u5E7F\u64AD' },
+    'changelog.quality': { en: 'Quality', zh: '\u8D28\u91CF' },
+    'changelog.qual1': { en: '\u2022 293 tests, 71%+ coverage', zh: '\u2022 293 \u4E2A\u6D4B\u8BD5\uFF0C71%+ \u8986\u76D6\u7387' },
+    'changelog.qual2': { en: '\u2022 8-dimension self-evaluation framework (score: 0.9179)', zh: '\u2022 8 \u7EF4\u5EA6\u81EA\u8BC4\u4F30\u6846\u67B6 (\u5206\u6570: 0.9179)' },
+    'changelog.qual3': { en: '\u2022 12 golden tasks for format validation', zh: '\u2022 12 \u4E2A\u91D1\u6807\u4EFB\u52A1\u7528\u4E8E\u683C\u5F0F\u9A8C\u8BC1' },
+    'changelog.qual4': { en: '\u2022 GitHub Pages site with NieR:Automata Tower aesthetic', zh: '\u2022 GitHub Pages \u7AD9\u70B9\uFF0CNieR:Automata Tower \u7F8E\u5B66' },
+    'footer.quote': { en: '"Glory to Mankind." -- YoRHa', zh: '"\u4EBA\u7C7B\u306B\u6804\u5149\u3042\u308C\u3002" -- YoRHa' },
+    'footer.github': { en: 'GitHub Repository', zh: 'GitHub \u4ED3\u5E93' }
+  };
+
+  function initTheme() {
+    var saved = localStorage.getItem('arktower-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeBtn(saved);
+  }
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('arktower-theme', next);
+    updateThemeBtn(next);
+  }
+
+  function updateThemeBtn(theme) {
+    var btn = document.getElementById('themeToggle');
+    if (btn) { btn.innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;'; }
+  }
+
+  function initLang() {
+    var saved = localStorage.getItem('arktower-lang') || 'en';
+    applyLang(saved);
+  }
+
+  function toggleLang() {
+    var current = localStorage.getItem('arktower-lang') || 'en';
+    var next = current === 'en' ? 'zh' : 'en';
+    localStorage.setItem('arktower-lang', next);
+    applyLang(next);
+  }
+
+  function applyLang(lang) {
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      if (T[key] && T[key][lang]) {
+        els[i].innerHTML = T[key][lang];
+      }
+    }
+    var btn = document.getElementById('langToggle');
+    if (btn) { btn.textContent = lang === 'en' ? '\u4E2D' : 'EN'; }
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('langToggle').addEventListener('click', toggleLang);
+
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', function() {
       document.querySelector('.nav-links').classList.remove('open');
     });
   });
+
+  initTheme();
+  initLang();
+})();
 </script>
 
 </body>
