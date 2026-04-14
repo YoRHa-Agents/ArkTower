@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -266,69 +266,73 @@
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#8801; MENU</button>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="format.html">Format</a></li>
-      <li><a href="demo.html" class="active">Demo</a></li>
-      <li><a href="docs.html">Docs</a></li>
-      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="format.html" data-i18n="nav.format">Format</a></li>
+      <li><a href="demo.html" class="active" data-i18n="nav.demo">Demo</a></li>
+      <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub &#8599;</a></li>
     </ul>
+    <div class="nav-controls">
+      <button type="button" id="langToggle" aria-label="Toggle language">EN</button>
+      <button type="button" id="themeToggle" aria-label="Toggle theme">&#9788;</button>
+    </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="container">
-    <div class="hero-serial">[DEMO] TOWER SYSTEM SIMULATION</div>
-    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Demo</h1>
-    <p class="hero-subtitle">Create, dispatch, and manage tasks in a simulated agent pool</p>
-    <div class="hero-badge">[CLIENT-SIDE SIMULATION]</div>
+    <div class="hero-serial" data-i18n="hero.serial">[DEMO] TOWER SYSTEM SIMULATION</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower <span data-i18n="hero.titleSuffix">Demo</span></h1>
+    <p class="hero-subtitle" data-i18n="hero.subtitle">Create, dispatch, and manage tasks in a simulated agent pool</p>
+    <div class="hero-badge" data-i18n="hero.badge">[CLIENT-SIDE SIMULATION]</div>
   </div>
 </header>
 
-<!-- DEMO.005 — Statistics Panel -->
+<!-- DEMO.005 -- Statistics Panel -->
 <section id="stats">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DEMO.005 — REAL-TIME METRICS</div>
-      <h2 class="section-title">[STATISTICS]</h2>
+      <div class="section-label" data-i18n="stats.label">DEMO.005 -- REAL-TIME METRICS</div>
+      <h2 class="section-title" data-i18n="stats.title">[STATISTICS]</h2>
     </div>
     <div class="stat-grid" id="statsGrid"></div>
   </div>
 </section>
 
-<!-- DEMO.001 — Task Pool + DEMO.002 — Create Task -->
+<!-- DEMO.001 -- Task Pool + DEMO.002 -- Create Task -->
 <section id="pool">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">DEMO.001 — TASK POOL SIMULATION</div>
-      <h2 class="section-title">[TASK POOL]</h2>
-      <p class="section-desc">Simulated task pool with lifecycle controls. Click a task to view details.</p>
+      <div class="section-label" data-i18n="pool.label">DEMO.001 -- TASK POOL SIMULATION</div>
+      <h2 class="section-title" data-i18n="pool.title">[TASK POOL]</h2>
+      <p class="section-desc" data-i18n="pool.desc">Simulated task pool with lifecycle controls. Click a task to view details.</p>
     </div>
 
     <div class="demo-two-col">
       <div>
         <div class="demo-panel">
-          <div class="demo-panel-title">ACTIVE POOL</div>
+          <div class="demo-panel-title" data-i18n="pool.active">ACTIVE POOL</div>
           <div id="taskPool"></div>
-          <div id="poolEmpty" style="display:none;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);text-align:center;padding:32px;">[ POOL EMPTY — CREATE A TASK ]</div>
+          <div id="poolEmpty" style="display:none;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);text-align:center;padding:32px;" data-i18n="pool.empty">[ POOL EMPTY -- CREATE A TASK ]</div>
         </div>
       </div>
       <div>
-        <!-- DEMO.002 — Create Task -->
+        <!-- DEMO.002 -- Create Task -->
         <div class="demo-panel">
-          <div class="demo-panel-title">DEMO.002 — CREATE TASK</div>
+          <div class="demo-panel-title" data-i18n="create.title">DEMO.002 -- CREATE TASK</div>
           <form id="createForm">
             <div class="form-group">
-              <label>Title</label>
-              <input type="text" id="newTitle" placeholder="Task title..." required>
+              <label data-i18n="create.lbl_title">Title</label>
+              <input type="text" id="newTitle" required>
             </div>
             <div class="form-group">
-              <label>Description</label>
-              <textarea id="newDesc" placeholder="Markdown description..."></textarea>
+              <label data-i18n="create.lbl_desc">Description</label>
+              <textarea id="newDesc"></textarea>
             </div>
             <div class="form-group">
-              <label>Priority</label>
+              <label data-i18n="create.lbl_priority">Priority</label>
               <select id="newPriority">
                 <option value="low">LOW</option>
                 <option value="medium" selected>MEDIUM</option>
@@ -337,21 +341,21 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Tags (comma-separated)</label>
+              <label data-i18n="create.lbl_tags">Tags (comma-separated)</label>
               <input type="text" id="newTags" placeholder="python, api, auth">
             </div>
-            <button type="submit" class="btn-submit">SUBMIT TASK</button>
+            <button type="submit" class="btn-submit" data-i18n="create.submit">SUBMIT TASK</button>
           </form>
         </div>
 
-        <!-- DEMO.006 — Pre-Analysis -->
+        <!-- DEMO.006 -- Pre-Analysis -->
         <div class="demo-panel">
-          <div class="demo-panel-title">DEMO.006 — PRE-ANALYSIS</div>
+          <div class="demo-panel-title" data-i18n="analysis.title">DEMO.006 -- PRE-ANALYSIS</div>
           <div class="form-group">
-            <label>Paste raw task text</label>
-            <textarea id="analyzeInput" placeholder="Paste task description for analysis..." style="min-height:100px;"></textarea>
+            <label data-i18n="analysis.lbl">Paste raw task text</label>
+            <textarea id="analyzeInput" style="min-height:100px;"></textarea>
           </div>
-          <button class="btn-submit" onclick="runAnalysis()">ANALYZE</button>
+          <button class="btn-submit" onclick="runAnalysis()" data-i18n="analysis.btn">ANALYZE</button>
           <div id="analysisResult" style="display:none;margin-top:16px;"></div>
         </div>
       </div>
@@ -359,14 +363,14 @@
   </div>
 </section>
 
-<!-- DEMO.004 — Task Detail Overlay -->
+<!-- DEMO.004 -- Task Detail Overlay -->
 <div class="detail-overlay" id="detailOverlay">
   <div class="detail-panel">
     <button class="detail-close" onclick="closeDetail()">&times;</button>
-    <div class="demo-panel-title" style="margin-bottom:20px;">DEMO.004 — TASK DETAIL</div>
+    <div class="demo-panel-title" style="margin-bottom:20px;" data-i18n="detail.title">DEMO.004 -- TASK DETAIL</div>
     <div id="detailContent"></div>
     <div style="margin-top:24px;">
-      <div class="demo-panel-title">HISTORY TIMELINE</div>
+      <div class="demo-panel-title" data-i18n="detail.history">HISTORY TIMELINE</div>
       <div id="detailTimeline"></div>
     </div>
   </div>
@@ -374,14 +378,14 @@
 
 <footer>
   <div class="container">
-    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <p class="footer-quote" data-i18n="footer.quote">"Glory to Mankind." -- YoRHa</p>
     <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="format.html">Format</a>
-      <a href="docs.html">Documentation</a>
-      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="format.html" data-i18n="nav.format">Format</a>
+      <a href="docs.html" data-i18n="footer.documentation">Documentation</a>
+      <a href="https://github.com" target="_blank" rel="noopener" data-i18n="footer.github">GitHub Repository</a>
     </div>
-    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+    <p class="footer-copy">ArkTower v0.1.0 | MIT License | Python 3.11+</p>
   </div>
 </footer>
 
@@ -389,7 +393,89 @@
 (function() {
   'use strict';
 
-  /* ── State Machine Transitions ── */
+  /* -- i18n translations -- */
+  var T = {
+    'nav.home': { en: 'Home', zh: '\u9996\u9875' },
+    'nav.format': { en: 'Format', zh: '\u683C\u5F0F' },
+    'nav.demo': { en: 'Demo', zh: '\u6F14\u793A' },
+    'nav.docs': { en: 'Docs', zh: '\u6587\u6863' },
+    'hero.serial': { en: '[DEMO] TOWER SYSTEM SIMULATION', zh: '[\u6F14\u793A] \u5854\u7CFB\u7EDF\u6A21\u62DF' },
+    'hero.titleSuffix': { en: 'Demo', zh: '\u6F14\u793A' },
+    'hero.subtitle': { en: 'Create, dispatch, and manage tasks in a simulated agent pool', zh: '\u5728\u6A21\u62DF\u667A\u80FD\u4F53\u6C60\u4E2D\u521B\u5EFA\u3001\u8C03\u5EA6\u548C\u7BA1\u7406\u4EFB\u52A1' },
+    'hero.badge': { en: '[CLIENT-SIDE SIMULATION]', zh: '[\u5BA2\u6237\u7AEF\u6A21\u62DF]' },
+    'stats.label': { en: 'DEMO.005 -- REAL-TIME METRICS', zh: 'DEMO.005 -- \u5B9E\u65F6\u6307\u6807' },
+    'stats.title': { en: '[STATISTICS]', zh: '[\u7EDF\u8BA1]' },
+    'pool.label': { en: 'DEMO.001 -- TASK POOL SIMULATION', zh: 'DEMO.001 -- \u4EFB\u52A1\u6C60\u6A21\u62DF' },
+    'pool.title': { en: '[TASK POOL]', zh: '[\u4EFB\u52A1\u6C60]' },
+    'pool.desc': { en: 'Simulated task pool with lifecycle controls. Click a task to view details.', zh: '\u5E26\u751F\u547D\u5468\u671F\u63A7\u5236\u7684\u6A21\u62DF\u4EFB\u52A1\u6C60\u3002\u70B9\u51FB\u4EFB\u52A1\u67E5\u770B\u8BE6\u60C5\u3002' },
+    'pool.active': { en: 'ACTIVE POOL', zh: '\u6D3B\u8DC3\u6C60' },
+    'pool.empty': { en: '[ POOL EMPTY -- CREATE A TASK ]', zh: '[ \u6C60\u4E3A\u7A7A -- \u521B\u5EFA\u4EFB\u52A1 ]' },
+    'create.title': { en: 'DEMO.002 -- CREATE TASK', zh: 'DEMO.002 -- \u521B\u5EFA\u4EFB\u52A1' },
+    'create.lbl_title': { en: 'Title', zh: '\u6807\u9898' },
+    'create.lbl_desc': { en: 'Description', zh: '\u63CF\u8FF0' },
+    'create.lbl_priority': { en: 'Priority', zh: '\u4F18\u5148\u7EA7' },
+    'create.lbl_tags': { en: 'Tags (comma-separated)', zh: '\u6807\u7B7E (\u9017\u53F7\u5206\u9694)' },
+    'create.submit': { en: 'SUBMIT TASK', zh: '\u63D0\u4EA4\u4EFB\u52A1' },
+    'analysis.title': { en: 'DEMO.006 -- PRE-ANALYSIS', zh: 'DEMO.006 -- \u9884\u5206\u6790' },
+    'analysis.lbl': { en: 'Paste raw task text', zh: '\u7C98\u8D34\u539F\u59CB\u4EFB\u52A1\u6587\u672C' },
+    'analysis.btn': { en: 'ANALYZE', zh: '\u5206\u6790' },
+    'detail.title': { en: 'DEMO.004 -- TASK DETAIL', zh: 'DEMO.004 -- \u4EFB\u52A1\u8BE6\u60C5' },
+    'detail.history': { en: 'HISTORY TIMELINE', zh: '\u5386\u53F2\u65F6\u95F4\u7EBF' },
+    'footer.quote': { en: '"Glory to Mankind." -- YoRHa', zh: '"\u4EBA\u7C7B\u306B\u6804\u5149\u3042\u308C\u3002" -- YoRHa' },
+    'footer.documentation': { en: 'Documentation', zh: '\u6587\u6863' },
+    'footer.github': { en: 'GitHub Repository', zh: 'GitHub \u4ED3\u5E93' }
+  };
+
+  /* -- Theme toggle -- */
+  function initTheme() {
+    var saved = localStorage.getItem('arktower-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeBtn(saved);
+  }
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('arktower-theme', next);
+    updateThemeBtn(next);
+  }
+
+  function updateThemeBtn(theme) {
+    var btn = document.getElementById('themeToggle');
+    if (btn) { btn.innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;'; }
+  }
+
+  /* -- i18n toggle -- */
+  function initLang() {
+    var saved = localStorage.getItem('arktower-lang') || 'en';
+    applyLang(saved);
+  }
+
+  function toggleLang() {
+    var current = localStorage.getItem('arktower-lang') || 'en';
+    var next = current === 'en' ? 'zh' : 'en';
+    localStorage.setItem('arktower-lang', next);
+    applyLang(next);
+  }
+
+  function applyLang(lang) {
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      if (T[key] && T[key][lang]) {
+        els[i].innerHTML = T[key][lang];
+      }
+    }
+    var btn = document.getElementById('langToggle');
+    if (btn) { btn.textContent = lang === 'en' ? '\u4E2D' : 'EN'; }
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('langToggle').addEventListener('click', toggleLang);
+
+  /* -- State Machine Transitions -- */
   var TRANSITIONS = {
     submit:        { '(none)': 'submitted' },
     enqueue:       { submitted: 'queued' },
@@ -420,7 +506,7 @@
 
   var AGENTS = ['YoRHa-2B','YoRHa-9S','YoRHa-A2','Pod-042','Pod-153'];
 
-  /* ── UUID generation ── */
+  /* -- UUID generation -- */
   function uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0;
@@ -431,7 +517,7 @@
   function ts() { return new Date().toISOString(); }
   function shortId(id) { return id.substring(0, 8); }
 
-  /* ── Task pool ── */
+  /* -- Task pool -- */
   var tasks = [];
 
   function createTask(title, description, priority, tags) {
@@ -495,7 +581,7 @@
     return task;
   }
 
-  /* ── Pre-loaded sample tasks ── */
+  /* -- Pre-loaded sample tasks -- */
   function loadSamples() {
     var s1 = createTask('Implement REST API authentication', 'Add JWT-based auth to all API endpoints', 'high', ['python','api','auth']);
     applyTrigger(s1.id, 'enqueue');
@@ -517,7 +603,7 @@
     createTask('Write MCP tool documentation', 'Document all 12 MCP tools with examples', 'low', ['docs','mcp']);
   }
 
-  /* ── Rendering ── */
+  /* -- Rendering -- */
   var PRIORITY_ORDER = { critical:0, high:1, medium:2, low:3 };
 
   function sortedTasks() {
@@ -609,7 +695,7 @@
     return d.innerHTML;
   }
 
-  /* ── Detail panel ── */
+  /* -- Detail panel -- */
   window._openDetail = function(taskId) {
     var task = tasks.find(function(t){ return t.id === taskId; });
     if (!task) { return; }
@@ -618,13 +704,13 @@
       ['TITLE', task.title],
       ['STATUS', '<span class="badge badge-' + task.status + '">' + task.status + '</span>'],
       ['PRIORITY', '<span class="badge badge-' + task.priority + '">' + task.priority + '</span>'],
-      ['ASSIGNED TO', task.assigned_to || '—'],
-      ['TAGS', task.tags.length ? task.tags.join(', ') : '—'],
-      ['DESCRIPTION', task.description || '—'],
+      ['ASSIGNED TO', task.assigned_to || '\u2014'],
+      ['TAGS', task.tags.length ? task.tags.join(', ') : '\u2014'],
+      ['DESCRIPTION', task.description || '\u2014'],
       ['CREATED', task.created_at],
       ['UPDATED', task.updated_at],
-      ['STARTED', task.started_at || '—'],
-      ['COMPLETED', task.completed_at || '—']
+      ['STARTED', task.started_at || '\u2014'],
+      ['COMPLETED', task.completed_at || '\u2014']
     ];
     var html = '';
     for (var i = 0; i < fields.length; i++) {
@@ -639,7 +725,7 @@
       thtml += '<span class="timeline-time">' + ev.time.substring(11, 19) + '</span>';
       thtml += '<span><strong>' + ev.trigger + '</strong> &nbsp; ';
       thtml += '<span class="badge badge-' + ev.from + '">' + ev.from + '</span>';
-      thtml += ' → <span class="badge badge-' + ev.to + '">' + ev.to + '</span>';
+      thtml += ' \u2192 <span class="badge badge-' + ev.to + '">' + ev.to + '</span>';
       thtml += ' &nbsp;<span style="color:var(--text-dim);font-size:12px;">by ' + esc(ev.actor) + '</span>';
       thtml += '</span></div>';
     }
@@ -655,13 +741,13 @@
     if (e.target === this) { closeDetail(); }
   });
 
-  /* ── Actions ── */
+  /* -- Actions -- */
   window._doAction = function(taskId, trigger) {
     applyTrigger(taskId, trigger);
     renderAll();
   };
 
-  /* ── Create form ── */
+  /* -- Create form -- */
   document.getElementById('createForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var title = document.getElementById('newTitle').value.trim();
@@ -678,7 +764,7 @@
     renderAll();
   });
 
-  /* ── Pre-Analysis ── */
+  /* -- Pre-Analysis -- */
   var KEYWORD_TAGS = {
     python:['python','py','pip','django','flask','fastapi'],
     javascript:['javascript','js','node','react','vue','typescript','ts'],
@@ -763,14 +849,16 @@
     result.style.display = 'block';
   };
 
-  /* ── Nav toggle ── */
+  /* -- Nav toggle -- */
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', function() {
       document.querySelector('.nav-links').classList.remove('open');
     });
   });
 
-  /* ── Init ── */
+  /* -- Init -- */
+  initTheme();
+  initLang();
   loadSamples();
   renderAll();
 })();

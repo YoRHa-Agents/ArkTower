@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,206 +17,258 @@
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#8801; MENU</button>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="format.html" class="active">Format</a></li>
-      <li><a href="demo.html">Demo</a></li>
-      <li><a href="docs.html">Docs</a></li>
-      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="format.html" class="active" data-i18n="nav.format">Format</a></li>
+      <li><a href="demo.html" data-i18n="nav.demo">Demo</a></li>
+      <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub &#8599;</a></li>
     </ul>
+    <div class="nav-controls">
+      <button type="button" id="langToggle" aria-label="Toggle language">EN</button>
+      <button type="button" id="themeToggle" aria-label="Toggle theme">&#9788;</button>
+    </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="container">
-    <div class="hero-serial">[SPECIFICATION] UNIFIED TASK FORMAT</div>
-    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Task Format</h1>
-    <p class="hero-subtitle">YAML Frontmatter + Markdown Body — Agent-Consumable Task Definitions</p>
+    <div class="hero-serial" data-i18n="hero.serial">[SPECIFICATION] UNIFIED TASK FORMAT</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower <span data-i18n="hero.titleSuffix">Task Format</span></h1>
+    <p class="hero-subtitle" data-i18n="hero.subtitle">YAML Frontmatter + Markdown Body -- Agent-Consumable Task Definitions</p>
     <div class="hero-badge">[FORMAT v1.0]</div>
     <div class="hero-meta">
-      <div class="hero-meta-item">SPEC: <span>v1.0</span></div>
-      <div class="hero-meta-item">FORMAT: <span>.task.md / .task.json</span></div>
-      <div class="hero-meta-item">STATES: <span>10</span></div>
-      <div class="hero-meta-item">TRIGGERS: <span>15</span></div>
+      <div class="hero-meta-item" data-i18n="hero.spec">SPEC: <span>v1.0</span></div>
+      <div class="hero-meta-item" data-i18n="hero.format">FORMAT: <span>.task.md / .task.json</span></div>
+      <div class="hero-meta-item" data-i18n="hero.states">STATES: <span>10</span></div>
+      <div class="hero-meta-item" data-i18n="hero.triggers">TRIGGERS: <span>15</span></div>
     </div>
   </div>
 </header>
 
-<!-- SPEC.001 — Format Overview -->
+<!-- SPEC.001 -- Format Overview -->
 <section id="overview">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.001 — FORMAT ARCHITECTURE</div>
-      <h2 class="section-title">[FORMAT OVERVIEW]</h2>
+      <div class="section-label" data-i18n="overview.label">SPEC.001 -- FORMAT ARCHITECTURE</div>
+      <h2 class="section-title" data-i18n="overview.title">[FORMAT OVERVIEW]</h2>
     </div>
     <div class="about-content">
-      <p>
+      <p data-i18n="overview.p1">
         ArkTower uses a <strong>hybrid task format</strong> combining YAML frontmatter for structured metadata with a Markdown body for human-readable descriptions. Every task is a single file that both humans and agents can read, edit, and process natively.
       </p>
-      <p>
-        The canonical format is <span class="inline-code">.task.md</span> — optimized for human authoring, version control diffs, and IDE editing. A parallel <span class="inline-code">.task.json</span> format exists for machine consumption. The two are <strong>losslessly convertible</strong> in both directions.
+      <p data-i18n="overview.p2">
+        The canonical format is <span class="inline-code">.task.md</span> -- optimized for human authoring, version control diffs, and IDE editing. A parallel <span class="inline-code">.task.json</span> format exists for machine consumption. The two are <strong>losslessly convertible</strong> in both directions.
       </p>
     </div>
 
     <div style="margin-top: 40px;" class="two-col">
       <div class="feature-card" data-index="MD">
-        <h3>.task.md — Human Format</h3>
-        <p>YAML frontmatter between <span class="inline-code">---</span> delimiters for metadata. Markdown body below for description, acceptance criteria, and context. Git-friendly, IDE-native.</p>
+        <h3 data-i18n="overview.md.h">.task.md -- Human Format</h3>
+        <p data-i18n="overview.md.p">YAML frontmatter between <span class="inline-code">---</span> delimiters for metadata. Markdown body below for description, acceptance criteria, and context. Git-friendly, IDE-native.</p>
         <span class="feature-tag">HUMAN_AUTHORED</span>
       </div>
       <div class="feature-card" data-index="JSON">
-        <h3>.task.json — Machine Format</h3>
-        <p>Flat JSON object with all fields at top level. <span class="inline-code">description</span> field contains the Markdown body as a string. API responses, MCP tools, and WebSocket events all use this format.</p>
+        <h3 data-i18n="overview.json.h">.task.json -- Machine Format</h3>
+        <p data-i18n="overview.json.p">Flat JSON object with all fields at top level. <span class="inline-code">description</span> field contains the Markdown body as a string. API responses, MCP tools, and WebSocket events all use this format.</p>
         <span class="feature-tag">MACHINE_CONSUMABLE</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SPEC.002 — Field Reference -->
+<!-- SPEC.002 -- Field Reference -->
 <section id="fields">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.002 — DATA MODEL</div>
-      <h2 class="section-title">[FIELD REFERENCE]</h2>
-      <p class="section-desc">Complete field reference for the ArkTower task format. All fields available in both .task.md frontmatter and .task.json.</p>
+      <div class="section-label" data-i18n="fields.label">SPEC.002 -- DATA MODEL</div>
+      <h2 class="section-title" data-i18n="fields.title">[FIELD REFERENCE]</h2>
+      <p class="section-desc" data-i18n="fields.desc">Complete field reference for the ArkTower task format. All fields available in both .task.md frontmatter and .task.json.</p>
     </div>
 
     <table class="spec-table">
       <thead>
         <tr>
-          <th>Field</th>
-          <th>Type</th>
-          <th>Required</th>
-          <th>Description</th>
+          <th data-i18n="fields.th.field">Field</th>
+          <th data-i18n="fields.th.type">Type</th>
+          <th data-i18n="fields.th.required">Required</th>
+          <th data-i18n="fields.th.desc">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td><code>id</code></td><td>string (UUID)</td><td>auto</td><td>Unique task identifier, auto-generated if omitted</td></tr>
-        <tr><td><code>title</code></td><td>string</td><td>yes</td><td>Human-readable task title</td></tr>
-        <tr><td><code>description</code></td><td>string</td><td>no</td><td>Markdown body — acceptance criteria, context, references</td></tr>
-        <tr><td><code>status</code></td><td>enum</td><td>auto</td><td>Current lifecycle state (10 values, default: <code>submitted</code>)</td></tr>
-        <tr><td><code>priority</code></td><td>enum</td><td>no</td><td><code>critical</code> | <code>high</code> | <code>medium</code> | <code>low</code> (default: medium)</td></tr>
-        <tr><td><code>tags</code></td><td>array[string]</td><td>no</td><td>Categorical labels for filtering and grouping</td></tr>
-        <tr><td><code>labels</code></td><td>map[string, string]</td><td>no</td><td>Key-value labels for arbitrary metadata</td></tr>
-        <tr><td><code>capabilities</code></td><td>array[string]</td><td>no</td><td>Required agent capabilities (e.g., <code>python</code>, <code>api</code>)</td></tr>
-        <tr><td><code>required_tools</code></td><td>array[string]</td><td>no</td><td>MCP tools the agent needs (e.g., <code>create_task</code>)</td></tr>
+        <tr><td><code>id</code></td><td>string (UUID)</td><td>auto</td><td data-i18n="fields.id">Unique task identifier, auto-generated if omitted</td></tr>
+        <tr><td><code>title</code></td><td>string</td><td>yes</td><td data-i18n="fields.title_f">Human-readable task title</td></tr>
+        <tr><td><code>description</code></td><td>string</td><td>no</td><td data-i18n="fields.description">Markdown body -- acceptance criteria, context, references</td></tr>
+        <tr><td><code>status</code></td><td>enum</td><td>auto</td><td data-i18n="fields.status">Current lifecycle state (10 values, default: <code>submitted</code>)</td></tr>
+        <tr><td><code>priority</code></td><td>enum</td><td>no</td><td data-i18n="fields.priority">priority: <code>critical</code> | <code>high</code> | <code>medium</code> | <code>low</code> (default: medium)</td></tr>
+        <tr><td><code>tags</code></td><td>array[string]</td><td>no</td><td data-i18n="fields.tags">Categorical labels for filtering and grouping</td></tr>
+        <tr><td><code>labels</code></td><td>map[string, string]</td><td>no</td><td data-i18n="fields.labels">Key-value labels for arbitrary metadata</td></tr>
+        <tr><td><code>capabilities</code></td><td>array[string]</td><td>no</td><td data-i18n="fields.capabilities">Required agent capabilities (e.g., <code>python</code>, <code>api</code>)</td></tr>
+        <tr><td><code>required_tools</code></td><td>array[string]</td><td>no</td><td data-i18n="fields.required_tools">MCP tools the agent needs (e.g., <code>create_task</code>)</td></tr>
         <tr><td><code>estimated_complexity</code></td><td>enum</td><td>no</td><td><code>trivial</code> | <code>low</code> | <code>medium</code> | <code>high</code> | <code>extreme</code></td></tr>
-        <tr><td><code>parent_id</code></td><td>string</td><td>no</td><td>ID of parent task (for subtask hierarchy)</td></tr>
-        <tr><td><code>context_id</code></td><td>string</td><td>no</td><td>Workflow or context grouping ID</td></tr>
-        <tr><td><code>owner_id</code></td><td>string</td><td>no</td><td>Creator / owner identity (default: <code>system</code>)</td></tr>
-        <tr><td><code>assigned_to</code></td><td>string</td><td>no</td><td>Agent or user currently assigned</td></tr>
-        <tr><td><code>assigned_type</code></td><td>string</td><td>no</td><td>Assignee type (e.g., <code>agent</code>, <code>human</code>)</td></tr>
-        <tr><td><code>parameters</code></td><td>map[string, any]</td><td>no</td><td>Arbitrary key-value parameters for task execution</td></tr>
-        <tr><td><code>output</code></td><td>string</td><td>no</td><td>Completion output / result summary</td></tr>
-        <tr><td><code>error</code></td><td>string</td><td>no</td><td>Error message (on failure)</td></tr>
-        <tr><td><code>template_id</code></td><td>string</td><td>no</td><td>Template this task was created from</td></tr>
-        <tr><td><code>max_steps</code></td><td>integer</td><td>no</td><td>Maximum execution steps allowed</td></tr>
-        <tr><td><code>version</code></td><td>integer</td><td>auto</td><td>Optimistic concurrency version (default: 1)</td></tr>
-        <tr><td><code>created_at</code></td><td>datetime</td><td>auto</td><td>ISO 8601 creation timestamp</td></tr>
-        <tr><td><code>updated_at</code></td><td>datetime</td><td>auto</td><td>ISO 8601 last-update timestamp</td></tr>
-        <tr><td><code>started_at</code></td><td>datetime</td><td>auto</td><td>When task entered <code>in_progress</code></td></tr>
-        <tr><td><code>completed_at</code></td><td>datetime</td><td>auto</td><td>When task reached a terminal state</td></tr>
+        <tr><td><code>parent_id</code></td><td>string</td><td>no</td><td data-i18n="fields.parent_id">ID of parent task (for subtask hierarchy)</td></tr>
+        <tr><td><code>context_id</code></td><td>string</td><td>no</td><td data-i18n="fields.context_id">Workflow or context grouping ID</td></tr>
+        <tr><td><code>owner_id</code></td><td>string</td><td>no</td><td data-i18n="fields.owner_id">Creator / owner identity (default: <code>system</code>)</td></tr>
+        <tr><td><code>assigned_to</code></td><td>string</td><td>no</td><td data-i18n="fields.assigned_to">Agent or user currently assigned</td></tr>
+        <tr><td><code>assigned_type</code></td><td>string</td><td>no</td><td data-i18n="fields.assigned_type">Assignee type (e.g., <code>agent</code>, <code>human</code>)</td></tr>
+        <tr><td><code>parameters</code></td><td>map[string, any]</td><td>no</td><td data-i18n="fields.parameters">Arbitrary key-value parameters for task execution</td></tr>
+        <tr><td><code>output</code></td><td>string</td><td>no</td><td data-i18n="fields.output">Completion output / result summary</td></tr>
+        <tr><td><code>error</code></td><td>string</td><td>no</td><td data-i18n="fields.error">Error message (on failure)</td></tr>
+        <tr><td><code>template_id</code></td><td>string</td><td>no</td><td data-i18n="fields.template_id">Template this task was created from</td></tr>
+        <tr><td><code>max_steps</code></td><td>integer</td><td>no</td><td data-i18n="fields.max_steps">Maximum execution steps allowed</td></tr>
+        <tr><td><code>version</code></td><td>integer</td><td>auto</td><td data-i18n="fields.version">Optimistic concurrency version (default: 1)</td></tr>
+        <tr><td><code>created_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.created_at">ISO 8601 creation timestamp</td></tr>
+        <tr><td><code>updated_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.updated_at">ISO 8601 last-update timestamp</td></tr>
+        <tr><td><code>started_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.started_at">When task entered <code>in_progress</code></td></tr>
+        <tr><td><code>completed_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.completed_at">When task reached a terminal state</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- SPEC.003 — State Machine -->
+<!-- SPEC.003 -- State Machine -->
 <section id="states">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.003 — LIFECYCLE ENGINE</div>
-      <h2 class="section-title">[STATE MACHINE]</h2>
-      <p class="section-desc">10 states, 15 named triggers. Every transition is validated and audited as a TaskEvent.</p>
+      <div class="section-label" data-i18n="states.label">SPEC.003 -- LIFECYCLE ENGINE</div>
+      <h2 class="section-title" data-i18n="states.title">[STATE MACHINE]</h2>
+      <p class="section-desc" data-i18n="states.desc">10 states, 15 named triggers. Every transition is validated and audited as a TaskEvent.</p>
     </div>
 
     <div style="margin-bottom: 40px;">
-      <div class="section-label" style="margin-bottom: 16px;">STATE OVERVIEW</div>
+      <div class="section-label" style="margin-bottom: 16px;" data-i18n="states.overview">STATE OVERVIEW</div>
       <div class="feature-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-submitted">submitted</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Initial state on creation</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.submitted">Initial state on creation</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-queued">queued</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Ready for agent claim</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.queued">Ready for agent claim</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-in_progress">in_progress</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Actively being worked on</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.in_progress">Actively being worked on</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-review">review</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Awaiting approval</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.review">Awaiting approval</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-input_required">input_required</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Waiting for external input</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.input_required">Waiting for external input</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-blocked">blocked</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Dependency or external block</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.blocked">Dependency or external block</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-completed">completed</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — success</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.completed">Terminal -- success</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-failed">failed</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — error</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.failed">Terminal -- error</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-canceled">canceled</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — manual cancel</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.canceled">Terminal -- manual cancel</p>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
           <span class="badge badge-timed_out">timed_out</span>
-          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — timeout</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" data-i18n="states.timed_out">Terminal -- timeout</p>
         </div>
       </div>
     </div>
 
     <div style="margin-bottom: 40px;">
-      <div class="section-label" style="margin-bottom: 16px;">STATE FLOW DIAGRAM</div>
-      <div class="arch-diagram" style="font-size:12px;">                          ┌───────────────────────────────────────┐
-                          │          <span class="layer-label">CANCEL</span> (from 6 states)          │
-                          │  submitted, queued, in_progress,      │
-                          │  review, input_required, blocked       │
-                          └──────────────┬────────────────────────┘
-                                         ▼
-     ╔═══════════╗   enqueue   ╔════════╗   claim    ╔═════════════╗
-     ║ submitted ║────────────▸║ queued ║───────────▸║ in_progress ║
-     ╚═══════════╝             ╚════════╝            ╚══════╤══════╝
-                                  ▲                         │
-                                  │ reopen          ┌───────┼────────┬──────────┐
-                                  │                 │       │        │          │
-                               ┌──┴──┐         send_review  block  request   complete
-                               │     │              │       │     _input      │
-                     ╔═══════════╗ ╔════════╗   ╔═══▼══╗ ╔══▼════╗ ╔══▼═════╗  │
-                     ║ completed ║ ║ failed ║   ║review║ ║blocked║ ║input_  ║  │
-                     ╚═════╤═════╝ ╚═══╤════╝   ╚══╤═══╝ ╚══╤════╝ ║required║  │
-                           │           │            │        │      ╚══╤═════╝  │
-                           │           │     approve│reject  │unblock  │resume  │
-                           │           │            │   │    │    │    │   │    │
-                           │           │            ▼   ▼    ▼    ▼    ▼   ▼    ▼
-                           │           │         (back to in_progress)    ╔══════════╗
-                           │           │                                  ║completed ║
-                           │           ▼                                  ╚══════════╝
-                     ╔═══════════╗  ╔════════╗  ╔══════════╗
-                     ║ canceled  ║  ║timed_  ║  ║  failed  ║
-                     ╚═══════════╝  ║  out   ║  ╚══════════╝
-                                    ╚════════╝</div>
+      <div class="section-label" style="margin-bottom: 16px;" data-i18n="states.flow_title">STATE FLOW DIAGRAM</div>
+      <div class="state-flow">
+        <!-- Main flow -->
+        <div class="state-flow-section">
+          <div class="state-flow-label" data-i18n="states.main_flow">MAIN FLOW</div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="submitted">submitted</div>
+            <div class="state-arrow"><span class="state-arrow-label">enqueue</span>&rarr;</div>
+            <div class="state-box" data-status="queued">queued</div>
+            <div class="state-arrow"><span class="state-arrow-label">claim</span>&rarr;</div>
+            <div class="state-box" data-status="in_progress">in_progress</div>
+            <div class="state-arrow"><span class="state-arrow-label">complete</span>&rarr;</div>
+            <div class="state-box" data-status="completed">completed</div>
+          </div>
+        </div>
+
+        <!-- Branching from in_progress -->
+        <div class="state-flow-section">
+          <div class="state-flow-label" data-i18n="states.branches">BRANCHES FROM in_progress</div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="in_progress">in_progress</div>
+            <div class="state-arrow"><span class="state-arrow-label">send_review</span>&rarr;</div>
+            <div class="state-box" data-status="review">review</div>
+            <div class="state-arrow"><span class="state-arrow-label">approve</span>&rarr;</div>
+            <div class="state-box" data-status="completed">completed</div>
+          </div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="in_progress">in_progress</div>
+            <div class="state-arrow"><span class="state-arrow-label">block</span>&rarr;</div>
+            <div class="state-box" data-status="blocked">blocked</div>
+            <div class="state-arrow"><span class="state-arrow-label">unblock</span>&rarr;</div>
+            <div class="state-box" data-status="in_progress">in_progress</div>
+          </div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="in_progress">in_progress</div>
+            <div class="state-arrow"><span class="state-arrow-label">request_input</span>&rarr;</div>
+            <div class="state-box" data-status="input_required">input_required</div>
+            <div class="state-arrow"><span class="state-arrow-label">resume</span>&rarr;</div>
+            <div class="state-box" data-status="in_progress">in_progress</div>
+          </div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="review">review</div>
+            <div class="state-arrow"><span class="state-arrow-label">reject</span>&rarr;</div>
+            <div class="state-box" data-status="in_progress">in_progress</div>
+          </div>
+        </div>
+
+        <!-- Terminal paths -->
+        <div class="state-flow-section">
+          <div class="state-flow-label" data-i18n="states.terminal">TERMINAL TRANSITIONS</div>
+          <div class="state-flow-row">
+            <div class="state-box" data-status="in_progress">in_progress</div>
+            <div class="state-arrow"><span class="state-arrow-label">fail</span>&rarr;</div>
+            <div class="state-box" data-status="failed">failed</div>
+          </div>
+          <div class="state-flow-row">
+            <div class="state-box" style="font-size:10px;color:var(--text-dim);border-color:var(--text-dim);" data-i18n="states.six_states">6 active states</div>
+            <div class="state-arrow"><span class="state-arrow-label">cancel</span>&rarr;</div>
+            <div class="state-box" data-status="canceled">canceled</div>
+          </div>
+          <div class="state-flow-row">
+            <div class="state-box" style="font-size:10px;color:var(--text-dim);border-color:var(--text-dim);">in_progress, blocked, input_required</div>
+            <div class="state-arrow"><span class="state-arrow-label">timeout</span>&rarr;</div>
+            <div class="state-box" data-status="timed_out">timed_out</div>
+          </div>
+        </div>
+
+        <!-- Reopen -->
+        <div class="state-flow-section">
+          <div class="state-flow-label" data-i18n="states.recovery">RECOVERY</div>
+          <div class="state-flow-row">
+            <div class="state-box" style="font-size:10px;color:var(--text-dim);border-color:var(--text-dim);">completed, failed, canceled, timed_out</div>
+            <div class="state-arrow"><span class="state-arrow-label">reopen</span>&rarr;</div>
+            <div class="state-box" data-status="queued">queued</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="section-label" style="margin-bottom: 16px;">TRANSITION TABLE — ALL 15 TRIGGERS</div>
+    <div class="section-label" style="margin-bottom: 16px;" data-i18n="states.table_title">TRANSITION TABLE -- ALL 15 TRIGGERS</div>
     <table class="spec-table">
       <thead>
         <tr>
-          <th>Trigger</th>
-          <th>From State</th>
-          <th>To State</th>
+          <th data-i18n="states.th.trigger">Trigger</th>
+          <th data-i18n="states.th.from">From State</th>
+          <th data-i18n="states.th.to">To State</th>
         </tr>
       </thead>
       <tbody>
@@ -240,18 +292,18 @@
   </div>
 </section>
 
-<!-- SPEC.004 — Task Examples -->
+<!-- SPEC.004 -- Task Examples -->
 <section id="examples">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.004 — EXEMPLARS</div>
-      <h2 class="section-title">[TASK EXAMPLES]</h2>
-      <p class="section-desc">Three complete .task.md files demonstrating the format for different task types.</p>
+      <div class="section-label" data-i18n="examples.label">SPEC.004 -- EXEMPLARS</div>
+      <h2 class="section-title" data-i18n="examples.title">[TASK EXAMPLES]</h2>
+      <p class="section-desc" data-i18n="examples.desc">Three complete .task.md files demonstrating the format for different task types.</p>
     </div>
 
     <div class="lined-code">
       <div class="code-header">
-        <span>EXAMPLE 1 — FEATURE TASK</span>
+        <span data-i18n="examples.ex1">EXAMPLE 1 -- FEATURE TASK</span>
         <span>jwt-auth.task.md</span>
       </div>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
@@ -292,7 +344,7 @@
 
     <div class="lined-code">
       <div class="code-header">
-        <span>EXAMPLE 2 — BUGFIX TASK</span>
+        <span data-i18n="examples.ex2">EXAMPLE 2 -- BUGFIX TASK</span>
         <span>hotfix-null-ref.task.md</span>
       </div>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
@@ -322,7 +374,7 @@
 
     <div class="lined-code">
       <div class="code-header">
-        <span>EXAMPLE 3 — RESEARCH TASK</span>
+        <span data-i18n="examples.ex3">EXAMPLE 3 -- RESEARCH TASK</span>
         <span>dist-scheduling-survey.task.md</span>
       </div>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
@@ -356,17 +408,17 @@
   </div>
 </section>
 
-<!-- SPEC.005 — JSON Schema -->
+<!-- SPEC.005 -- JSON Schema -->
 <section id="schema">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.005 — VALIDATION</div>
-      <h2 class="section-title">[JSON SCHEMA]</h2>
-      <p class="section-desc">JSON Schema for validating .task.json files. Used by the pre-analysis engine and API input validation.</p>
+      <div class="section-label" data-i18n="schema.label">SPEC.005 -- VALIDATION</div>
+      <h2 class="section-title" data-i18n="schema.title">[JSON SCHEMA]</h2>
+      <p class="section-desc" data-i18n="schema.desc">JSON Schema for validating .task.json files. Used by the pre-analysis engine and API input validation.</p>
     </div>
 
     <details>
-      <summary>VIEW FULL JSON SCHEMA</summary>
+      <summary data-i18n="schema.view">VIEW FULL JSON SCHEMA</summary>
       <div class="detail-content">
         <div class="code-block" style="margin-top: 16px;">
           <span class="code-label">JSON SCHEMA</span>
@@ -422,38 +474,38 @@
   </div>
 </section>
 
-<!-- SPEC.006 — Conversion Rules -->
+<!-- SPEC.006 -- Conversion Rules -->
 <section id="conversion">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">SPEC.006 — INTEROPERABILITY</div>
-      <h2 class="section-title">[CONVERSION RULES]</h2>
-      <p class="section-desc">Bidirectional, lossless conversion between .task.md and .task.json formats.</p>
+      <div class="section-label" data-i18n="conversion.label">SPEC.006 -- INTEROPERABILITY</div>
+      <h2 class="section-title" data-i18n="conversion.title">[CONVERSION RULES]</h2>
+      <p class="section-desc" data-i18n="conversion.desc">Bidirectional, lossless conversion between .task.md and .task.json formats.</p>
     </div>
 
     <div class="two-col">
       <div>
-        <div class="section-label" style="margin-bottom: 12px;">.TASK.MD → .TASK.JSON</div>
+        <div class="section-label" style="margin-bottom: 12px;">.TASK.MD &rarr; .TASK.JSON</div>
         <div class="feature-card">
-          <h3>MD to JSON</h3>
-          <p>1. Parse YAML frontmatter between <span class="inline-code">---</span> delimiters<br>
+          <h3 data-i18n="conversion.md2json.h">MD to JSON</h3>
+          <p data-i18n="conversion.md2json.p">1. Parse YAML frontmatter between <span class="inline-code">---</span> delimiters<br>
              2. Extract all key-value pairs as top-level JSON fields<br>
              3. Everything below the closing <span class="inline-code">---</span> becomes the <span class="inline-code">description</span> field<br>
              4. Arrays remain arrays, maps remain objects<br>
              5. Dates are ISO 8601 strings</p>
-          <span class="feature-tag">PARSE → SERIALIZE</span>
+          <span class="feature-tag">PARSE &rarr; SERIALIZE</span>
         </div>
       </div>
       <div>
-        <div class="section-label" style="margin-bottom: 12px;">.TASK.JSON → .TASK.MD</div>
+        <div class="section-label" style="margin-bottom: 12px;">.TASK.JSON &rarr; .TASK.MD</div>
         <div class="feature-card">
-          <h3>JSON to MD</h3>
-          <p>1. All fields except <span class="inline-code">description</span> become YAML frontmatter<br>
+          <h3 data-i18n="conversion.json2md.h">JSON to MD</h3>
+          <p data-i18n="conversion.json2md.p">1. All fields except <span class="inline-code">description</span> become YAML frontmatter<br>
              2. <span class="inline-code">description</span> field becomes the Markdown body below <span class="inline-code">---</span><br>
              3. Null fields are omitted from frontmatter<br>
              4. Arrays use YAML list syntax<br>
              5. Maps use nested YAML key-value syntax</p>
-          <span class="feature-tag">DESERIALIZE → EMIT</span>
+          <span class="feature-tag">DESERIALIZE &rarr; EMIT</span>
         </div>
       </div>
     </div>
@@ -462,23 +514,186 @@
 
 <footer>
   <div class="container">
-    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <p class="footer-quote" data-i18n="footer.quote">"Glory to Mankind." -- YoRHa</p>
     <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="demo.html">Demo</a>
-      <a href="docs.html">Documentation</a>
-      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="demo.html" data-i18n="nav.demo">Demo</a>
+      <a href="docs.html" data-i18n="footer.documentation">Documentation</a>
+      <a href="https://github.com" target="_blank" rel="noopener" data-i18n="footer.github">GitHub Repository</a>
     </div>
-    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+    <p class="footer-copy">ArkTower v0.1.0 | MIT License | Python 3.11+</p>
   </div>
 </footer>
 
 <script>
+(function() {
+  'use strict';
+
+  var T = {
+    'nav.home': { en: 'Home', zh: '\u9996\u9875' },
+    'nav.format': { en: 'Format', zh: '\u683C\u5F0F' },
+    'nav.demo': { en: 'Demo', zh: '\u6F14\u793A' },
+    'nav.docs': { en: 'Docs', zh: '\u6587\u6863' },
+    'hero.serial': { en: '[SPECIFICATION] UNIFIED TASK FORMAT', zh: '[\u89C4\u8303] \u7EDF\u4E00\u4EFB\u52A1\u683C\u5F0F' },
+    'hero.titleSuffix': { en: 'Task Format', zh: '\u4EFB\u52A1\u683C\u5F0F' },
+    'hero.subtitle': { en: 'YAML Frontmatter + Markdown Body -- Agent-Consumable Task Definitions', zh: 'YAML \u5143\u6570\u636E + Markdown \u6B63\u6587 -- \u667A\u80FD\u4F53\u53EF\u6D88\u8D39\u7684\u4EFB\u52A1\u5B9A\u4E49' },
+    'hero.spec': { en: 'SPEC: <span>v1.0</span>', zh: '\u89C4\u8303: <span>v1.0</span>' },
+    'hero.format': { en: 'FORMAT: <span>.task.md / .task.json</span>', zh: '\u683C\u5F0F: <span>.task.md / .task.json</span>' },
+    'hero.states': { en: 'STATES: <span>10</span>', zh: '\u72B6\u6001: <span>10</span>' },
+    'hero.triggers': { en: 'TRIGGERS: <span>15</span>', zh: '\u89E6\u53D1\u5668: <span>15</span>' },
+    'overview.label': { en: 'SPEC.001 -- FORMAT ARCHITECTURE', zh: 'SPEC.001 -- \u683C\u5F0F\u67B6\u6784' },
+    'overview.title': { en: '[FORMAT OVERVIEW]', zh: '[\u683C\u5F0F\u6982\u89C8]' },
+    'overview.p1': {
+      en: 'ArkTower uses a <strong>hybrid task format</strong> combining YAML frontmatter for structured metadata with a Markdown body for human-readable descriptions. Every task is a single file that both humans and agents can read, edit, and process natively.',
+      zh: 'ArkTower \u4F7F\u7528<strong>\u6DF7\u5408\u4EFB\u52A1\u683C\u5F0F</strong>\uFF0C\u5C06 YAML \u5143\u6570\u636E\u4E0E Markdown \u6B63\u6587\u7ED3\u5408\u3002\u6BCF\u4E2A\u4EFB\u52A1\u662F\u4E00\u4E2A\u5355\u6587\u4EF6\uFF0C\u4EBA\u7C7B\u548C\u667A\u80FD\u4F53\u5747\u53EF\u539F\u751F\u8BFB\u53D6\u3001\u7F16\u8F91\u548C\u5904\u7406\u3002'
+    },
+    'overview.p2': {
+      en: 'The canonical format is <span class="inline-code">.task.md</span> -- optimized for human authoring, version control diffs, and IDE editing. A parallel <span class="inline-code">.task.json</span> format exists for machine consumption. The two are <strong>losslessly convertible</strong> in both directions.',
+      zh: '\u89C4\u8303\u683C\u5F0F\u4E3A <span class="inline-code">.task.md</span> -- \u9488\u5BF9\u4EBA\u7C7B\u7F16\u5199\u3001\u7248\u672C\u63A7\u5236\u5DEE\u5F02\u548C IDE \u7F16\u8F91\u8FDB\u884C\u4E86\u4F18\u5316\u3002\u5E76\u884C\u7684 <span class="inline-code">.task.json</span> \u683C\u5F0F\u7528\u4E8E\u673A\u5668\u6D88\u8D39\u3002\u4E24\u8005\u53EF<strong>\u65E0\u635F\u53CC\u5411\u8F6C\u6362</strong>\u3002'
+    },
+    'overview.md.h': { en: '.task.md -- Human Format', zh: '.task.md -- \u4EBA\u7C7B\u683C\u5F0F' },
+    'overview.md.p': { en: 'YAML frontmatter between <span class="inline-code">---</span> delimiters for metadata. Markdown body below for description, acceptance criteria, and context. Git-friendly, IDE-native.', zh: '<span class="inline-code">---</span> \u5206\u9694\u7B26\u4E4B\u95F4\u7684 YAML \u5143\u6570\u636E\u3002\u4E0B\u65B9\u4E3A\u63CF\u8FF0\u3001\u9A8C\u6536\u6807\u51C6\u548C\u4E0A\u4E0B\u6587\u7684 Markdown \u6B63\u6587\u3002\u5BF9 Git \u548C IDE \u53CB\u597D\u3002' },
+    'overview.json.h': { en: '.task.json -- Machine Format', zh: '.task.json -- \u673A\u5668\u683C\u5F0F' },
+    'overview.json.p': { en: 'Flat JSON object with all fields at top level. <span class="inline-code">description</span> field contains the Markdown body as a string. API responses, MCP tools, and WebSocket events all use this format.', zh: '\u6240\u6709\u5B57\u6BB5\u5728\u9876\u5C42\u7684\u6241\u5E73 JSON \u5BF9\u8C61\u3002<span class="inline-code">description</span> \u5B57\u6BB5\u4EE5\u5B57\u7B26\u4E32\u5F62\u5F0F\u5305\u542B Markdown \u6B63\u6587\u3002API \u54CD\u5E94\u3001MCP \u5DE5\u5177\u548C WebSocket \u4E8B\u4EF6\u5747\u4F7F\u7528\u6B64\u683C\u5F0F\u3002' },
+    'fields.label': { en: 'SPEC.002 -- DATA MODEL', zh: 'SPEC.002 -- \u6570\u636E\u6A21\u578B' },
+    'fields.title': { en: '[FIELD REFERENCE]', zh: '[\u5B57\u6BB5\u53C2\u8003]' },
+    'fields.desc': { en: 'Complete field reference for the ArkTower task format. All fields available in both .task.md frontmatter and .task.json.', zh: 'ArkTower \u4EFB\u52A1\u683C\u5F0F\u7684\u5B8C\u6574\u5B57\u6BB5\u53C2\u8003\u3002\u6240\u6709\u5B57\u6BB5\u5728 .task.md \u5143\u6570\u636E\u548C .task.json \u4E2D\u5747\u53EF\u7528\u3002' },
+    'fields.th.field': { en: 'Field', zh: '\u5B57\u6BB5' },
+    'fields.th.type': { en: 'Type', zh: '\u7C7B\u578B' },
+    'fields.th.required': { en: 'Required', zh: '\u5FC5\u586B' },
+    'fields.th.desc': { en: 'Description', zh: '\u63CF\u8FF0' },
+    'fields.id': { en: 'Unique task identifier, auto-generated if omitted', zh: '\u552F\u4E00\u4EFB\u52A1\u6807\u8BC6\u7B26\uFF0C\u7701\u7565\u65F6\u81EA\u52A8\u751F\u6210' },
+    'fields.title_f': { en: 'Human-readable task title', zh: '\u4EBA\u7C7B\u53EF\u8BFB\u7684\u4EFB\u52A1\u6807\u9898' },
+    'fields.description': { en: 'Markdown body -- acceptance criteria, context, references', zh: 'Markdown \u6B63\u6587 -- \u9A8C\u6536\u6807\u51C6\u3001\u4E0A\u4E0B\u6587\u3001\u53C2\u8003' },
+    'fields.status': { en: 'Current lifecycle state (10 values, default: <code>submitted</code>)', zh: '\u5F53\u524D\u751F\u547D\u5468\u671F\u72B6\u6001 (10 \u4E2A\u503C\uFF0C\u9ED8\u8BA4: <code>submitted</code>)' },
+    'fields.priority': { en: 'priority: <code>critical</code> | <code>high</code> | <code>medium</code> | <code>low</code> (default: medium)', zh: '\u4F18\u5148\u7EA7: <code>critical</code> | <code>high</code> | <code>medium</code> | <code>low</code> (\u9ED8\u8BA4: medium)' },
+    'fields.tags': { en: 'Categorical labels for filtering and grouping', zh: '\u7528\u4E8E\u8FC7\u6EE4\u548C\u5206\u7EC4\u7684\u5206\u7C7B\u6807\u7B7E' },
+    'fields.labels': { en: 'Key-value labels for arbitrary metadata', zh: '\u4EFB\u610F\u5143\u6570\u636E\u7684\u952E\u503C\u5BF9\u6807\u7B7E' },
+    'fields.capabilities': { en: 'Required agent capabilities (e.g., <code>python</code>, <code>api</code>)', zh: '\u6240\u9700\u667A\u80FD\u4F53\u80FD\u529B (\u5982 <code>python</code>, <code>api</code>)' },
+    'fields.required_tools': { en: 'MCP tools the agent needs (e.g., <code>create_task</code>)', zh: '\u667A\u80FD\u4F53\u6240\u9700\u7684 MCP \u5DE5\u5177 (\u5982 <code>create_task</code>)' },
+    'fields.parent_id': { en: 'ID of parent task (for subtask hierarchy)', zh: '\u7236\u4EFB\u52A1 ID (\u7528\u4E8E\u5B50\u4EFB\u52A1\u5C42\u7EA7)' },
+    'fields.context_id': { en: 'Workflow or context grouping ID', zh: '\u5DE5\u4F5C\u6D41\u6216\u4E0A\u4E0B\u6587\u5206\u7EC4 ID' },
+    'fields.owner_id': { en: 'Creator / owner identity (default: <code>system</code>)', zh: '\u521B\u5EFA\u8005/\u6240\u6709\u8005\u8EAB\u4EFD (\u9ED8\u8BA4: <code>system</code>)' },
+    'fields.assigned_to': { en: 'Agent or user currently assigned', zh: '\u5F53\u524D\u5206\u914D\u7684\u667A\u80FD\u4F53\u6216\u7528\u6237' },
+    'fields.assigned_type': { en: 'Assignee type (e.g., <code>agent</code>, <code>human</code>)', zh: '\u53D7\u8BA9\u4EBA\u7C7B\u578B (\u5982 <code>agent</code>, <code>human</code>)' },
+    'fields.parameters': { en: 'Arbitrary key-value parameters for task execution', zh: '\u4EFB\u52A1\u6267\u884C\u7684\u4EFB\u610F\u952E\u503C\u53C2\u6570' },
+    'fields.output': { en: 'Completion output / result summary', zh: '\u5B8C\u6210\u8F93\u51FA / \u7ED3\u679C\u6458\u8981' },
+    'fields.error': { en: 'Error message (on failure)', zh: '\u9519\u8BEF\u4FE1\u606F (\u5931\u8D25\u65F6)' },
+    'fields.template_id': { en: 'Template this task was created from', zh: '\u521B\u5EFA\u6B64\u4EFB\u52A1\u7684\u6A21\u677F' },
+    'fields.max_steps': { en: 'Maximum execution steps allowed', zh: '\u5141\u8BB8\u7684\u6700\u5927\u6267\u884C\u6B65\u6570' },
+    'fields.version': { en: 'Optimistic concurrency version (default: 1)', zh: '\u4E50\u89C2\u5E76\u53D1\u7248\u672C (\u9ED8\u8BA4: 1)' },
+    'fields.created_at': { en: 'ISO 8601 creation timestamp', zh: 'ISO 8601 \u521B\u5EFA\u65F6\u95F4\u6233' },
+    'fields.updated_at': { en: 'ISO 8601 last-update timestamp', zh: 'ISO 8601 \u6700\u540E\u66F4\u65B0\u65F6\u95F4\u6233' },
+    'fields.started_at': { en: 'When task entered <code>in_progress</code>', zh: '\u4EFB\u52A1\u8FDB\u5165 <code>in_progress</code> \u7684\u65F6\u95F4' },
+    'fields.completed_at': { en: 'When task reached a terminal state', zh: '\u4EFB\u52A1\u8FBE\u5230\u7EC8\u6001\u7684\u65F6\u95F4' },
+    'states.label': { en: 'SPEC.003 -- LIFECYCLE ENGINE', zh: 'SPEC.003 -- \u751F\u547D\u5468\u671F\u5F15\u64CE' },
+    'states.title': { en: '[STATE MACHINE]', zh: '[\u72B6\u6001\u673A]' },
+    'states.desc': { en: '10 states, 15 named triggers. Every transition is validated and audited as a TaskEvent.', zh: '10 \u4E2A\u72B6\u6001\uFF0C15 \u4E2A\u547D\u540D\u89E6\u53D1\u5668\u3002\u6BCF\u6B21\u8FC7\u6E21\u5747\u7ECF\u8FC7\u9A8C\u8BC1\u5E76\u4F5C\u4E3A TaskEvent \u5BA1\u8BA1\u3002' },
+    'states.overview': { en: 'STATE OVERVIEW', zh: '\u72B6\u6001\u6982\u89C8' },
+    'states.submitted': { en: 'Initial state on creation', zh: '\u521B\u5EFA\u65F6\u7684\u521D\u59CB\u72B6\u6001' },
+    'states.queued': { en: 'Ready for agent claim', zh: '\u7B49\u5F85\u667A\u80FD\u4F53\u8BA4\u9886' },
+    'states.in_progress': { en: 'Actively being worked on', zh: '\u6B63\u5728\u79EF\u6781\u5904\u7406\u4E2D' },
+    'states.review': { en: 'Awaiting approval', zh: '\u7B49\u5F85\u5BA1\u6279' },
+    'states.input_required': { en: 'Waiting for external input', zh: '\u7B49\u5F85\u5916\u90E8\u8F93\u5165' },
+    'states.blocked': { en: 'Dependency or external block', zh: '\u4F9D\u8D56\u6216\u5916\u90E8\u963B\u585E' },
+    'states.completed': { en: 'Terminal -- success', zh: '\u7EC8\u6001 -- \u6210\u529F' },
+    'states.failed': { en: 'Terminal -- error', zh: '\u7EC8\u6001 -- \u9519\u8BEF' },
+    'states.canceled': { en: 'Terminal -- manual cancel', zh: '\u7EC8\u6001 -- \u624B\u52A8\u53D6\u6D88' },
+    'states.timed_out': { en: 'Terminal -- timeout', zh: '\u7EC8\u6001 -- \u8D85\u65F6' },
+    'states.flow_title': { en: 'STATE FLOW DIAGRAM', zh: '\u72B6\u6001\u6D41\u8F6C\u56FE' },
+    'states.main_flow': { en: 'MAIN FLOW', zh: '\u4E3B\u6D41\u7A0B' },
+    'states.branches': { en: 'BRANCHES FROM in_progress', zh: 'in_progress \u7684\u5206\u652F' },
+    'states.terminal': { en: 'TERMINAL TRANSITIONS', zh: '\u7EC8\u6001\u8FC7\u6E21' },
+    'states.recovery': { en: 'RECOVERY', zh: '\u6062\u590D' },
+    'states.six_states': { en: '6 active states', zh: '6 \u4E2A\u6D3B\u8DC3\u72B6\u6001' },
+    'states.table_title': { en: 'TRANSITION TABLE -- ALL 15 TRIGGERS', zh: '\u8FC7\u6E21\u8868 -- \u5168\u90E8 15 \u4E2A\u89E6\u53D1\u5668' },
+    'states.th.trigger': { en: 'Trigger', zh: '\u89E6\u53D1\u5668' },
+    'states.th.from': { en: 'From State', zh: '\u6765\u6E90\u72B6\u6001' },
+    'states.th.to': { en: 'To State', zh: '\u76EE\u6807\u72B6\u6001' },
+    'examples.label': { en: 'SPEC.004 -- EXEMPLARS', zh: 'SPEC.004 -- \u793A\u4F8B' },
+    'examples.title': { en: '[TASK EXAMPLES]', zh: '[\u4EFB\u52A1\u793A\u4F8B]' },
+    'examples.desc': { en: 'Three complete .task.md files demonstrating the format for different task types.', zh: '\u4E09\u4E2A\u5B8C\u6574\u7684 .task.md \u6587\u4EF6\uFF0C\u5C55\u793A\u4E0D\u540C\u4EFB\u52A1\u7C7B\u578B\u7684\u683C\u5F0F\u3002' },
+    'examples.ex1': { en: 'EXAMPLE 1 -- FEATURE TASK', zh: '\u793A\u4F8B 1 -- \u529F\u80FD\u4EFB\u52A1' },
+    'examples.ex2': { en: 'EXAMPLE 2 -- BUGFIX TASK', zh: '\u793A\u4F8B 2 -- \u4FEE\u590D\u4EFB\u52A1' },
+    'examples.ex3': { en: 'EXAMPLE 3 -- RESEARCH TASK', zh: '\u793A\u4F8B 3 -- \u7814\u7A76\u4EFB\u52A1' },
+    'schema.label': { en: 'SPEC.005 -- VALIDATION', zh: 'SPEC.005 -- \u9A8C\u8BC1' },
+    'schema.title': { en: '[JSON SCHEMA]', zh: '[JSON Schema]' },
+    'schema.desc': { en: 'JSON Schema for validating .task.json files. Used by the pre-analysis engine and API input validation.', zh: '\u7528\u4E8E\u9A8C\u8BC1 .task.json \u6587\u4EF6\u7684 JSON Schema\u3002\u7531\u9884\u5206\u6790\u5F15\u64CE\u548C API \u8F93\u5165\u9A8C\u8BC1\u4F7F\u7528\u3002' },
+    'schema.view': { en: 'VIEW FULL JSON SCHEMA', zh: '\u67E5\u770B\u5B8C\u6574 JSON SCHEMA' },
+    'conversion.label': { en: 'SPEC.006 -- INTEROPERABILITY', zh: 'SPEC.006 -- \u4E92\u64CD\u4F5C\u6027' },
+    'conversion.title': { en: '[CONVERSION RULES]', zh: '[\u8F6C\u6362\u89C4\u5219]' },
+    'conversion.desc': { en: 'Bidirectional, lossless conversion between .task.md and .task.json formats.', zh: '.task.md \u548C .task.json \u683C\u5F0F\u4E4B\u95F4\u7684\u53CC\u5411\u65E0\u635F\u8F6C\u6362\u3002' },
+    'conversion.md2json.h': { en: 'MD to JSON', zh: 'MD \u8F6C JSON' },
+    'conversion.md2json.p': {
+      en: '1. Parse YAML frontmatter between <span class="inline-code">---</span> delimiters<br>2. Extract all key-value pairs as top-level JSON fields<br>3. Everything below the closing <span class="inline-code">---</span> becomes the <span class="inline-code">description</span> field<br>4. Arrays remain arrays, maps remain objects<br>5. Dates are ISO 8601 strings',
+      zh: '1. \u89E3\u6790 <span class="inline-code">---</span> \u5206\u9694\u7B26\u4E4B\u95F4\u7684 YAML \u5143\u6570\u636E<br>2. \u63D0\u53D6\u6240\u6709\u952E\u503C\u5BF9\u4F5C\u4E3A\u9876\u5C42 JSON \u5B57\u6BB5<br>3. \u5173\u95ED\u7684 <span class="inline-code">---</span> \u4E0B\u65B9\u7684\u5185\u5BB9\u6210\u4E3A <span class="inline-code">description</span> \u5B57\u6BB5<br>4. \u6570\u7EC4\u4FDD\u6301\u6570\u7EC4\uFF0C\u6620\u5C04\u4FDD\u6301\u5BF9\u8C61<br>5. \u65E5\u671F\u4E3A ISO 8601 \u5B57\u7B26\u4E32'
+    },
+    'conversion.json2md.h': { en: 'JSON to MD', zh: 'JSON \u8F6C MD' },
+    'conversion.json2md.p': {
+      en: '1. All fields except <span class="inline-code">description</span> become YAML frontmatter<br>2. <span class="inline-code">description</span> field becomes the Markdown body below <span class="inline-code">---</span><br>3. Null fields are omitted from frontmatter<br>4. Arrays use YAML list syntax<br>5. Maps use nested YAML key-value syntax',
+      zh: '1. \u9664 <span class="inline-code">description</span> \u5916\u7684\u6240\u6709\u5B57\u6BB5\u6210\u4E3A YAML \u5143\u6570\u636E<br>2. <span class="inline-code">description</span> \u5B57\u6BB5\u6210\u4E3A <span class="inline-code">---</span> \u4E0B\u65B9\u7684 Markdown \u6B63\u6587<br>3. Null \u5B57\u6BB5\u4ECE\u5143\u6570\u636E\u4E2D\u7701\u7565<br>4. \u6570\u7EC4\u4F7F\u7528 YAML \u5217\u8868\u8BED\u6CD5<br>5. \u6620\u5C04\u4F7F\u7528\u5D4C\u5957\u7684 YAML \u952E\u503C\u8BED\u6CD5'
+    },
+    'footer.quote': { en: '"Glory to Mankind." -- YoRHa', zh: '"\u4EBA\u7C7B\u306B\u6804\u5149\u3042\u308C\u3002" -- YoRHa' },
+    'footer.documentation': { en: 'Documentation', zh: '\u6587\u6863' },
+    'footer.github': { en: 'GitHub Repository', zh: 'GitHub \u4ED3\u5E93' }
+  };
+
+  function initTheme() {
+    var saved = localStorage.getItem('arktower-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeBtn(saved);
+  }
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('arktower-theme', next);
+    updateThemeBtn(next);
+  }
+
+  function updateThemeBtn(theme) {
+    var btn = document.getElementById('themeToggle');
+    if (btn) { btn.innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;'; }
+  }
+
+  function initLang() {
+    var saved = localStorage.getItem('arktower-lang') || 'en';
+    applyLang(saved);
+  }
+
+  function toggleLang() {
+    var current = localStorage.getItem('arktower-lang') || 'en';
+    var next = current === 'en' ? 'zh' : 'en';
+    localStorage.setItem('arktower-lang', next);
+    applyLang(next);
+  }
+
+  function applyLang(lang) {
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      if (T[key] && T[key][lang]) {
+        els[i].innerHTML = T[key][lang];
+      }
+    }
+    var btn = document.getElementById('langToggle');
+    if (btn) { btn.textContent = lang === 'en' ? '\u4E2D' : 'EN'; }
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('langToggle').addEventListener('click', toggleLang);
+
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', function() {
       document.querySelector('.nav-links').classList.remove('open');
     });
   });
+
+  initTheme();
+  initLang();
+})();
 </script>
 
 </body>

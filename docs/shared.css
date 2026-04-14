@@ -1,11 +1,11 @@
-/* ══════════════════════════════════════════════════════════════════════
-   ArkTower — Shared Design System
+/* ======================================================================
+   ArkTower -- Shared Design System
    NieR:Automata Tower / YoRHa aesthetic
-   ══════════════════════════════════════════════════════════════════════ */
+   ====================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
-/* ── Reset ── */
+/* -- Reset -- */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@
   border-radius: 0 !important;
 }
 
-/* ── Design Tokens ── */
+/* -- Design Tokens (dark default) -- */
 :root {
   --bg: #0D0D0D;
   --bg-card: #1A1A1A;
@@ -28,24 +28,28 @@
   --blue: #6B8DAD;
   --border: #333333;
   --border-hover: #C7372F;
+  --nav-bg: rgba(13, 13, 13, 0.95);
+  --nav-bg-solid: rgba(13, 13, 13, 0.98);
   --font-main: 'Rajdhani', 'Segoe UI', sans-serif;
   --font-mono: 'Courier New', 'Consolas', monospace;
 }
 
-/* ── Light theme tokens (opt-in via [data-theme="light"]) ── */
+/* -- Light theme tokens -- */
 [data-theme="light"] {
-  --bg: #F0EDE4;
-  --bg-card: #E8E4DB;
-  --bg-elevated: #DAD6CD;
-  --bg-code: #E0DCD3;
-  --text: #2A2620;
+  --bg: #F5F0E8;
+  --bg-card: #FFFDF8;
+  --bg-elevated: #EDE8DF;
+  --bg-code: #ECE7DE;
+  --text: #2A2520;
   --text-muted: #5A5549;
   --text-dim: #7A756A;
-  --border: #C0BBA8;
+  --border: #D4CFC6;
   --border-hover: #C7372F;
+  --nav-bg: rgba(245, 240, 232, 0.95);
+  --nav-bg-solid: rgba(245, 240, 232, 0.98);
 }
 
-/* ── Base ── */
+/* -- Base -- */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 72px;
@@ -60,7 +64,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Scanline overlay ── */
+/* -- Scanline overlay -- */
 .scanline-overlay {
   position: fixed;
   top: 0;
@@ -78,12 +82,12 @@ body {
   );
 }
 
-/* ── Navigation ── */
+/* -- Navigation -- */
 nav {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(13, 13, 13, 0.95);
+  background: var(--nav-bg);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -95,8 +99,8 @@ nav {
   padding: 0 32px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   height: 56px;
+  gap: 20px;
 }
 
 .nav-brand {
@@ -106,6 +110,7 @@ nav {
   text-transform: uppercase;
   color: var(--text);
   text-decoration: none;
+  margin-right: auto;
 }
 
 .nav-brand span {
@@ -144,14 +149,42 @@ nav {
   font-size: 14px;
 }
 
-/* ── Main container ── */
+/* -- Nav controls (i18n + theme toggles) -- */
+.nav-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-controls button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  line-height: 1.4;
+  min-width: 32px;
+  text-align: center;
+}
+
+.nav-controls button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* -- Main container -- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 32px;
 }
 
-/* ── Hero ── */
+/* -- Hero -- */
 .hero {
   position: relative;
   padding: 120px 0 100px;
@@ -228,8 +261,8 @@ nav {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 13px;
-  color: #8BAA7F;
-  border: 1px solid #8BAA7F;
+  color: var(--green);
+  border: 1px solid var(--green);
   padding: 6px 20px;
   letter-spacing: 3px;
   animation: flicker 5s infinite;
@@ -254,7 +287,7 @@ nav {
   color: var(--text);
 }
 
-/* ── Sections ── */
+/* -- Sections -- */
 section {
   padding: 80px 0;
   border-top: 1px solid var(--border);
@@ -289,7 +322,7 @@ section {
   line-height: 1.8;
 }
 
-/* ── Feature / Card grid ── */
+/* -- Feature / Card grid -- */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -345,24 +378,207 @@ section {
   letter-spacing: 1px;
 }
 
-/* ── Architecture ── */
-.arch-diagram {
+/* -- Architecture (native HTML/CSS diagram) -- */
+.arch-native {
   background: var(--bg-code);
   border: 1px solid var(--border);
-  padding: 32px;
+  padding: 24px;
   overflow-x: auto;
+  min-width: 0;
+}
+
+.arch-layer {
+  border: 1px solid var(--border);
+  padding: 14px 20px;
+  text-align: center;
+}
+
+.arch-layer-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.arch-layer-items {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+.arch-layer-items span {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.arch-boxes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.arch-box {
+  border: 1px solid var(--border);
+  padding: 12px 8px;
+  text-align: center;
+  background: var(--bg-card);
+}
+
+.arch-box-name {
   font-family: var(--font-mono);
   font-size: 13px;
-  line-height: 1.5;
-  color: var(--text);
-  white-space: pre;
-}
-
-.arch-diagram .layer-label {
   color: var(--accent);
+  letter-spacing: 1px;
 }
 
-/* ── Code blocks ── */
+.arch-box-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.arch-vline {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0;
+}
+
+.arch-vline::before {
+  content: '';
+  width: 2px;
+  height: 20px;
+  background: var(--border);
+}
+
+.arch-center-box {
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  text-align: center;
+  background: var(--bg-card);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.arch-center-box .arch-box-name {
+  display: inline;
+}
+
+.arch-annotation {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-left: 12px;
+}
+
+/* -- State flow diagram (native HTML/CSS) -- */
+.state-flow {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  padding: 24px;
+  overflow-x: auto;
+}
+
+.state-flow-section {
+  margin-bottom: 24px;
+}
+
+.state-flow-section:last-child {
+  margin-bottom: 0;
+}
+
+.state-flow-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.state-flow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.state-box {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.state-box[data-status="submitted"] { border-color: var(--text-dim); color: var(--text-dim); }
+.state-box[data-status="queued"] { border-color: var(--blue); color: var(--blue); }
+.state-box[data-status="in_progress"] { border-color: var(--green); color: var(--green); }
+.state-box[data-status="review"] { border-color: var(--yellow); color: var(--yellow); }
+.state-box[data-status="input_required"] { border-color: var(--yellow); color: var(--yellow); }
+.state-box[data-status="blocked"] { border-color: var(--accent); color: var(--accent); }
+.state-box[data-status="completed"] { border-color: var(--green); color: var(--green); border-width: 2px; }
+.state-box[data-status="failed"] { border-color: var(--accent); color: var(--accent); border-width: 2px; }
+.state-box[data-status="canceled"] { border-color: var(--text-dim); color: var(--text-dim); border-width: 2px; }
+.state-box[data-status="timed_out"] { border-color: var(--yellow); color: var(--yellow); border-width: 2px; }
+
+.state-arrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.state-arrow-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.state-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.state-flow-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.state-flow-cell .trigger-name {
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+/* -- Code blocks -- */
 .code-block {
   position: relative;
   background: var(--bg-code);
@@ -384,7 +600,7 @@ section {
 }
 
 .code-block .command {
-  color: #8BAA7F;
+  color: var(--green);
 }
 
 .code-label {
@@ -401,7 +617,7 @@ section {
   letter-spacing: 1px;
 }
 
-/* ── Status display ── */
+/* -- Status display (aligned bars) -- */
 .status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -412,7 +628,6 @@ section {
 .status-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background: var(--bg-card);
   border: 1px solid var(--border);
   padding: 16px 20px;
@@ -428,6 +643,11 @@ section {
   font-size: 13px;
   letter-spacing: 1px;
   color: var(--text-dim);
+  width: 180px;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .status-value {
@@ -435,14 +655,18 @@ section {
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1px;
+  width: 52px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .status-bar {
   flex: 1;
   height: 3px;
-  background: #222;
-  margin: 0 20px;
+  background: var(--bg-elevated);
+  margin: 0 16px;
   position: relative;
+  min-width: 40px;
 }
 
 .status-bar-fill {
@@ -453,9 +677,9 @@ section {
   transition: width 0.6s ease;
 }
 
-.status-perfect { color: #8BAA7F; }
+.status-perfect { color: var(--green); }
 .status-good { color: var(--text); }
-.status-warn { color: #D4A853; }
+.status-warn { color: var(--yellow); }
 
 .status-overall {
   background: var(--bg-card);
@@ -477,7 +701,7 @@ section {
   font-family: var(--font-mono);
   font-size: 36px;
   font-weight: 700;
-  color: #8BAA7F;
+  color: var(--green);
 }
 
 .status-overall-gate {
@@ -487,7 +711,7 @@ section {
   margin-top: 4px;
 }
 
-/* ── About content ── */
+/* -- About content -- */
 .about-content {
   max-width: 800px;
 }
@@ -511,7 +735,7 @@ section {
   padding: 2px 8px;
 }
 
-/* ── Links ── */
+/* -- Links -- */
 a {
   color: var(--accent);
   text-decoration: none;
@@ -522,11 +746,21 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ── Tables ── */
+/* -- Tables -- */
 .spec-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 24px;
+  overflow-x: auto;
+  display: block;
+}
+
+.spec-table thead,
+.spec-table tbody,
+.spec-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .spec-table th {
@@ -562,7 +796,7 @@ a:hover {
   color: var(--text);
 }
 
-/* ── Badges ── */
+/* -- Badges -- */
 .badge {
   display: inline-block;
   font-family: var(--font-mono);
@@ -589,7 +823,7 @@ a:hover {
 .badge-medium { color: var(--text-muted); border-color: var(--text-muted); }
 .badge-low { color: var(--text-dim); border-color: var(--text-dim); }
 
-/* ── Collapsible ── */
+/* -- Collapsible -- */
 details {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -615,12 +849,12 @@ details summary {
 details summary::-webkit-details-marker { display: none; }
 
 details summary::before {
-  content: '▸ ';
+  content: '\25B8 ';
   color: var(--accent);
 }
 
 details[open] summary::before {
-  content: '▾ ';
+  content: '\25BE ';
 }
 
 details summary:hover {
@@ -631,7 +865,7 @@ details .detail-content {
   padding: 0 20px 20px;
 }
 
-/* ── Lifecycle diagram ── */
+/* -- Lifecycle diagram -- */
 .lifecycle-flow {
   display: flex;
   align-items: center;
@@ -666,7 +900,7 @@ details .detail-content {
   font-size: 12px;
 }
 
-/* ── Lined code block (with line numbers) ── */
+/* -- Lined code block (with line numbers) -- */
 .lined-code {
   position: relative;
   background: var(--bg-code);
@@ -714,14 +948,14 @@ details .detail-content {
 .lined-code .yaml-str { color: var(--text); }
 .lined-code .md-body { color: var(--text-muted); }
 
-/* ── Two-column layout ── */
+/* -- Two-column layout -- */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
-/* ── Footer ── */
+/* -- Footer -- */
 footer {
   border-top: 1px solid var(--border);
   padding: 60px 0;
@@ -758,7 +992,12 @@ footer {
   opacity: 0.6;
 }
 
-/* ── Responsive ── */
+/* -- Responsive -- */
+@media (max-width: 1024px) {
+  .status-label { width: 160px; }
+  .arch-boxes { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-links.open {
@@ -768,7 +1007,7 @@ footer {
     top: 56px;
     left: 0;
     right: 0;
-    background: rgba(13, 13, 13, 0.98);
+    background: var(--nav-bg-solid);
     border-bottom: 1px solid var(--border);
     padding: 16px 32px;
     gap: 16px;
@@ -782,16 +1021,22 @@ footer {
   section { padding: 60px 0; }
   .feature-grid { grid-template-columns: 1fr; }
   .status-grid { grid-template-columns: 1fr; }
+  .status-label { width: 150px; font-size: 11px; }
   .status-overall { flex-direction: column; gap: 12px; text-align: center; }
-  .arch-diagram { font-size: 11px; padding: 16px; }
+  .arch-native { padding: 16px; }
+  .arch-boxes { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .arch-layer-items { gap: 4px; }
   .two-col { grid-template-columns: 1fr; }
   .spec-table { font-size: 13px; }
   .spec-table th,
   .spec-table td { padding: 8px 10px; }
+  .state-flow { padding: 16px; }
 }
 
 @media (max-width: 480px) {
   .hero-title { letter-spacing: 4px; }
   .hero-title-sm { letter-spacing: 2px; }
   .hero-subtitle { font-size: 14px; letter-spacing: 2px; }
+  .arch-boxes { grid-template-columns: 1fr 1fr; }
+  .status-label { width: 120px; }
 }
