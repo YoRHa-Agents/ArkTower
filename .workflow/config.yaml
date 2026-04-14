@@ -1,0 +1,58 @@
+repo_mode: github
+
+self_update:
+  enabled: true
+  schedule: on_commit
+  checks:
+    - type: eval
+      command: "python -m arktower.evaluation.runner"
+      threshold: 0.80
+    - type: test
+      command: "python -m pytest tests/ -x -q"
+      threshold: 1.0
+    - type: lint
+      command: "python -m ruff check arktower/ --select F"
+      threshold: 1.0
+
+quality_gates:
+  relaxed:
+    composite_threshold: 0.70
+    coverage_threshold: 0.60
+  standard:
+    composite_threshold: 0.85
+    coverage_threshold: 0.80
+  strict:
+    composite_threshold: 0.90
+    coverage_threshold: 0.90
+
+evaluation:
+  dimensions:
+    - lifecycle_correctness
+    - task_format_quality
+    - dispatch_reliability
+    - search_effectiveness
+    - api_completeness
+    - analysis_accuracy
+    - archive_integrity
+    - concurrency_safety
+  
+  dimension_descriptions:
+    lifecycle_correctness: "State machine transitions, terminal state enforcement, audit trail"
+    task_format_quality: "Task model completeness, defaults, JSON roundtrip, Unicode support"
+    dispatch_reliability: "Create-enqueue-claim-complete flow, atomic claims, error handling"
+    search_effectiveness: "FTS5 retrieval accuracy, tag filtering, combined filters"
+    api_completeness: "REST endpoint coverage, MCP tool registration, WebSocket support"
+    analysis_accuracy: "Complexity scoring calibration, tag extraction recall"
+    archive_integrity: "Snapshot roundtrip fidelity, export format correctness"
+    concurrency_safety: "SQLite pragmas, atomic operations, foreign key enforcement"
+
+iteration:
+  max_rounds: 5
+  convergence_threshold: 0.05
+  improvement_targets:
+    - dimension: lifecycle_correctness
+      target: 0.95
+    - dimension: dispatch_reliability
+      target: 0.95
+    - dimension: search_effectiveness
+      target: 0.90
