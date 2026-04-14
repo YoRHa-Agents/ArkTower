@@ -6,10 +6,9 @@ from nicegui import ui
 
 from arktower.core.models import TaskFilter
 from arktower.core.task_service import TaskService
-from arktower.web.components.status_badge import STATUS_COLORS
 from arktower.web.components.task_card import task_card
 from arktower.web.i18n import t
-from arktower.web.theme import get_colors, get_priority_colors
+from arktower.web.theme import get_colors, get_priority_colors, get_status_colors
 
 
 def render_pool_overview(svc: TaskService, navigate_to_task=None) -> None:
@@ -25,7 +24,7 @@ def render_pool_overview(svc: TaskService, navigate_to_task=None) -> None:
             stats.by_status.get(s, 0)
             for s in ["submitted", "queued", "in_progress", "review", "input_required"]
         )
-        _metric_card(t("pool.active"), str(active), "#7FDBCA")
+        _metric_card(t("pool.active"), str(active), c["info"])
         blocked = stats.by_status.get("blocked", 0)
         _metric_card(t("pool.blocked"), str(blocked), c["accent"])
         failed = stats.by_status.get("failed", 0)
@@ -37,8 +36,9 @@ def render_pool_overview(svc: TaskService, navigate_to_task=None) -> None:
         ):
             _section_header(t("pool.status_dist"), inline=True)
             if stats.by_status:
+                status_colors = get_status_colors()
                 for status, count in sorted(stats.by_status.items(), key=lambda x: -x[1]):
-                    colors = STATUS_COLORS.get(status, {"text": c["text_dim"], "border": c["border"]})
+                    colors = status_colors.get(status, {"text": c["text_dim"], "border": c["border"]})
                     with ui.row().classes("items-center gap-2"):
                         ui.label(f"[{status.upper()}]").style(
                             f"width: 140px; color: {colors['text']}; font-size: 0.8rem;"

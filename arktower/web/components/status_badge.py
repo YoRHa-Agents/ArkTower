@@ -4,11 +4,7 @@ from __future__ import annotations
 
 from nicegui import ui
 
-from arktower.web.theme import YORHA_PRIORITY, YORHA_STATUS, get_priority_colors, get_status_colors
-
-STATUS_COLORS = YORHA_STATUS
-
-PRIORITY_COLORS = YORHA_PRIORITY
+from arktower.web.theme import get_priority_colors, get_status_colors
 
 
 def status_badge(status: str) -> ui.badge:

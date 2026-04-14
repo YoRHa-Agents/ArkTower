@@ -23,6 +23,9 @@ YORHA_COLORS_DARK: dict[str, str] = {
     "accent_dark": "#8B2520",
     "border": "#333333",
     "border_accent": "#C7372F",
+    "success": "#8BAA7F",
+    "warning": "#D4A574",
+    "info": "#7FDBCA",
 }
 
 YORHA_STATUS_DARK: dict[str, dict[str, str]] = {
@@ -59,6 +62,9 @@ YORHA_COLORS_LIGHT: dict[str, str] = {
     "accent_dark": "#A02D27",
     "border": "#D4CFC6",
     "border_accent": "#C7372F",
+    "success": "#4A7A3F",
+    "warning": "#8B6340",
+    "info": "#2E7D6E",
 }
 
 YORHA_STATUS_LIGHT: dict[str, dict[str, str]] = {

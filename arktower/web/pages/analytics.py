@@ -37,7 +37,7 @@ def render_analytics(svc: TaskService) -> None:
             )
             if total_terminal > 0:
                 rate = completed / total_terminal * 100
-                rate_color = "#8BAA7F" if rate >= 80 else c["accent"] if rate < 50 else "#D4A574"
+                rate_color = c["success"] if rate >= 80 else c["accent"] if rate < 50 else c["warning"]
                 ui.label(f"{rate:.1f}%").style(
                     f"color: {rate_color}; font-size: 3rem; font-weight: 700;"
                     " font-family: 'Rajdhani', monospace; line-height: 1;"
@@ -76,12 +76,12 @@ def render_analytics(svc: TaskService) -> None:
             queued = stats.by_status.get("queued", 0)
             in_progress = stats.by_status.get("in_progress", 0)
 
-            _queue_metric(t("analytics.queued"), str(queued), "#7FDBCA")
+            _queue_metric(t("analytics.queued"), str(queued), c["info"])
             _queue_metric(t("analytics.in_progress"), str(in_progress), c["text_primary"])
 
             if stats.oldest_queued_age_seconds is not None:
                 age_mins = stats.oldest_queued_age_seconds / 60
-                color = c["accent"] if age_mins > 60 else "#D4A574" if age_mins > 15 else "#8BAA7F"
+                color = c["accent"] if age_mins > 60 else c["warning"] if age_mins > 15 else c["success"]
                 _queue_metric(t("analytics.oldest"), f"{age_mins:.0f} MIN", color)
 
 

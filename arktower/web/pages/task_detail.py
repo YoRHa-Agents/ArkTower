@@ -6,9 +6,9 @@ from nicegui import ui
 
 from arktower.core.models import TaskEvent
 from arktower.core.task_service import TaskService
-from arktower.web.components.status_badge import STATUS_COLORS, priority_indicator, status_badge
+from arktower.web.components.status_badge import priority_indicator, status_badge
 from arktower.web.i18n import t
-from arktower.web.theme import get_colors
+from arktower.web.theme import get_colors, get_status_colors
 
 
 def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> None:
@@ -118,8 +118,9 @@ def _field(label: str, value: str, mono: bool = False) -> None:
 def _history_entry(event: TaskEvent) -> None:
     """Render a single history event in military log format."""
     c = get_colors()
-    from_colors = STATUS_COLORS.get(event.from_status.value, {"text": c["text_dim"]})
-    to_colors = STATUS_COLORS.get(event.to_status.value, {"text": c["text_dim"]})
+    status_colors = get_status_colors()
+    from_colors = status_colors.get(event.from_status.value, {"text": c["text_dim"]})
+    to_colors = status_colors.get(event.to_status.value, {"text": c["text_dim"]})
     actor_part = f" // {event.actor}" if event.actor else ""
 
     with ui.row().classes("items-center gap-2 py-1").style(

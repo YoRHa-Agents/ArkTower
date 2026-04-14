@@ -45,8 +45,21 @@ def get_service() -> TaskService:
     return _svc
 
 
+def _mount_api_routes() -> None:
+    """Mount the FastAPI REST API routes on the NiceGUI server."""
+    from arktower.api.rest_routes import router as api_router
+    from arktower.api.ws_manager import ConnectionManager
+    from arktower.core.event_bus import EventBus
+
+    bus = EventBus()
+    app.state.event_bus = bus
+    app.state.ws_manager = ConnectionManager(bus)
+    app.include_router(api_router)
+
+
 def setup_dashboard() -> None:
-    """Configure the NiceGUI dashboard with all pages."""
+    """Configure the NiceGUI dashboard with all pages and REST API."""
+    _mount_api_routes()
 
     @ui.page("/")
     def index():
