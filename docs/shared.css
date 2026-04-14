@@ -634,8 +634,9 @@ section {
   word-break: break-word;
 }
 
-/* SPEC.005 JSON Schema: preserve exact 2-space indentation (no reflow) */
-.code-block pre code.json-schema-code {
+/* Structured data (JSON, YAML, TOML): preserve exact indentation (no reflow) */
+.code-block pre code.json-schema-code,
+.code-block pre code.code-structured {
   white-space: pre;
   word-break: normal;
   overflow-x: auto;
