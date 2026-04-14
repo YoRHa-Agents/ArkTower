@@ -1,6 +1,8 @@
 # ArkTower Architecture Summary
 
-> Last modified: 2026-04-14T06:55:00Z
+> Last modified: 2026-04-14T12:30:00Z
+
+_GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`._
 
 ## Overview
 

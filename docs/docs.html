@@ -338,7 +338,9 @@
     <div class="section-label" style="margin-bottom: 12px;" data-i18n="cli.task_ops">TASK OPERATIONS</div>
     <div class="code-block">
       <span class="code-label">arktower task</span>
-      <code><span class="comment"># Create a new task</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># Create a new task</span>
 <span class="command">arktower task create "Task title" \
   --priority high \
   --tags "python,api" \
@@ -363,26 +365,32 @@
 <span class="command">arktower task search "authentication api"</span>
 
 <span class="comment"># Delete a task</span>
-<span class="command">arktower task delete &lt;task-id&gt;</span></code>
+<span class="command">arktower task delete &lt;task-id&gt;</span></code></pre>
+      </div>
     </div>
 
     <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.pool_ops">POOL OPERATIONS</div>
     <div class="code-block">
       <span class="code-label">arktower pool</span>
-      <code><span class="comment"># View pool statistics</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># View pool statistics</span>
 <span class="command">arktower pool stats</span>
 
 <span class="comment"># Get next task for claiming</span>
 <span class="command">arktower pool next</span>
 
 <span class="comment"># Pool stats in JSON format</span>
-<span class="command">arktower pool stats --json</span></code>
+<span class="command">arktower pool stats --json</span></code></pre>
+      </div>
     </div>
 
     <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.server_mgmt">SERVER MANAGEMENT</div>
     <div class="code-block">
       <span class="code-label">arktower server</span>
-      <code><span class="comment"># Run database migrations</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># Run database migrations</span>
 <span class="command">arktower server migrate</span>
 
 <span class="comment"># Start dashboard (NiceGUI + API)</span>
@@ -392,13 +400,16 @@
 <span class="command">arktower server start --mode api</span>
 
 <span class="comment"># MCP server for Cursor/Claude</span>
-<span class="command">arktower server mcp</span></code>
+<span class="command">arktower server mcp</span></code></pre>
+      </div>
     </div>
 
     <div class="section-label" style="margin: 24px 0 12px;" data-i18n="cli.eval_cmds">EVALUATION COMMANDS</div>
     <div class="code-block">
       <span class="code-label">arktower eval</span>
-      <code><span class="comment"># Run full evaluation</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># Run full evaluation</span>
 <span class="command">arktower eval run</span>
 
 <span class="comment"># Evaluate specific dimension</span>
@@ -411,7 +422,8 @@
 <span class="command">arktower eval report</span>
 
 <span class="comment"># Validate golden tasks</span>
-<span class="command">arktower eval golden</span></code>
+<span class="command">arktower eval golden</span></code></pre>
+      </div>
     </div>
   </div>
 </section>
@@ -428,20 +440,25 @@
     <div class="section-label" style="margin-bottom: 12px;">CURSOR MCP INTEGRATION</div>
     <div class="code-block">
       <span class="code-label">.cursor/mcp.json</span>
-      <code>{
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code>{
   "mcpServers": {
     "arktower": {
       "command": "python",
       "args": ["-m", "arktower.mcp.server"]
     }
   }
-}</code>
+}</code></pre>
+      </div>
     </div>
 
     <div class="section-label" style="margin: 24px 0 12px;">NINES EVALUATION</div>
     <div class="code-block">
       <span class="code-label">nines.toml</span>
-      <code><span class="comment"># NineS self-evaluation configuration</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># NineS self-evaluation configuration</span>
 [project]
 name = "arktower"
 description = "Agent-oriented task pool system"
@@ -461,13 +478,16 @@ dimensions = [
 
 [gates]
 standard = { composite = 0.85, coverage = 80 }
-strict   = { composite = 0.90, coverage = 90 }</code>
+strict   = { composite = 0.90, coverage = 90 }</code></pre>
+      </div>
     </div>
 
     <div class="section-label" style="margin: 24px 0 12px;">DEVOLA FLOW SELF-UPDATE</div>
     <div class="code-block">
       <span class="code-label">.workflow/config.yaml</span>
-      <code><span class="comment"># DevolaFlow configuration</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># DevolaFlow configuration</span>
 project:
   name: arktower
   type: python
@@ -487,7 +507,8 @@ hooks:
   pre_commit:
     - "python -m pytest tests/ -x -q"
   post_iteration:
-    - "arktower eval run"</code>
+    - "arktower eval run"</code></pre>
+      </div>
     </div>
   </div>
 </section>
@@ -550,6 +571,25 @@ hooks:
   </div>
 </footer>
 
+<script>
+function copyCode(btn) {
+  var block = btn.closest('.code-block-wrapper').querySelector('pre, code');
+  if (!block) {
+    return;
+  }
+  var text = block.innerText || block.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'COPIED';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'COPY';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function(err) {
+    console.error('copyCode failed', err);
+  });
+}
+</script>
 <script>
 (function() {
   'use strict';
