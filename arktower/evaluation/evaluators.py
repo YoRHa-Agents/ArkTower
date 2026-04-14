@@ -2,12 +2,8 @@
 
 from __future__ import annotations
 
-import sqlite3
-import threading
-import time
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
 
 from pydantic import BaseModel
 
@@ -18,12 +14,10 @@ from arktower.core.models import (
     TaskFilter,
     TaskPriority,
     TaskStatus,
-    TaskTemplate,
-    TaskUpdate,
     Trigger,
 )
 from arktower.core.state_machine import TERMINAL_STATES, TRANSITION_TABLE, InvalidTransition, StateMachine
-from arktower.core.task_service import TaskNotFoundError, TaskService
+from arktower.core.task_service import TaskService
 from arktower.evaluation.dimensions import DimensionScore, EvalDimension, EvalFinding
 from arktower.store.connection import DatabaseConnection
 from arktower.store.migration import MigrationRunner
@@ -92,7 +86,7 @@ class LifecycleEvaluator(BaseEvaluator):
                             severity="major",
                             dimension=self.dimension,
                             title=f"Terminal state {ts.value} accepts {trigger.value}",
-                            description=f"Terminal state should reject non-reopen triggers",
+                            description="Terminal state should reject non-reopen triggers",
                         ))
                 except InvalidTransition:
                     passed += 1
@@ -322,7 +316,7 @@ class DispatchEvaluator(BaseEvaluator):
             async def _dep_check():
                 t1 = await svc.create_task(TaskCreate(title="Dep parent"))
                 t2 = await svc.create_task(TaskCreate(title="Dep child"))
-                from arktower.core.models import Dependency, DependencyType
+                from arktower.core.models import Dependency
                 repo.create_dependency(Dependency(from_task_id=t2.id, to_task_id=t1.id))
                 await svc.advance_task(t2.id, Trigger.ENQUEUE)
                 await svc.advance_task(t1.id, Trigger.ENQUEUE)
@@ -601,7 +595,6 @@ class ArchiveEvaluator(BaseEvaluator):
         import asyncio
         import tempfile
         from arktower.archive.snapshot_writer import SnapshotWriter
-        from arktower.archive.export_formats import ExportFormats
 
         passed, failed, details, findings = 0, 0, [], []
 

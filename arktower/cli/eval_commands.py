@@ -96,7 +96,7 @@ def eval_report(
 @app.command("golden")
 def eval_golden() -> None:
     """Validate golden test tasks."""
-    from arktower.core.models import Task, TaskCreate
+    from arktower.core.models import TaskCreate
     from arktower.evaluation.golden_tasks import GOLDEN_TASKS
 
     passed, failed = 0, 0

@@ -96,7 +96,7 @@ if __name__ == "__main__":
     report = run_and_save(ctx, output_dir=Path(".local/eval_reports"))
 
     print(f"\n{'='*60}")
-    print(f"ArkTower Self-Evaluation Report")
+    print("ArkTower Self-Evaluation Report")
     print(f"{'='*60}")
     print(f"Overall Score: {report.overall_score:.4f}")
     print(f"Timestamp: {report.timestamp}")

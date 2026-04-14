@@ -10,10 +10,9 @@ from arktower.core.models import (
     TaskFilter,
     TaskPriority,
     TaskStatus,
-    TaskUpdate,
     Trigger,
 )
-from arktower.core.task_service import TaskService, TemplateNotFoundError
+from arktower.core.task_service import TaskService
 
 
 async def handle_create_task(svc: TaskService, arguments: dict[str, Any]) -> str:
