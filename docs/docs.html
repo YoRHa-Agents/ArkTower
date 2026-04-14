@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArkTower — System Documentation</title>
+  <meta name="description" content="ArkTower system documentation. Technical references, architecture guides, API specifications, and CLI reference.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="format.html">Format</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="docs.html" class="active">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-serial">[ARCHIVE] SYSTEM DOCUMENTATION</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Docs</h1>
+    <p class="hero-subtitle">Technical references, architecture guides, and API specifications</p>
+    <div class="hero-badge">[DOCUMENTATION v0.1.0]</div>
+  </div>
+</header>
+
+<!-- DOC.001 — Architecture -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.001 — SYSTEM TOPOLOGY</div>
+      <h2 class="section-title">[ARCHITECTURE]</h2>
+      <p class="section-desc">Multi-layer architecture with unified task service facade, event bus, and pluggable storage.</p>
+    </div>
+
+    <div class="arch-diagram">╔════════════════════════════════════════════════════════════════════╗
+║                     <span class="layer-label">[EXTERNAL CONSUMERS]</span>                          ║
+║   Cursor (MCP)  │  OpenClaw  │  REST API  │  Dashboard  │  CLI   ║
+╠════════════════════════════════════════════════════════════════════╣
+║                                                                    ║
+║   ┌────────────┐  ┌────────────┐  ┌─────────┐  ┌──────────────┐  ║
+║   │ MCP Server │  │ REST API   │  │   CLI   │  │   NiceGUI    │  ║
+║   │  (stdio)   │  │ (FastAPI)  │  │ (Typer) │  │  Dashboard   │  ║
+║   └─────┬──────┘  └─────┬──────┘  └────┬────┘  └──────┬───────┘  ║
+║         └───────────────┬┘──────────────┘──────────────┘          ║
+║                         │                                          ║
+║              ┌──────────▼──────────┐                               ║
+║              │    <span class="layer-label">Task Service</span>     │◄──── EventBus (pub/sub)       ║
+║              └──────────┬──────────┘                               ║
+║              ┌──────────▼──────────┐                               ║
+║              │   <span class="layer-label">State Machine</span>     │  15 triggers × 10 states      ║
+║              └──────────┬──────────┘                               ║
+║              ┌──────────▼──────────┐                               ║
+║              │  <span class="layer-label">SQLite (WAL mode)</span>  │  FTS5 · JSON1 · Indexes      ║
+║              └─────────────────────┘                               ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝</div>
+
+    <div class="feature-grid" style="margin-top: 32px;">
+      <div class="feature-card" data-index="CORE">
+        <h3>arktower/core/</h3>
+        <p>Domain models (Task, TaskStatus, Trigger), StateMachine (15 triggers × 10 states), EventBus, TaskService facade, TaskNormalizer.</p>
+        <span class="feature-tag">DOMAIN</span>
+      </div>
+      <div class="feature-card" data-index="STORE">
+        <h3>arktower/store/</h3>
+        <p>TaskRepository protocol, SqliteTaskRepository (CRUD, FTS5, atomic claim), migration runner with 3 migrations.</p>
+        <span class="feature-tag">PERSISTENCE</span>
+      </div>
+      <div class="feature-card" data-index="API">
+        <h3>arktower/api/</h3>
+        <p>FastAPI app factory, REST routes at /api/v1/*, WebSocket manager for real-time events.</p>
+        <span class="feature-tag">HTTP</span>
+      </div>
+      <div class="feature-card" data-index="MCP">
+        <h3>arktower/mcp/</h3>
+        <p>MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor and Claude.</p>
+        <span class="feature-tag">AI_INTEGRATION</span>
+      </div>
+      <div class="feature-card" data-index="CLI">
+        <h3>arktower/cli/</h3>
+        <p>Typer CLI with Rich output: task, pool, server, eval subcommands. JSON output mode.</p>
+        <span class="feature-tag">TERMINAL</span>
+      </div>
+      <div class="feature-card" data-index="WEB">
+        <h3>arktower/web/</h3>
+        <p>NiceGUI dashboard with YoRHa theme, i18n (EN/ZH), dark/light toggle, pool overview, task board, analytics.</p>
+        <span class="feature-tag">DASHBOARD</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; text-align: right;">
+      <a href="https://github.com" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:13px;letter-spacing:2px;">VIEW FULL ARCHITECTURE →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DOC.002 — API Reference -->
+<section id="api">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.002 — INTERFACE PROTOCOLS</div>
+      <h2 class="section-title">[API REFERENCE]</h2>
+      <p class="section-desc">REST API endpoints, MCP tools, and WebSocket events.</p>
+    </div>
+
+    <div class="section-label" style="margin-bottom: 16px;">REST API ENDPOINTS — /api/v1/</div>
+    <table class="spec-table">
+      <thead>
+        <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>GET</code></td><td>/api/v1/health</td><td>Health check — returns system status</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks</td><td>Create a new task</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks</td><td>List tasks with optional filters (status, priority, tags, search)</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}</td><td>Get full details of a specific task</td></tr>
+        <tr><td><code>PATCH</code></td><td>/api/v1/tasks/{id}</td><td>Update task fields (title, description, priority, tags, etc.)</td></tr>
+        <tr><td><code>DELETE</code></td><td>/api/v1/tasks/{id}</td><td>Delete a task from the pool</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/advance</td><td>Advance task via state machine trigger</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/claim</td><td>Atomically claim a queued task for an agent</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/tasks/{id}/complete</td><td>Mark task as completed with optional output</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/tasks/{id}/history</td><td>Get task event history (audit trail)</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/pool/stats</td><td>Pool statistics — counts by status, priority, queue age</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/pool/next</td><td>Get highest-priority queued task (capability matching)</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/templates</td><td>Create a task template</td></tr>
+        <tr><td><code>GET</code></td><td>/api/v1/templates</td><td>List all task templates</td></tr>
+        <tr><td><code>POST</code></td><td>/api/v1/archives/{id}</td><td>Archive a terminal task to JSON snapshot</td></tr>
+        <tr><td><code>WS</code></td><td>/ws</td><td>WebSocket — real-time task lifecycle events</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin: 32px 0 16px;">MCP TOOLS — 12 REGISTERED</div>
+    <table class="spec-table">
+      <thead>
+        <tr><th>Tool Name</th><th>Description</th><th>Key Parameters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>create_task</code></td><td>Create a new task in the pool</td><td>title, description, priority, tags</td></tr>
+        <tr><td><code>list_tasks</code></td><td>List tasks with optional filters</td><td>status, priority, tags, limit, offset</td></tr>
+        <tr><td><code>get_task</code></td><td>Get full details of a task</td><td>task_id</td></tr>
+        <tr><td><code>claim_task</code></td><td>Claim a queued task for an agent</td><td>task_id, agent_id</td></tr>
+        <tr><td><code>complete_task</code></td><td>Mark a task as completed</td><td>task_id, output</td></tr>
+        <tr><td><code>search_tasks</code></td><td>Full-text search across tasks</td><td>query, limit</td></tr>
+        <tr><td><code>get_pool_stats</code></td><td>Get pool statistics</td><td>(none)</td></tr>
+        <tr><td><code>get_next_task</code></td><td>Get highest-priority queued task</td><td>(none)</td></tr>
+        <tr><td><code>advance_task</code></td><td>Advance via state machine trigger</td><td>task_id, trigger, actor, notes</td></tr>
+        <tr><td><code>fail_task</code></td><td>Mark a task as failed</td><td>task_id, error</td></tr>
+        <tr><td><code>archive_task</code></td><td>Archive a terminal task</td><td>task_id, format</td></tr>
+        <tr><td><code>create_from_template</code></td><td>Create task from a template</td><td>template_name, overrides</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin: 32px 0 16px;">WEBSOCKET EVENTS</div>
+    <div class="feature-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+      <div class="feature-card" data-index="WS">
+        <h3>task.transition</h3>
+        <p>Fired on every state machine transition. Payload includes task_id, trigger, from_status, to_status, actor.</p>
+        <span class="feature-tag">LIFECYCLE</span>
+      </div>
+      <div class="feature-card" data-index="WS">
+        <h3>task.created</h3>
+        <p>Fired when a new task is created. Payload includes the full task object.</p>
+        <span class="feature-tag">CRUD</span>
+      </div>
+      <div class="feature-card" data-index="WS">
+        <h3>task.updated</h3>
+        <p>Fired on task field updates. Payload includes task_id and changed fields.</p>
+        <span class="feature-tag">CRUD</span>
+      </div>
+      <div class="feature-card" data-index="WS">
+        <h3>task.deleted</h3>
+        <p>Fired when a task is removed from the pool. Payload includes task_id.</p>
+        <span class="feature-tag">CRUD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOC.003 — Evaluation System -->
+<section id="evaluation">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.003 — QUALITY ASSURANCE</div>
+      <h2 class="section-title">[EVALUATION SYSTEM]</h2>
+      <p class="section-desc">8-dimension self-benchmarking framework with weighted scoring and quality gates.</p>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-row">
+        <span class="status-label">lifecycle_correctness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">search_effectiveness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">analysis_accuracy</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">archive_integrity</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">concurrency_safety</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">api_completeness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:#DAD4BB;"></div></div>
+        <span class="status-value status-good">0.95</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">task_format_quality</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:#DAD4BB;"></div></div>
+        <span class="status-value status-good">0.87</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">dispatch_reliability</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:#D4A853;"></div></div>
+        <span class="status-value status-warn">0.71</span>
+      </div>
+    </div>
+
+    <div class="status-overall" style="margin-bottom: 32px;">
+      <div>
+        <div class="status-overall-label">Composite Score</div>
+        <div class="status-overall-gate">GATE: STANDARD (≥ 0.85) — PASSED</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="status-overall-value">0.9179</div>
+        <div class="status-overall-gate">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead>
+        <tr><th>Dimension</th><th>Weight</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>lifecycle_correctness</code></td><td>20%</td><td>State machine transitions, terminal state enforcement, audit trail</td></tr>
+        <tr><td><code>dispatch_reliability</code></td><td>20%</td><td>Lifecycle flows, atomic claims, capability matching, dependency gates</td></tr>
+        <tr><td><code>task_format_quality</code></td><td>15%</td><td>Task model completeness, agent fields, .task.md parser, normalizer</td></tr>
+        <tr><td><code>search_effectiveness</code></td><td>10%</td><td>FTS5 retrieval, tag filtering, combined filter accuracy</td></tr>
+        <tr><td><code>api_completeness</code></td><td>10%</td><td>REST endpoints, MCP tools, health check, authentication</td></tr>
+        <tr><td><code>analysis_accuracy</code></td><td>10%</td><td>Complexity scoring calibration, tag extraction recall</td></tr>
+        <tr><td><code>archive_integrity</code></td><td>10%</td><td>Snapshot roundtrip, export format correctness (JSON/NDJSON/CSV/MD)</td></tr>
+        <tr><td><code>concurrency_safety</code></td><td>5%</td><td>SQLite pragmas, atomic operations, FK enforcement</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin: 24px 0 16px;">QUALITY GATE THRESHOLDS</div>
+    <table class="spec-table" style="max-width: 500px;">
+      <thead>
+        <tr><th>Gate</th><th>Composite ≥</th><th>Coverage ≥</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span style="color:var(--green);">Relaxed</span></td><td>0.70</td><td>60%</td></tr>
+        <tr><td><span style="color:var(--text);">Standard</span></td><td>0.85</td><td>80%</td></tr>
+        <tr><td><span style="color:var(--accent);">Strict</span></td><td>0.90</td><td>90%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- DOC.004 — CLI Reference -->
+<section id="cli">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.004 — TERMINAL INTERFACE</div>
+      <h2 class="section-title">[CLI REFERENCE]</h2>
+      <p class="section-desc">All CLI commands via the <span class="inline-code">arktower</span> entry point. Powered by Typer + Rich.</p>
+    </div>
+
+    <div class="section-label" style="margin-bottom: 12px;">TASK OPERATIONS</div>
+    <div class="code-block">
+      <span class="code-label">arktower task</span>
+      <code><span class="comment"># Create a new task</span>
+<span class="command">arktower task create "Task title" \
+  --priority high \
+  --tags "python,api" \
+  --description "Detailed description"</span>
+
+<span class="comment"># List tasks with filters</span>
+<span class="command">arktower task list --status queued --priority high --json</span>
+
+<span class="comment"># Show task details</span>
+<span class="command">arktower task show &lt;task-id&gt;</span>
+
+<span class="comment"># Advance via trigger</span>
+<span class="command">arktower task advance &lt;task-id&gt; enqueue</span>
+
+<span class="comment"># Claim a task</span>
+<span class="command">arktower task claim &lt;task-id&gt; agent-1</span>
+
+<span class="comment"># Complete a task</span>
+<span class="command">arktower task complete &lt;task-id&gt; --output "Done in PR #42"</span>
+
+<span class="comment"># Search tasks (FTS5)</span>
+<span class="command">arktower task search "authentication api"</span>
+
+<span class="comment"># Delete a task</span>
+<span class="command">arktower task delete &lt;task-id&gt;</span></code>
+    </div>
+
+    <div class="section-label" style="margin: 24px 0 12px;">POOL OPERATIONS</div>
+    <div class="code-block">
+      <span class="code-label">arktower pool</span>
+      <code><span class="comment"># View pool statistics</span>
+<span class="command">arktower pool stats</span>
+
+<span class="comment"># Get next task for claiming</span>
+<span class="command">arktower pool next</span>
+
+<span class="comment"># Pool stats in JSON format</span>
+<span class="command">arktower pool stats --json</span></code>
+    </div>
+
+    <div class="section-label" style="margin: 24px 0 12px;">SERVER MANAGEMENT</div>
+    <div class="code-block">
+      <span class="code-label">arktower server</span>
+      <code><span class="comment"># Run database migrations</span>
+<span class="command">arktower server migrate</span>
+
+<span class="comment"># Start dashboard (NiceGUI + API)</span>
+<span class="command">arktower server start</span>
+
+<span class="comment"># API-only mode (no dashboard)</span>
+<span class="command">arktower server start --mode api</span>
+
+<span class="comment"># MCP server for Cursor/Claude</span>
+<span class="command">arktower server mcp</span></code>
+    </div>
+
+    <div class="section-label" style="margin: 24px 0 12px;">EVALUATION COMMANDS</div>
+    <div class="code-block">
+      <span class="code-label">arktower eval</span>
+      <code><span class="comment"># Run full evaluation</span>
+<span class="command">arktower eval run</span>
+
+<span class="comment"># Evaluate specific dimension</span>
+<span class="command">arktower eval run --dimension lifecycle_correctness</span>
+
+<span class="comment"># JSON output for CI/CD</span>
+<span class="command">arktower eval run --json</span>
+
+<span class="comment"># View latest report</span>
+<span class="command">arktower eval report</span>
+
+<span class="comment"># Validate golden tasks</span>
+<span class="command">arktower eval golden</span></code>
+    </div>
+  </div>
+</section>
+
+<!-- DOC.005 — Configuration -->
+<section id="config">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.005 — SYSTEM CONFIGURATION</div>
+      <h2 class="section-title">[CONFIGURATION]</h2>
+      <p class="section-desc">Integration configuration files for Cursor, NineS, and DevolaFlow.</p>
+    </div>
+
+    <div class="section-label" style="margin-bottom: 12px;">CURSOR MCP INTEGRATION</div>
+    <div class="code-block">
+      <span class="code-label">.cursor/mcp.json</span>
+      <code>{
+  "mcpServers": {
+    "arktower": {
+      "command": "python",
+      "args": ["-m", "arktower.mcp.server"]
+    }
+  }
+}</code>
+    </div>
+
+    <div class="section-label" style="margin: 24px 0 12px;">NINES EVALUATION</div>
+    <div class="code-block">
+      <span class="code-label">nines.toml</span>
+      <code><span class="comment"># NineS self-evaluation configuration</span>
+[project]
+name = "arktower"
+description = "Agent-oriented task pool system"
+
+[eval]
+command = "arktower eval run --json"
+dimensions = [
+  "lifecycle_correctness",
+  "task_format_quality",
+  "dispatch_reliability",
+  "search_effectiveness",
+  "api_completeness",
+  "analysis_accuracy",
+  "archive_integrity",
+  "concurrency_safety"
+]
+
+[gates]
+standard = { composite = 0.85, coverage = 80 }
+strict   = { composite = 0.90, coverage = 90 }</code>
+    </div>
+
+    <div class="section-label" style="margin: 24px 0 12px;">DEVOLA FLOW SELF-UPDATE</div>
+    <div class="code-block">
+      <span class="code-label">.workflow/config.yaml</span>
+      <code><span class="comment"># DevolaFlow configuration</span>
+project:
+  name: arktower
+  type: python
+
+quality_gates:
+  relaxed:
+    composite_score: 0.70
+    test_coverage: 60
+  standard:
+    composite_score: 0.85
+    test_coverage: 80
+  strict:
+    composite_score: 0.90
+    test_coverage: 90
+
+hooks:
+  pre_commit:
+    - "python -m pytest tests/ -x -q"
+  post_iteration:
+    - "arktower eval run"</code>
+    </div>
+  </div>
+</section>
+
+<!-- DOC.006 — Changelog -->
+<section id="changelog">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DOC.006 — VERSION HISTORY</div>
+      <h2 class="section-title">[CHANGELOG]</h2>
+    </div>
+
+    <div class="feature-card" data-index="v0.1.0" style="max-width:800px;">
+      <h3>v0.1.0 — Initial Release</h3>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;font-family:var(--font-mono);">2026-04-14</p>
+      <p><strong>Core System</strong></p>
+      <ul style="list-style:none;padding:0;margin:8px 0 16px;">
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Pydantic v2 task model with 24 fields including agent capability fields</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 10-state lifecycle with 15 named triggers and full transition table</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● EventBus pub/sub for lifecycle events</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● TaskService facade with capability matching dispatch</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● TaskNormalizer for field standardization</li>
+      </ul>
+      <p><strong>Storage</strong></p>
+      <ul style="list-style:none;padding:0;margin:8px 0 16px;">
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● SQLite with WAL mode, FTS5 full-text search, JSON1 extension</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Atomic claim operation for concurrent agent access</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Migration runner with 3 migration files</li>
+      </ul>
+      <p><strong>Interfaces</strong></p>
+      <ul style="list-style:none;padding:0;margin:8px 0 16px;">
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● FastAPI REST API with 15+ endpoints</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● MCP server with 12 tools, 1 resource, 2 prompts</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● Typer CLI with Rich terminal output</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● NiceGUI dashboard with YoRHa Tower theme, i18n, dark/light mode</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● WebSocket real-time event broadcasting</li>
+      </ul>
+      <p><strong>Quality</strong></p>
+      <ul style="list-style:none;padding:0;margin:8px 0;">
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 293 tests, 71%+ coverage</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 8-dimension self-evaluation framework (score: 0.9179)</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● 12 golden tasks for format validation</li>
+        <li style="padding:4px 0;font-size:14px;color:var(--text-dim);">● GitHub Pages site with NieR:Automata Tower aesthetic</li>
+      </ul>
+      <span class="feature-tag">INITIAL_RELEASE</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="format.html">Format</a>
+      <a href="demo.html">Demo</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+    </div>
+    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

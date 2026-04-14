@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArkTower — Interactive Demo</title>
+  <meta name="description" content="ArkTower interactive demo. Create, dispatch, and manage tasks in a simulated agent pool.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .demo-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .demo-panel-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .task-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .task-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+    .task-card.selected {
+      border-color: var(--accent);
+      border-width: 2px;
+    }
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .task-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .task-card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .task-card-id {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+    .task-card-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .task-card-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      letter-spacing: 1px;
+    }
+    .task-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .task-actions button {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-dim);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .task-actions button:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .task-actions button:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-main);
+      font-size: 15px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group select { cursor: pointer; }
+    .btn-submit {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 3px;
+      padding: 10px 28px;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .btn-submit:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .stat-item {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .detail-overlay {
+      display: none;
+      position: fixed;
+      top: 0;left: 0;right: 0;bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 20px 20px;
+      overflow-y: auto;
+    }
+    .detail-overlay.open { display: flex; }
+    .detail-panel {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      max-width: 700px;
+      width: 100%;
+      padding: 32px;
+      position: relative;
+    }
+    .detail-close {
+      position: absolute;
+      top: 12px;right: 16px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--text-dim);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .detail-close:hover { color: var(--accent); }
+    .detail-field {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0;
+    }
+    .detail-field-key {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      width: 140px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .detail-field-val {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-word;
+    }
+    .timeline-entry {
+      display: flex;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 13px;
+      border-left: 2px solid var(--border);
+      padding-left: 16px;
+      margin-left: 8px;
+    }
+    .timeline-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      min-width: 80px;
+    }
+    .demo-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .demo-two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="format.html">Format</a></li>
+      <li><a href="demo.html" class="active">Demo</a></li>
+      <li><a href="docs.html">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-serial">[DEMO] TOWER SYSTEM SIMULATION</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Demo</h1>
+    <p class="hero-subtitle">Create, dispatch, and manage tasks in a simulated agent pool</p>
+    <div class="hero-badge">[CLIENT-SIDE SIMULATION]</div>
+  </div>
+</header>
+
+<!-- DEMO.005 — Statistics Panel -->
+<section id="stats">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DEMO.005 — REAL-TIME METRICS</div>
+      <h2 class="section-title">[STATISTICS]</h2>
+    </div>
+    <div class="stat-grid" id="statsGrid"></div>
+  </div>
+</section>
+
+<!-- DEMO.001 — Task Pool + DEMO.002 — Create Task -->
+<section id="pool">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">DEMO.001 — TASK POOL SIMULATION</div>
+      <h2 class="section-title">[TASK POOL]</h2>
+      <p class="section-desc">Simulated task pool with lifecycle controls. Click a task to view details.</p>
+    </div>
+
+    <div class="demo-two-col">
+      <div>
+        <div class="demo-panel">
+          <div class="demo-panel-title">ACTIVE POOL</div>
+          <div id="taskPool"></div>
+          <div id="poolEmpty" style="display:none;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);text-align:center;padding:32px;">[ POOL EMPTY — CREATE A TASK ]</div>
+        </div>
+      </div>
+      <div>
+        <!-- DEMO.002 — Create Task -->
+        <div class="demo-panel">
+          <div class="demo-panel-title">DEMO.002 — CREATE TASK</div>
+          <form id="createForm">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="newTitle" placeholder="Task title..." required>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="newDesc" placeholder="Markdown description..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Priority</label>
+              <select id="newPriority">
+                <option value="low">LOW</option>
+                <option value="medium" selected>MEDIUM</option>
+                <option value="high">HIGH</option>
+                <option value="critical">CRITICAL</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tags (comma-separated)</label>
+              <input type="text" id="newTags" placeholder="python, api, auth">
+            </div>
+            <button type="submit" class="btn-submit">SUBMIT TASK</button>
+          </form>
+        </div>
+
+        <!-- DEMO.006 — Pre-Analysis -->
+        <div class="demo-panel">
+          <div class="demo-panel-title">DEMO.006 — PRE-ANALYSIS</div>
+          <div class="form-group">
+            <label>Paste raw task text</label>
+            <textarea id="analyzeInput" placeholder="Paste task description for analysis..." style="min-height:100px;"></textarea>
+          </div>
+          <button class="btn-submit" onclick="runAnalysis()">ANALYZE</button>
+          <div id="analysisResult" style="display:none;margin-top:16px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO.004 — Task Detail Overlay -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-panel">
+    <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <div class="demo-panel-title" style="margin-bottom:20px;">DEMO.004 — TASK DETAIL</div>
+    <div id="detailContent"></div>
+    <div style="margin-top:24px;">
+      <div class="demo-panel-title">HISTORY TIMELINE</div>
+      <div id="detailTimeline"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="format.html">Format</a>
+      <a href="docs.html">Documentation</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+    </div>
+    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ── State Machine Transitions ── */
+  var TRANSITIONS = {
+    submit:        { '(none)': 'submitted' },
+    enqueue:       { submitted: 'queued' },
+    claim:         { queued: 'in_progress' },
+    request_input: { in_progress: 'input_required' },
+    resume:        { input_required: 'in_progress' },
+    block:         { in_progress: 'blocked' },
+    unblock:       { blocked: 'in_progress' },
+    send_review:   { in_progress: 'review' },
+    approve:       { review: 'completed' },
+    reject:        { review: 'in_progress' },
+    complete:      { in_progress: 'completed' },
+    fail:          { in_progress: 'failed' },
+    cancel:        { submitted:'canceled', queued:'canceled', in_progress:'canceled',
+                     review:'canceled', input_required:'canceled', blocked:'canceled' },
+    timeout:       { in_progress:'timed_out', blocked:'timed_out', input_required:'timed_out' },
+    reopen:        { completed:'queued', failed:'queued', canceled:'queued', timed_out:'queued' }
+  };
+
+  var TERMINAL = { completed:1, failed:1, canceled:1, timed_out:1 };
+
+  var ACTION_LABELS = {
+    enqueue: 'ENQUEUE', claim: 'CLAIM', complete: 'COMPLETE', fail: 'FAIL',
+    block: 'BLOCK', unblock: 'UNBLOCK', cancel: 'CANCEL', send_review: 'REVIEW',
+    approve: 'APPROVE', reject: 'REJECT', request_input: 'REQ INPUT',
+    resume: 'RESUME', timeout: 'TIMEOUT', reopen: 'REOPEN'
+  };
+
+  var AGENTS = ['YoRHa-2B','YoRHa-9S','YoRHa-A2','Pod-042','Pod-153'];
+
+  /* ── UUID generation ── */
+  function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  function ts() { return new Date().toISOString(); }
+  function shortId(id) { return id.substring(0, 8); }
+
+  /* ── Task pool ── */
+  var tasks = [];
+
+  function createTask(title, description, priority, tags) {
+    var now = ts();
+    var task = {
+      id: uuid(),
+      title: title,
+      description: description || '',
+      status: 'submitted',
+      priority: priority || 'medium',
+      tags: tags || [],
+      assigned_to: null,
+      created_at: now,
+      updated_at: now,
+      started_at: null,
+      completed_at: null,
+      history: [{ trigger:'submit', from:'(none)', to:'submitted', time:now, actor:'system' }]
+    };
+    tasks.push(task);
+    return task;
+  }
+
+  function getAvailableActions(status) {
+    var actions = [];
+    for (var trigger in TRANSITIONS) {
+      if (trigger === 'submit') { continue; }
+      if (TRANSITIONS[trigger][status]) {
+        actions.push(trigger);
+      }
+    }
+    return actions;
+  }
+
+  function applyTrigger(taskId, trigger) {
+    var task = tasks.find(function(t){ return t.id === taskId; });
+    if (!task) { return null; }
+    var mapping = TRANSITIONS[trigger];
+    if (!mapping || !mapping[task.status]) { return null; }
+    var from = task.status;
+    var to = mapping[from];
+    task.status = to;
+    task.updated_at = ts();
+    if (trigger === 'claim') {
+      task.assigned_to = AGENTS[Math.floor(Math.random() * AGENTS.length)];
+      task.started_at = task.updated_at;
+    }
+    if (TERMINAL[to]) {
+      task.completed_at = task.updated_at;
+    }
+    if (trigger === 'reopen') {
+      task.completed_at = null;
+      task.assigned_to = null;
+    }
+    task.history.push({
+      trigger: trigger,
+      from: from,
+      to: to,
+      time: task.updated_at,
+      actor: task.assigned_to || 'system'
+    });
+    return task;
+  }
+
+  /* ── Pre-loaded sample tasks ── */
+  function loadSamples() {
+    var s1 = createTask('Implement REST API authentication', 'Add JWT-based auth to all API endpoints', 'high', ['python','api','auth']);
+    applyTrigger(s1.id, 'enqueue');
+    applyTrigger(s1.id, 'claim');
+
+    var s2 = createTask('Fix SQLite WAL checkpoint stall', 'Database checkpoint hangs under load', 'critical', ['bugfix','sqlite','production']);
+    applyTrigger(s2.id, 'enqueue');
+
+    var s3 = createTask('Add FTS5 search to dashboard', 'Integrate full-text search in NiceGUI task board', 'medium', ['frontend','search']);
+    applyTrigger(s3.id, 'enqueue');
+    applyTrigger(s3.id, 'claim');
+    applyTrigger(s3.id, 'complete');
+
+    var s4 = createTask('Design capability matching algorithm', 'Research and implement agent-task capability matching', 'high', ['research','architecture']);
+    applyTrigger(s4.id, 'enqueue');
+    applyTrigger(s4.id, 'claim');
+    applyTrigger(s4.id, 'fail');
+
+    createTask('Write MCP tool documentation', 'Document all 12 MCP tools with examples', 'low', ['docs','mcp']);
+  }
+
+  /* ── Rendering ── */
+  var PRIORITY_ORDER = { critical:0, high:1, medium:2, low:3 };
+
+  function sortedTasks() {
+    return tasks.slice().sort(function(a,b) {
+      return (PRIORITY_ORDER[a.priority] || 2) - (PRIORITY_ORDER[b.priority] || 2);
+    });
+  }
+
+  function renderPool() {
+    var pool = document.getElementById('taskPool');
+    var empty = document.getElementById('poolEmpty');
+    if (tasks.length === 0) {
+      pool.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    var sorted = sortedTasks();
+    var html = '';
+    for (var i = 0; i < sorted.length; i++) {
+      var t = sorted[i];
+      var actions = getAvailableActions(t.status);
+      html += '<div class="task-card" data-id="' + t.id + '" onclick="window._openDetail(\'' + t.id + '\')">';
+      html += '<div class="task-card-header">';
+      html += '<span class="task-card-title">' + esc(t.title) + '</span>';
+      html += '<span class="badge badge-' + t.priority + '">' + t.priority + '</span>';
+      html += '</div>';
+      html += '<div class="task-card-meta">';
+      html += '<span class="badge badge-' + t.status + '">' + t.status + '</span>';
+      if (t.assigned_to) {
+        html += '<span class="task-card-id">AGENT: ' + esc(t.assigned_to) + '</span>';
+      }
+      html += '<span class="task-card-id">' + shortId(t.id) + '</span>';
+      html += '</div>';
+      if (t.tags.length) {
+        html += '<div class="task-card-tags">';
+        for (var j = 0; j < t.tags.length; j++) {
+          html += '<span class="task-card-tag">' + esc(t.tags[j]) + '</span>';
+        }
+        html += '</div>';
+      }
+      html += '<div class="task-actions">';
+      for (var k = 0; k < Object.keys(ACTION_LABELS).length; k++) {
+        var act = Object.keys(ACTION_LABELS)[k];
+        var enabled = actions.indexOf(act) !== -1;
+        html += '<button ' + (enabled ? '' : 'disabled') + ' onclick="event.stopPropagation();window._doAction(\'' + t.id + '\',\'' + act + '\')">' + ACTION_LABELS[act] + '</button>';
+      }
+      html += '</div></div>';
+    }
+    pool.innerHTML = html;
+  }
+
+  function renderStats() {
+    var grid = document.getElementById('statsGrid');
+    var byStatus = {};
+    var byPriority = {};
+    for (var i = 0; i < tasks.length; i++) {
+      byStatus[tasks[i].status] = (byStatus[tasks[i].status] || 0) + 1;
+      byPriority[tasks[i].priority] = (byPriority[tasks[i].priority] || 0) + 1;
+    }
+    var statuses = ['submitted','queued','in_progress','review','input_required','blocked','completed','failed','canceled','timed_out'];
+    var html = '<div class="stat-item"><div class="stat-num" style="color:var(--text)">' + tasks.length + '</div><div class="stat-lbl">TOTAL</div></div>';
+    for (var s = 0; s < statuses.length; s++) {
+      var st = statuses[s];
+      var count = byStatus[st] || 0;
+      if (count > 0) {
+        html += '<div class="stat-item"><div class="stat-num badge-' + st + '" style="font-size:28px;border:none;padding:0;">' + count + '</div><div class="stat-lbl">' + st + '</div></div>';
+      }
+    }
+    var prios = ['critical','high','medium','low'];
+    for (var p = 0; p < prios.length; p++) {
+      var pr = prios[p];
+      var cnt = byPriority[pr] || 0;
+      if (cnt > 0) {
+        html += '<div class="stat-item"><div class="stat-num badge-' + pr + '" style="font-size:28px;border:none;padding:0;">' + cnt + '</div><div class="stat-lbl">' + pr + '</div></div>';
+      }
+    }
+    grid.innerHTML = html;
+  }
+
+  function renderAll() {
+    renderPool();
+    renderStats();
+  }
+
+  function esc(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  /* ── Detail panel ── */
+  window._openDetail = function(taskId) {
+    var task = tasks.find(function(t){ return t.id === taskId; });
+    if (!task) { return; }
+    var fields = [
+      ['ID', task.id],
+      ['TITLE', task.title],
+      ['STATUS', '<span class="badge badge-' + task.status + '">' + task.status + '</span>'],
+      ['PRIORITY', '<span class="badge badge-' + task.priority + '">' + task.priority + '</span>'],
+      ['ASSIGNED TO', task.assigned_to || '—'],
+      ['TAGS', task.tags.length ? task.tags.join(', ') : '—'],
+      ['DESCRIPTION', task.description || '—'],
+      ['CREATED', task.created_at],
+      ['UPDATED', task.updated_at],
+      ['STARTED', task.started_at || '—'],
+      ['COMPLETED', task.completed_at || '—']
+    ];
+    var html = '';
+    for (var i = 0; i < fields.length; i++) {
+      html += '<div class="detail-field"><span class="detail-field-key">' + fields[i][0] + '</span><span class="detail-field-val">' + fields[i][1] + '</span></div>';
+    }
+    document.getElementById('detailContent').innerHTML = html;
+
+    var thtml = '';
+    for (var h = 0; h < task.history.length; h++) {
+      var ev = task.history[h];
+      thtml += '<div class="timeline-entry">';
+      thtml += '<span class="timeline-time">' + ev.time.substring(11, 19) + '</span>';
+      thtml += '<span><strong>' + ev.trigger + '</strong> &nbsp; ';
+      thtml += '<span class="badge badge-' + ev.from + '">' + ev.from + '</span>';
+      thtml += ' → <span class="badge badge-' + ev.to + '">' + ev.to + '</span>';
+      thtml += ' &nbsp;<span style="color:var(--text-dim);font-size:12px;">by ' + esc(ev.actor) + '</span>';
+      thtml += '</span></div>';
+    }
+    document.getElementById('detailTimeline').innerHTML = thtml;
+    document.getElementById('detailOverlay').classList.add('open');
+  };
+
+  window.closeDetail = function() {
+    document.getElementById('detailOverlay').classList.remove('open');
+  };
+
+  document.getElementById('detailOverlay').addEventListener('click', function(e) {
+    if (e.target === this) { closeDetail(); }
+  });
+
+  /* ── Actions ── */
+  window._doAction = function(taskId, trigger) {
+    applyTrigger(taskId, trigger);
+    renderAll();
+  };
+
+  /* ── Create form ── */
+  document.getElementById('createForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var title = document.getElementById('newTitle').value.trim();
+    if (!title) { return; }
+    var desc = document.getElementById('newDesc').value.trim();
+    var prio = document.getElementById('newPriority').value;
+    var rawTags = document.getElementById('newTags').value;
+    var tags = rawTags ? rawTags.split(',').map(function(t){ return t.trim(); }).filter(Boolean) : [];
+    createTask(title, desc, prio, tags);
+    document.getElementById('newTitle').value = '';
+    document.getElementById('newDesc').value = '';
+    document.getElementById('newPriority').value = 'medium';
+    document.getElementById('newTags').value = '';
+    renderAll();
+  });
+
+  /* ── Pre-Analysis ── */
+  var KEYWORD_TAGS = {
+    python:['python','py','pip','django','flask','fastapi'],
+    javascript:['javascript','js','node','react','vue','typescript','ts'],
+    api:['api','rest','endpoint','graphql','grpc'],
+    auth:['auth','jwt','oauth','login','session','token'],
+    database:['database','db','sql','sqlite','postgres','mysql','mongo'],
+    frontend:['frontend','ui','ux','css','html','component','dashboard'],
+    bugfix:['bug','fix','error','crash','null','exception','regression'],
+    test:['test','testing','coverage','unit','integration','e2e'],
+    docs:['doc','documentation','readme','guide','reference'],
+    security:['security','vulnerability','cve','xss','csrf','injection'],
+    performance:['performance','slow','optimize','cache','latency','profil'],
+    devops:['docker','ci','cd','deploy','kubernetes','k8s','pipeline']
+  };
+
+  var PRIORITY_WORDS = {
+    critical: ['critical','urgent','asap','p0','emergency','outage','down'],
+    high: ['important','high','priority','production','hotfix','p1'],
+    low: ['minor','low','nice-to-have','cleanup','chore','trivial']
+  };
+
+  window.runAnalysis = function() {
+    var text = document.getElementById('analyzeInput').value.trim();
+    var result = document.getElementById('analysisResult');
+    if (!text) {
+      result.style.display = 'none';
+      return;
+    }
+    var lower = text.toLowerCase();
+    var words = lower.split(/[\s,.\-_:;!?()[\]{}]+/).filter(Boolean);
+
+    var title = text.split(/[.\n]/)[0].substring(0, 80);
+
+    var tags = [];
+    for (var cat in KEYWORD_TAGS) {
+      for (var k = 0; k < KEYWORD_TAGS[cat].length; k++) {
+        if (lower.indexOf(KEYWORD_TAGS[cat][k]) !== -1) {
+          if (tags.indexOf(cat) === -1) { tags.push(cat); }
+          break;
+        }
+      }
+    }
+
+    var priority = 'medium';
+    for (var p in PRIORITY_WORDS) {
+      for (var w = 0; w < PRIORITY_WORDS[p].length; w++) {
+        if (lower.indexOf(PRIORITY_WORDS[p][w]) !== -1) {
+          priority = p;
+          break;
+        }
+      }
+    }
+
+    var complexity = 'medium';
+    var wordCount = words.length;
+    if (wordCount < 10) { complexity = 'trivial'; }
+    else if (wordCount < 25) { complexity = 'low'; }
+    else if (wordCount < 60) { complexity = 'medium'; }
+    else if (wordCount < 120) { complexity = 'high'; }
+    else { complexity = 'extreme'; }
+
+    var html = '<div style="background:var(--bg-code);border:1px solid var(--border);padding:20px;">';
+    html += '<div class="demo-panel-title" style="margin-bottom:12px;">ANALYSIS RESULT</div>';
+    html += '<div class="detail-field"><span class="detail-field-key">TITLE</span><span class="detail-field-val">' + esc(title) + '</span></div>';
+    html += '<div class="detail-field"><span class="detail-field-key">PRIORITY</span><span class="detail-field-val"><span class="badge badge-' + priority + '">' + priority + '</span></span></div>';
+    html += '<div class="detail-field"><span class="detail-field-key">COMPLEXITY</span><span class="detail-field-val">' + complexity + ' (' + wordCount + ' words)</span></div>';
+    html += '<div class="detail-field"><span class="detail-field-key">TAGS</span><span class="detail-field-val">';
+    if (tags.length) {
+      for (var t = 0; t < tags.length; t++) {
+        html += '<span class="task-card-tag" style="margin-right:4px;">' + tags[t] + '</span>';
+      }
+    } else {
+      html += '<span style="color:var(--text-dim);">No tags detected</span>';
+    }
+    html += '</span></div></div>';
+    result.innerHTML = html;
+    result.style.display = 'block';
+  };
+
+  /* ── Nav toggle ── */
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+
+  /* ── Init ── */
+  loadSamples();
+  renderAll();
+})();
+</script>
+
+</body>
+</html>

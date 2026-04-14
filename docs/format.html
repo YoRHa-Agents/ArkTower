@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArkTower — Task Format Specification</title>
+  <meta name="description" content="ArkTower unified task format specification. YAML frontmatter + Markdown body agent-consumable task definitions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>Ark</span>Tower</a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="format.html" class="active">Format</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="docs.html">Docs</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-serial">[SPECIFICATION] UNIFIED TASK FORMAT</div>
+    <h1 class="hero-title-sm"><span class="accent">Ark</span>Tower Task Format</h1>
+    <p class="hero-subtitle">YAML Frontmatter + Markdown Body — Agent-Consumable Task Definitions</p>
+    <div class="hero-badge">[FORMAT v1.0]</div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">SPEC: <span>v1.0</span></div>
+      <div class="hero-meta-item">FORMAT: <span>.task.md / .task.json</span></div>
+      <div class="hero-meta-item">STATES: <span>10</span></div>
+      <div class="hero-meta-item">TRIGGERS: <span>15</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- SPEC.001 — Format Overview -->
+<section id="overview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.001 — FORMAT ARCHITECTURE</div>
+      <h2 class="section-title">[FORMAT OVERVIEW]</h2>
+    </div>
+    <div class="about-content">
+      <p>
+        ArkTower uses a <strong>hybrid task format</strong> combining YAML frontmatter for structured metadata with a Markdown body for human-readable descriptions. Every task is a single file that both humans and agents can read, edit, and process natively.
+      </p>
+      <p>
+        The canonical format is <span class="inline-code">.task.md</span> — optimized for human authoring, version control diffs, and IDE editing. A parallel <span class="inline-code">.task.json</span> format exists for machine consumption. The two are <strong>losslessly convertible</strong> in both directions.
+      </p>
+    </div>
+
+    <div style="margin-top: 40px;" class="two-col">
+      <div class="feature-card" data-index="MD">
+        <h3>.task.md — Human Format</h3>
+        <p>YAML frontmatter between <span class="inline-code">---</span> delimiters for metadata. Markdown body below for description, acceptance criteria, and context. Git-friendly, IDE-native.</p>
+        <span class="feature-tag">HUMAN_AUTHORED</span>
+      </div>
+      <div class="feature-card" data-index="JSON">
+        <h3>.task.json — Machine Format</h3>
+        <p>Flat JSON object with all fields at top level. <span class="inline-code">description</span> field contains the Markdown body as a string. API responses, MCP tools, and WebSocket events all use this format.</p>
+        <span class="feature-tag">MACHINE_CONSUMABLE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEC.002 — Field Reference -->
+<section id="fields">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.002 — DATA MODEL</div>
+      <h2 class="section-title">[FIELD REFERENCE]</h2>
+      <p class="section-desc">Complete field reference for the ArkTower task format. All fields available in both .task.md frontmatter and .task.json.</p>
+    </div>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string (UUID)</td><td>auto</td><td>Unique task identifier, auto-generated if omitted</td></tr>
+        <tr><td><code>title</code></td><td>string</td><td>yes</td><td>Human-readable task title</td></tr>
+        <tr><td><code>description</code></td><td>string</td><td>no</td><td>Markdown body — acceptance criteria, context, references</td></tr>
+        <tr><td><code>status</code></td><td>enum</td><td>auto</td><td>Current lifecycle state (10 values, default: <code>submitted</code>)</td></tr>
+        <tr><td><code>priority</code></td><td>enum</td><td>no</td><td><code>critical</code> | <code>high</code> | <code>medium</code> | <code>low</code> (default: medium)</td></tr>
+        <tr><td><code>tags</code></td><td>array[string]</td><td>no</td><td>Categorical labels for filtering and grouping</td></tr>
+        <tr><td><code>labels</code></td><td>map[string, string]</td><td>no</td><td>Key-value labels for arbitrary metadata</td></tr>
+        <tr><td><code>capabilities</code></td><td>array[string]</td><td>no</td><td>Required agent capabilities (e.g., <code>python</code>, <code>api</code>)</td></tr>
+        <tr><td><code>required_tools</code></td><td>array[string]</td><td>no</td><td>MCP tools the agent needs (e.g., <code>create_task</code>)</td></tr>
+        <tr><td><code>estimated_complexity</code></td><td>enum</td><td>no</td><td><code>trivial</code> | <code>low</code> | <code>medium</code> | <code>high</code> | <code>extreme</code></td></tr>
+        <tr><td><code>parent_id</code></td><td>string</td><td>no</td><td>ID of parent task (for subtask hierarchy)</td></tr>
+        <tr><td><code>context_id</code></td><td>string</td><td>no</td><td>Workflow or context grouping ID</td></tr>
+        <tr><td><code>owner_id</code></td><td>string</td><td>no</td><td>Creator / owner identity (default: <code>system</code>)</td></tr>
+        <tr><td><code>assigned_to</code></td><td>string</td><td>no</td><td>Agent or user currently assigned</td></tr>
+        <tr><td><code>assigned_type</code></td><td>string</td><td>no</td><td>Assignee type (e.g., <code>agent</code>, <code>human</code>)</td></tr>
+        <tr><td><code>parameters</code></td><td>map[string, any]</td><td>no</td><td>Arbitrary key-value parameters for task execution</td></tr>
+        <tr><td><code>output</code></td><td>string</td><td>no</td><td>Completion output / result summary</td></tr>
+        <tr><td><code>error</code></td><td>string</td><td>no</td><td>Error message (on failure)</td></tr>
+        <tr><td><code>template_id</code></td><td>string</td><td>no</td><td>Template this task was created from</td></tr>
+        <tr><td><code>max_steps</code></td><td>integer</td><td>no</td><td>Maximum execution steps allowed</td></tr>
+        <tr><td><code>version</code></td><td>integer</td><td>auto</td><td>Optimistic concurrency version (default: 1)</td></tr>
+        <tr><td><code>created_at</code></td><td>datetime</td><td>auto</td><td>ISO 8601 creation timestamp</td></tr>
+        <tr><td><code>updated_at</code></td><td>datetime</td><td>auto</td><td>ISO 8601 last-update timestamp</td></tr>
+        <tr><td><code>started_at</code></td><td>datetime</td><td>auto</td><td>When task entered <code>in_progress</code></td></tr>
+        <tr><td><code>completed_at</code></td><td>datetime</td><td>auto</td><td>When task reached a terminal state</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SPEC.003 — State Machine -->
+<section id="states">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.003 — LIFECYCLE ENGINE</div>
+      <h2 class="section-title">[STATE MACHINE]</h2>
+      <p class="section-desc">10 states, 15 named triggers. Every transition is validated and audited as a TaskEvent.</p>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+      <div class="section-label" style="margin-bottom: 16px;">STATE OVERVIEW</div>
+      <div class="feature-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-submitted">submitted</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Initial state on creation</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-queued">queued</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Ready for agent claim</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-in_progress">in_progress</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Actively being worked on</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-review">review</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Awaiting approval</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-input_required">input_required</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Waiting for external input</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-blocked">blocked</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Dependency or external block</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-completed">completed</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — success</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-failed">failed</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — error</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-canceled">canceled</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — manual cancel</p>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:16px 20px;">
+          <span class="badge badge-timed_out">timed_out</span>
+          <p style="font-size:13px;color:var(--text-dim);margin-top:8px;">Terminal — timeout</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+      <div class="section-label" style="margin-bottom: 16px;">STATE FLOW DIAGRAM</div>
+      <div class="arch-diagram" style="font-size:12px;">                          ┌───────────────────────────────────────┐
+                          │          <span class="layer-label">CANCEL</span> (from 6 states)          │
+                          │  submitted, queued, in_progress,      │
+                          │  review, input_required, blocked       │
+                          └──────────────┬────────────────────────┘
+                                         ▼
+     ╔═══════════╗   enqueue   ╔════════╗   claim    ╔═════════════╗
+     ║ submitted ║────────────▸║ queued ║───────────▸║ in_progress ║
+     ╚═══════════╝             ╚════════╝            ╚══════╤══════╝
+                                  ▲                         │
+                                  │ reopen          ┌───────┼────────┬──────────┐
+                                  │                 │       │        │          │
+                               ┌──┴──┐         send_review  block  request   complete
+                               │     │              │       │     _input      │
+                     ╔═══════════╗ ╔════════╗   ╔═══▼══╗ ╔══▼════╗ ╔══▼═════╗  │
+                     ║ completed ║ ║ failed ║   ║review║ ║blocked║ ║input_  ║  │
+                     ╚═════╤═════╝ ╚═══╤════╝   ╚══╤═══╝ ╚══╤════╝ ║required║  │
+                           │           │            │        │      ╚══╤═════╝  │
+                           │           │     approve│reject  │unblock  │resume  │
+                           │           │            │   │    │    │    │   │    │
+                           │           │            ▼   ▼    ▼    ▼    ▼   ▼    ▼
+                           │           │         (back to in_progress)    ╔══════════╗
+                           │           │                                  ║completed ║
+                           │           ▼                                  ╚══════════╝
+                     ╔═══════════╗  ╔════════╗  ╔══════════╗
+                     ║ canceled  ║  ║timed_  ║  ║  failed  ║
+                     ╚═══════════╝  ║  out   ║  ╚══════════╝
+                                    ╚════════╝</div>
+    </div>
+
+    <div class="section-label" style="margin-bottom: 16px;">TRANSITION TABLE — ALL 15 TRIGGERS</div>
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Trigger</th>
+          <th>From State</th>
+          <th>To State</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>submit</code></td><td><span class="badge badge-submitted">(none)</span></td><td><span class="badge badge-submitted">submitted</span></td></tr>
+        <tr><td><code>enqueue</code></td><td><span class="badge badge-submitted">submitted</span></td><td><span class="badge badge-queued">queued</span></td></tr>
+        <tr><td><code>claim</code></td><td><span class="badge badge-queued">queued</span></td><td><span class="badge badge-in_progress">in_progress</span></td></tr>
+        <tr><td><code>request_input</code></td><td><span class="badge badge-in_progress">in_progress</span></td><td><span class="badge badge-input_required">input_required</span></td></tr>
+        <tr><td><code>resume</code></td><td><span class="badge badge-input_required">input_required</span></td><td><span class="badge badge-in_progress">in_progress</span></td></tr>
+        <tr><td><code>block</code></td><td><span class="badge badge-in_progress">in_progress</span></td><td><span class="badge badge-blocked">blocked</span></td></tr>
+        <tr><td><code>unblock</code></td><td><span class="badge badge-blocked">blocked</span></td><td><span class="badge badge-in_progress">in_progress</span></td></tr>
+        <tr><td><code>send_review</code></td><td><span class="badge badge-in_progress">in_progress</span></td><td><span class="badge badge-review">review</span></td></tr>
+        <tr><td><code>approve</code></td><td><span class="badge badge-review">review</span></td><td><span class="badge badge-completed">completed</span></td></tr>
+        <tr><td><code>reject</code></td><td><span class="badge badge-review">review</span></td><td><span class="badge badge-in_progress">in_progress</span></td></tr>
+        <tr><td><code>complete</code></td><td><span class="badge badge-in_progress">in_progress</span></td><td><span class="badge badge-completed">completed</span></td></tr>
+        <tr><td><code>fail</code></td><td><span class="badge badge-in_progress">in_progress</span></td><td><span class="badge badge-failed">failed</span></td></tr>
+        <tr><td><code>cancel</code></td><td>submitted, queued, in_progress, review, input_required, blocked</td><td><span class="badge badge-canceled">canceled</span></td></tr>
+        <tr><td><code>timeout</code></td><td>in_progress, blocked, input_required</td><td><span class="badge badge-timed_out">timed_out</span></td></tr>
+        <tr><td><code>reopen</code></td><td>completed, failed, canceled, timed_out</td><td><span class="badge badge-queued">queued</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SPEC.004 — Task Examples -->
+<section id="examples">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.004 — EXEMPLARS</div>
+      <h2 class="section-title">[TASK EXAMPLES]</h2>
+      <p class="section-desc">Three complete .task.md files demonstrating the format for different task types.</p>
+    </div>
+
+    <div class="lined-code">
+      <div class="code-header">
+        <span>EXAMPLE 1 — FEATURE TASK</span>
+        <span>jwt-auth.task.md</span>
+      </div>
+      <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
+<span class="ln"> 2</span><span class="yaml-key">id:</span> <span class="yaml-val">a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
+<span class="ln"> 3</span><span class="yaml-key">title:</span> <span class="yaml-str">Implement JWT Authentication for API Gateway</span>
+<span class="ln"> 4</span><span class="yaml-key">status:</span> <span class="yaml-val">queued</span>
+<span class="ln"> 5</span><span class="yaml-key">priority:</span> <span class="yaml-val">high</span>
+<span class="ln"> 6</span><span class="yaml-key">tags:</span>
+<span class="ln"> 7</span>  <span class="yaml-val">- python</span>
+<span class="ln"> 8</span>  <span class="yaml-val">- api</span>
+<span class="ln"> 9</span>  <span class="yaml-val">- auth</span>
+<span class="ln">10</span>  <span class="yaml-val">- security</span>
+<span class="ln">11</span><span class="yaml-key">capabilities:</span>
+<span class="ln">12</span>  <span class="yaml-val">- python</span>
+<span class="ln">13</span>  <span class="yaml-val">- fastapi</span>
+<span class="ln">14</span>  <span class="yaml-val">- jwt</span>
+<span class="ln">15</span><span class="yaml-key">required_tools:</span>
+<span class="ln">16</span>  <span class="yaml-val">- create_task</span>
+<span class="ln">17</span>  <span class="yaml-val">- complete_task</span>
+<span class="ln">18</span><span class="yaml-key">estimated_complexity:</span> <span class="yaml-val">high</span>
+<span class="ln">19</span><span class="yaml-key">owner_id:</span> <span class="yaml-val">team-backend</span>
+<span class="ln">20</span><span class="yaml-key">max_steps:</span> <span class="yaml-val">50</span>
+<span class="ln">21</span><span class="yaml-key">parameters:</span>
+<span class="ln">22</span>  <span class="yaml-key">algorithm:</span> <span class="yaml-val">RS256</span>
+<span class="ln">23</span>  <span class="yaml-key">token_expiry:</span> <span class="yaml-val">3600</span>
+<span class="ln">24</span><span class="yaml-key">---</span>
+<span class="ln">25</span>
+<span class="ln">26</span><span class="md-body">## Description</span>
+<span class="ln">27</span><span class="md-body">Add JWT-based authentication to the FastAPI gateway. Tokens</span>
+<span class="ln">28</span><span class="md-body">should use RS256 signing with 1-hour expiry.</span>
+<span class="ln">29</span>
+<span class="ln">30</span><span class="md-body">## Acceptance Criteria</span>
+<span class="ln">31</span><span class="md-body">- [ ] POST /auth/login returns signed JWT</span>
+<span class="ln">32</span><span class="md-body">- [ ] Protected endpoints return 401 without valid token</span>
+<span class="ln">33</span><span class="md-body">- [ ] Token refresh endpoint implemented</span>
+<span class="ln">34</span><span class="md-body">- [ ] Unit tests for auth middleware</span></pre>
+    </div>
+
+    <div class="lined-code">
+      <div class="code-header">
+        <span>EXAMPLE 2 — BUGFIX TASK</span>
+        <span>hotfix-null-ref.task.md</span>
+      </div>
+      <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
+<span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Fix NullReference in task claim under concurrent load</span>
+<span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">critical</span>
+<span class="ln"> 4</span><span class="yaml-key">tags:</span>
+<span class="ln"> 5</span>  <span class="yaml-val">- bugfix</span>
+<span class="ln"> 6</span>  <span class="yaml-val">- production</span>
+<span class="ln"> 7</span>  <span class="yaml-val">- concurrency</span>
+<span class="ln"> 8</span><span class="yaml-key">estimated_complexity:</span> <span class="yaml-val">medium</span>
+<span class="ln"> 9</span><span class="yaml-key">labels:</span>
+<span class="ln">10</span>  <span class="yaml-key">severity:</span> <span class="yaml-val">P0</span>
+<span class="ln">11</span>  <span class="yaml-key">environment:</span> <span class="yaml-val">production</span>
+<span class="ln">12</span><span class="yaml-key">---</span>
+<span class="ln">13</span>
+<span class="ln">14</span><span class="md-body">## Error Context</span>
+<span class="ln">15</span><span class="md-body">```</span>
+<span class="ln">16</span><span class="md-body">TypeError: 'NoneType' object has no attribute 'status'</span>
+<span class="ln">17</span><span class="md-body">  at arktower/core/task_service.py:218</span>
+<span class="ln">18</span><span class="md-body">```</span>
+<span class="ln">19</span>
+<span class="ln">20</span><span class="md-body">## Steps to Reproduce</span>
+<span class="ln">21</span><span class="md-body">1. Submit 10 tasks concurrently</span>
+<span class="ln">22</span><span class="md-body">2. Claim all from 5 parallel agents</span>
+<span class="ln">23</span><span class="md-body">3. Race condition on atomic_claim</span></pre>
+    </div>
+
+    <div class="lined-code">
+      <div class="code-header">
+        <span>EXAMPLE 3 — RESEARCH TASK</span>
+        <span>dist-scheduling-survey.task.md</span>
+      </div>
+      <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
+<span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Survey distributed task scheduling strategies</span>
+<span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">medium</span>
+<span class="ln"> 4</span><span class="yaml-key">tags:</span>
+<span class="ln"> 5</span>  <span class="yaml-val">- research</span>
+<span class="ln"> 6</span>  <span class="yaml-val">- architecture</span>
+<span class="ln"> 7</span>  <span class="yaml-val">- scheduling</span>
+<span class="ln"> 8</span><span class="yaml-key">capabilities:</span>
+<span class="ln"> 9</span>  <span class="yaml-val">- research</span>
+<span class="ln">10</span>  <span class="yaml-val">- distributed-systems</span>
+<span class="ln">11</span><span class="yaml-key">estimated_complexity:</span> <span class="yaml-val">high</span>
+<span class="ln">12</span><span class="yaml-key">parameters:</span>
+<span class="ln">13</span>  <span class="yaml-key">scope:</span> <span class="yaml-val">multi-agent task dispatch</span>
+<span class="ln">14</span>  <span class="yaml-key">context_refs:</span>
+<span class="ln">15</span>    <span class="yaml-val">- doc_auto/architecture.md</span>
+<span class="ln">16</span>    <span class="yaml-val">- arktower/core/task_service.py</span>
+<span class="ln">17</span><span class="yaml-key">---</span>
+<span class="ln">18</span>
+<span class="ln">19</span><span class="md-body">## Objective</span>
+<span class="ln">20</span><span class="md-body">Evaluate scheduling strategies for multi-agent task pools:</span>
+<span class="ln">21</span><span class="md-body">priority queues, capability-weighted dispatch, work-stealing,</span>
+<span class="ln">22</span><span class="md-body">and fair-share scheduling.</span>
+<span class="ln">23</span>
+<span class="ln">24</span><span class="md-body">## Deliverables</span>
+<span class="ln">25</span><span class="md-body">- [ ] Comparison matrix of 4+ strategies</span>
+<span class="ln">26</span><span class="md-body">- [ ] Recommendation with trade-off analysis</span>
+<span class="ln">27</span><span class="md-body">- [ ] Prototype implementation sketch</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- SPEC.005 — JSON Schema -->
+<section id="schema">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.005 — VALIDATION</div>
+      <h2 class="section-title">[JSON SCHEMA]</h2>
+      <p class="section-desc">JSON Schema for validating .task.json files. Used by the pre-analysis engine and API input validation.</p>
+    </div>
+
+    <details>
+      <summary>VIEW FULL JSON SCHEMA</summary>
+      <div class="detail-content">
+        <div class="code-block" style="margin-top: 16px;">
+          <span class="code-label">JSON SCHEMA</span>
+          <code>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArkTower Task",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "id":                   { "type": "string", "format": "uuid" },
+    "title":                { "type": "string", "minLength": 1 },
+    "description":          { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["submitted","queued","in_progress","review",
+               "input_required","blocked","completed",
+               "failed","canceled","timed_out"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical","high","medium","low"],
+      "default": "medium"
+    },
+    "tags":                 { "type": "array", "items": { "type": "string" } },
+    "labels":               { "type": "object", "additionalProperties": { "type": "string" } },
+    "capabilities":         { "type": "array", "items": { "type": "string" } },
+    "required_tools":       { "type": "array", "items": { "type": "string" } },
+    "estimated_complexity": {
+      "type": "string",
+      "enum": ["trivial","low","medium","high","extreme"]
+    },
+    "parent_id":            { "type": ["string","null"] },
+    "context_id":           { "type": ["string","null"] },
+    "owner_id":             { "type": "string", "default": "system" },
+    "assigned_to":          { "type": ["string","null"] },
+    "assigned_type":        { "type": ["string","null"] },
+    "parameters":           { "type": "object" },
+    "output":               { "type": ["string","null"] },
+    "error":                { "type": ["string","null"] },
+    "template_id":          { "type": ["string","null"] },
+    "max_steps":            { "type": ["integer","null"], "minimum": 1 },
+    "version":              { "type": "integer", "minimum": 1 },
+    "created_at":           { "type": "string", "format": "date-time" },
+    "updated_at":           { "type": "string", "format": "date-time" },
+    "started_at":           { "type": ["string","null"], "format": "date-time" },
+    "completed_at":         { "type": ["string","null"], "format": "date-time" }
+  },
+  "additionalProperties": false
+}</code>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- SPEC.006 — Conversion Rules -->
+<section id="conversion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SPEC.006 — INTEROPERABILITY</div>
+      <h2 class="section-title">[CONVERSION RULES]</h2>
+      <p class="section-desc">Bidirectional, lossless conversion between .task.md and .task.json formats.</p>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-label" style="margin-bottom: 12px;">.TASK.MD → .TASK.JSON</div>
+        <div class="feature-card">
+          <h3>MD to JSON</h3>
+          <p>1. Parse YAML frontmatter between <span class="inline-code">---</span> delimiters<br>
+             2. Extract all key-value pairs as top-level JSON fields<br>
+             3. Everything below the closing <span class="inline-code">---</span> becomes the <span class="inline-code">description</span> field<br>
+             4. Arrays remain arrays, maps remain objects<br>
+             5. Dates are ISO 8601 strings</p>
+          <span class="feature-tag">PARSE → SERIALIZE</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom: 12px;">.TASK.JSON → .TASK.MD</div>
+        <div class="feature-card">
+          <h3>JSON to MD</h3>
+          <p>1. All fields except <span class="inline-code">description</span> become YAML frontmatter<br>
+             2. <span class="inline-code">description</span> field becomes the Markdown body below <span class="inline-code">---</span><br>
+             3. Null fields are omitted from frontmatter<br>
+             4. Arrays use YAML list syntax<br>
+             5. Maps use nested YAML key-value syntax</p>
+          <span class="feature-tag">DESERIALIZE → EMIT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="demo.html">Demo</a>
+      <a href="docs.html">Documentation</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+    </div>
+    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

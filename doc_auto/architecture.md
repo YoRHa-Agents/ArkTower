@@ -67,4 +67,10 @@ Tasks include `capabilities`, `required_tools`, and `estimated_complexity` field
 - `.cursor/mcp.json` — MCP server registration for Cursor
 - `nines.toml` — NineS evaluation configuration
 - `.workflow/config.yaml` — DevolaFlow self-update hooks and quality gates
-- `docs/index.html` — GitHub Pages static site (NieR:Automata Tower / YoRHa aesthetic)
+- `docs/index.html` — GitHub Pages landing page (NieR:Automata Tower / YoRHa aesthetic)
+- `docs/shared.css` — Shared design system (CSS variables, components, responsive utilities)
+- `docs/format.html` — Task format specification page (YAML+MD format, field reference, state machine)
+- `docs/demo.html` — Interactive client-side demo (task pool simulation, lifecycle controls, pre-analysis)
+- `docs/docs.html` — Documentation hub (architecture, API reference, CLI, evaluation, configuration)
+
+> Last modified: 2026-04-14T06:20:00Z (docs pages added)
