@@ -306,6 +306,8 @@
         <span data-i18n="examples.ex1">EXAMPLE 1 -- FEATURE TASK</span>
         <span>jwt-auth.task.md</span>
       </div>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">id:</span> <span class="yaml-val">a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
 <span class="ln"> 3</span><span class="yaml-key">title:</span> <span class="yaml-str">Implement JWT Authentication for API Gateway</span>
@@ -340,6 +342,7 @@
 <span class="ln">32</span><span class="md-body">- [ ] Protected endpoints return 401 without valid token</span>
 <span class="ln">33</span><span class="md-body">- [ ] Token refresh endpoint implemented</span>
 <span class="ln">34</span><span class="md-body">- [ ] Unit tests for auth middleware</span></pre>
+      </div>
     </div>
 
     <div class="lined-code">
@@ -347,6 +350,8 @@
         <span data-i18n="examples.ex2">EXAMPLE 2 -- BUGFIX TASK</span>
         <span>hotfix-null-ref.task.md</span>
       </div>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Fix NullReference in task claim under concurrent load</span>
 <span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">critical</span>
@@ -370,6 +375,7 @@
 <span class="ln">21</span><span class="md-body">1. Submit 10 tasks concurrently</span>
 <span class="ln">22</span><span class="md-body">2. Claim all from 5 parallel agents</span>
 <span class="ln">23</span><span class="md-body">3. Race condition on atomic_claim</span></pre>
+      </div>
     </div>
 
     <div class="lined-code">
@@ -377,6 +383,8 @@
         <span data-i18n="examples.ex3">EXAMPLE 3 -- RESEARCH TASK</span>
         <span>dist-scheduling-survey.task.md</span>
       </div>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Survey distributed task scheduling strategies</span>
 <span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">medium</span>
@@ -404,6 +412,7 @@
 <span class="ln">25</span><span class="md-body">- [ ] Comparison matrix of 4+ strategies</span>
 <span class="ln">26</span><span class="md-body">- [ ] Recommendation with trade-off analysis</span>
 <span class="ln">27</span><span class="md-body">- [ ] Prototype implementation sketch</span></pre>
+      </div>
     </div>
   </div>
 </section>
@@ -422,7 +431,9 @@
       <div class="detail-content">
         <div class="code-block" style="margin-top: 16px;">
           <span class="code-label">JSON SCHEMA</span>
-          <code>{
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+            <pre><code>{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ArkTower Task",
   "type": "object",
@@ -467,7 +478,8 @@
     "completed_at":         { "type": ["string","null"], "format": "date-time" }
   },
   "additionalProperties": false
-}</code>
+}</code></pre>
+          </div>
         </div>
       </div>
     </details>
@@ -525,6 +537,25 @@
   </div>
 </footer>
 
+<script>
+function copyCode(btn) {
+  var block = btn.closest('.code-block-wrapper').querySelector('pre, code');
+  if (!block) {
+    return;
+  }
+  var text = block.innerText || block.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'COPIED';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'COPY';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function(err) {
+    console.error('copyCode failed', err);
+  });
+}
+</script>
 <script>
 (function() {
   'use strict';

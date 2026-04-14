@@ -230,7 +230,9 @@
 
     <div class="code-block">
       <span class="code-label">BASH</span>
-      <code><span class="comment"># [INSTALL] Clone and install</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># [INSTALL] Clone and install</span>
 <span class="command">pip install -e ".[dev]"</span>
 
 <span class="comment"># [MIGRATE] Initialize the database</span>
@@ -243,12 +245,15 @@
 <span class="command">arktower server start --mode api</span>
 
 <span class="comment"># [DEPLOY] MCP server for Cursor integration</span>
-<span class="command">arktower server mcp</span></code>
+<span class="command">arktower server mcp</span></code></pre>
+      </div>
     </div>
 
     <div class="code-block">
       <span class="code-label">OPERATIONS</span>
-      <code><span class="comment"># [CREATE] New task entry</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment"># [CREATE] New task entry</span>
 <span class="command">arktower task create "Implement JWT authentication" \
   --priority high \
   --tags "python,api,auth" \
@@ -260,12 +265,15 @@
 <span class="comment"># [ADVANCE] Task lifecycle transitions</span>
 <span class="command">arktower task advance &lt;task-id&gt; enqueue</span>
 <span class="command">arktower task claim &lt;task-id&gt; agent-1</span>
-<span class="command">arktower task complete &lt;task-id&gt; --output "Implemented in PR #42"</span></code>
+<span class="command">arktower task complete &lt;task-id&gt; --output "Implemented in PR #42"</span></code></pre>
+      </div>
     </div>
 
     <div class="code-block">
       <span class="code-label">MCP CONFIG</span>
-      <code><span class="comment">// .cursor/mcp.json</span>
+      <div class="code-block-wrapper">
+        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre><code><span class="comment">// .cursor/mcp.json</span>
 {
   "mcpServers": {
     "arktower": {
@@ -273,7 +281,8 @@
       "args": ["-m", "arktower.mcp.server"]
     }
   }
-}</code>
+}</code></pre>
+      </div>
     </div>
   </div>
 </section>
@@ -357,6 +366,25 @@
   </div>
 </footer>
 
+<script>
+function copyCode(btn) {
+  var block = btn.closest('.code-block-wrapper').querySelector('pre, code');
+  if (!block) {
+    return;
+  }
+  var text = block.innerText || block.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'COPIED';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'COPY';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function(err) {
+    console.error('copyCode failed', err);
+  });
+}
+</script>
 <script>
 (function() {
   'use strict';
