@@ -6,12 +6,12 @@ from nicegui import ui
 
 from arktower.core.models import Task
 from arktower.web.components.status_badge import priority_indicator, status_badge
-from arktower.web.theme import YORHA_COLORS
+from arktower.web.theme import get_colors
 
 
 def task_card(task: Task, on_click=None) -> ui.card:
     """Render a NieR:Automata-styled summary card for a task."""
-    c = YORHA_COLORS
+    c = get_colors()
     with ui.card().classes("w-full cursor-pointer").style(
         f"background: {c['bg_surface']}; border: 1px solid {c['border']};"
         " border-radius: 0; transition: border-color 0.2s;"

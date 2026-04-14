@@ -7,55 +7,57 @@ from nicegui import ui
 from arktower.core.models import TaskFilter, TaskPriority, TaskStatus
 from arktower.core.task_service import TaskService
 from arktower.web.components.task_card import task_card
-from arktower.web.theme import YORHA_COLORS
-
-_INPUT_STYLE = (
-    "color: #DAD4BB; background: #1A1A1A; border: 1px solid #333;"
-    " border-radius: 0; font-family: 'Rajdhani', monospace;"
-)
+from arktower.web.i18n import t
+from arktower.web.theme import get_colors
 
 
 def render_task_board(svc: TaskService, navigate_to_task=None) -> None:
     """Render the filterable task board."""
-    c = YORHA_COLORS
+    c = get_colors()
 
-    ui.label("[SYSTEM] TASK POOL").style(
+    _input_style = (
+        f"color: {c['text_primary']}; background: {c['bg_surface']};"
+        f" border: 1px solid {c['border']};"
+        " border-radius: 0; font-family: 'Rajdhani', monospace;"
+    )
+
+    ui.label(t("board.title")).style(
         f"color: {c['text_muted']}; font-size: 0.8rem; letter-spacing: 2px;"
         " font-family: 'Rajdhani', monospace; margin-bottom: 8px;"
     )
 
     search_input = (
-        ui.input(placeholder="SEARCH TASKS...")
+        ui.input(placeholder=t("board.search"))
         .props("outlined dense clearable")
         .classes("w-full")
-        .style(_INPUT_STYLE)
+        .style(_input_style)
     )
 
     with ui.row().classes("w-full gap-2 items-center flex-wrap"):
         status_select = (
             ui.select(
                 options={s.value: f"[{s.value.upper()}]" for s in TaskStatus},
-                label="STATUS",
+                label=t("board.status"),
                 multiple=True,
             )
             .props("outlined dense clearable")
             .classes("min-w-[160px]")
-            .style(_INPUT_STYLE)
+            .style(_input_style)
         )
 
         priority_select = (
             ui.select(
                 options={p.value: f"[{p.value.upper()}]" for p in TaskPriority},
-                label="PRIORITY",
+                label=t("board.priority"),
                 multiple=True,
             )
             .props("outlined dense clearable")
             .classes("min-w-[140px]")
-            .style(_INPUT_STYLE)
+            .style(_input_style)
         )
 
         refresh_btn = (
-            ui.button("REFRESH", icon="refresh")
+            ui.button(t("board.refresh"), icon="refresh")
             .props("flat dense")
             .style(
                 f"color: {c['text_muted']}; border: 1px solid {c['border']};"
@@ -79,13 +81,13 @@ def render_task_board(svc: TaskService, navigate_to_task=None) -> None:
         tasks = svc.list_tasks(filters)
         with task_container:
             if not tasks:
-                ui.label("[NO DATA] No tasks match current parameters.").style(
+                ui.label(t("board.empty")).style(
                     f"color: {c['text_dim']}; font-family: 'Rajdhani', monospace;"
                     " letter-spacing: 1px; padding: 32px 0; text-align: center;"
                 ).classes("w-full")
             else:
-                for t in tasks:
-                    task_card(t, on_click=navigate_to_task)
+                for task in tasks:
+                    task_card(task, on_click=navigate_to_task)
 
     refresh_btn.on("click", load_tasks)
     search_input.on("keyup.enter", load_tasks)

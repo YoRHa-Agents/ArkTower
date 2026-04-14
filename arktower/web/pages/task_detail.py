@@ -7,24 +7,25 @@ from nicegui import ui
 from arktower.core.models import TaskEvent
 from arktower.core.task_service import TaskService
 from arktower.web.components.status_badge import STATUS_COLORS, priority_indicator, status_badge
-from arktower.web.theme import YORHA_COLORS
+from arktower.web.i18n import t
+from arktower.web.theme import get_colors
 
 
 def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> None:
     """Render the detail view for a single task."""
-    c = YORHA_COLORS
+    c = get_colors()
 
     try:
         task = svc.get_task(task_id)
     except Exception:
-        ui.label("[ERROR] Task not found").style(
+        ui.label(t("detail.error_not_found")).style(
             f"color: {c['accent']}; font-family: 'Rajdhani', monospace;"
             " letter-spacing: 1px; font-size: 1.2rem;"
         )
         return
 
     if navigate_back:
-        ui.button("< BACK TO POOL", on_click=navigate_back).props("flat").style(
+        ui.button(t("detail.back"), on_click=navigate_back).props("flat").style(
             f"color: {c['text_muted']}; border: 1px solid {c['border']};"
             " border-radius: 0; letter-spacing: 1px;"
             " font-family: 'Rajdhani', monospace; font-size: 0.8rem;"
@@ -42,21 +43,21 @@ def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> No
         f"background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
     ):
         with ui.grid(columns=3).classes("w-full gap-4"):
-            _field("[ID]", task.id, mono=True)
-            _field("[OWNER]", task.owner_id)
-            _field("[ASSIGNED]", task.assigned_to or "—")
-            _field("[CREATED]", str(task.created_at)[:19])
-            _field("[UPDATED]", str(task.updated_at)[:19])
-            _field("[COMPLETED]", str(task.completed_at)[:19] if task.completed_at else "—")
-            _field("[TAGS]", ", ".join(t.upper() for t in task.tags) if task.tags else "—")
-            _field("[TEMPLATE]", task.template_id or "—")
-            _field("[VERSION]", str(task.version))
+            _field(t("detail.id"), task.id, mono=True)
+            _field(t("detail.owner"), task.owner_id)
+            _field(t("detail.assigned"), task.assigned_to or "—")
+            _field(t("detail.created"), str(task.created_at)[:19])
+            _field(t("detail.updated"), str(task.updated_at)[:19])
+            _field(t("detail.completed"), str(task.completed_at)[:19] if task.completed_at else "—")
+            _field(t("detail.tags"), ", ".join(tg.upper() for tg in task.tags) if task.tags else "—")
+            _field(t("detail.template"), task.template_id or "—")
+            _field(t("detail.version"), str(task.version))
 
     if task.description:
         with ui.card().classes("w-full mt-2").style(
             f"background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
         ):
-            ui.label("[DESCRIPTION]").style(
+            ui.label(t("detail.description")).style(
                 f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 4px;"
             )
@@ -68,7 +69,7 @@ def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> No
         with ui.card().classes("w-full mt-2").style(
             f"background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
         ):
-            ui.label("[OUTPUT]").style(
+            ui.label(t("detail.output")).style(
                 f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 4px;"
             )
@@ -78,7 +79,7 @@ def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> No
         with ui.card().classes("w-full mt-2").style(
             f"background: {c['bg_surface']}; border: 1px solid {c['accent']}; border-radius: 0;"
         ):
-            ui.label("[ERROR]").style(
+            ui.label(t("detail.error")).style(
                 f"color: {c['accent']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 4px;"
             )
@@ -89,7 +90,7 @@ def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> No
         with ui.card().classes("w-full mt-2").style(
             f"background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
         ):
-            ui.label("[LOG] TRANSITION HISTORY").style(
+            ui.label(t("detail.history")).style(
                 f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 8px;"
             )
@@ -99,7 +100,7 @@ def render_task_detail(svc: TaskService, task_id: str, navigate_back=None) -> No
 
 def _field(label: str, value: str, mono: bool = False) -> None:
     """Render a labeled data field in YoRHa style."""
-    c = YORHA_COLORS
+    c = get_colors()
     with ui.column().classes("gap-0"):
         ui.label(label).style(
             f"color: {c['text_dim']}; font-size: 0.65rem; letter-spacing: 2px;"
@@ -116,9 +117,9 @@ def _field(label: str, value: str, mono: bool = False) -> None:
 
 def _history_entry(event: TaskEvent) -> None:
     """Render a single history event in military log format."""
-    c = YORHA_COLORS
-    from_colors = STATUS_COLORS.get(event.from_status.value, {"text": "#8A8172"})
-    to_colors = STATUS_COLORS.get(event.to_status.value, {"text": "#8A8172"})
+    c = get_colors()
+    from_colors = STATUS_COLORS.get(event.from_status.value, {"text": c["text_dim"]})
+    to_colors = STATUS_COLORS.get(event.to_status.value, {"text": c["text_dim"]})
     actor_part = f" // {event.actor}" if event.actor else ""
 
     with ui.row().classes("items-center gap-2 py-1").style(

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from nicegui import ui
 
-from arktower.web.theme import YORHA_PRIORITY, YORHA_STATUS
+from arktower.web.theme import YORHA_PRIORITY, YORHA_STATUS, get_priority_colors, get_status_colors
 
 STATUS_COLORS = YORHA_STATUS
 
@@ -13,7 +13,7 @@ PRIORITY_COLORS = YORHA_PRIORITY
 
 def status_badge(status: str) -> ui.badge:
     """Render a military-classification-style status badge."""
-    colors = STATUS_COLORS.get(
+    colors = get_status_colors().get(
         status, {"text": "#8A8172", "border": "#555"}
     )
     label = f"[{status.upper()}]"
@@ -30,7 +30,7 @@ def status_badge(status: str) -> ui.badge:
 
 def priority_indicator(priority: str) -> ui.badge:
     """Render a YoRHa-styled priority badge."""
-    color = PRIORITY_COLORS.get(priority, "#8A8172")
+    color = get_priority_colors().get(priority, "#8A8172")
     label = f"[{priority.upper()}]"
     return (
         ui.badge(label)
