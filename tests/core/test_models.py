@@ -151,6 +151,89 @@ class TestTask:
         with pytest.raises(ValidationError):
             Task(title="Bad", status="nonexistent")
 
+    def test_enriched_fields_defaults(self) -> None:
+        task = Task(title="Defaults check")
+        assert task.task_type is None
+        assert task.kind == "task"
+        assert task.timeout_seconds is None
+        assert task.max_retries == 0
+        assert task.deadline is None
+        assert task.budget_tokens is None
+        assert task.input_schema == {}
+        assert task.output_schema == {}
+        assert task.acceptance_criteria == []
+        assert task.constraints == []
+        assert task.context_refs == []
+        assert task.subtask_ids == []
+        assert task.quality_thresholds == {}
+        assert task.estimated_effort_minutes is None
+        assert task.agent_instructions is None
+        assert task.preferred_agent_type is None
+        assert task.retry_count == 0
+
+    def test_enriched_fields_populated(self) -> None:
+        now = datetime.now(timezone.utc)
+        task = Task(
+            title="Enriched task",
+            task_type="feature",
+            kind="task",
+            timeout_seconds=7200,
+            max_retries=3,
+            deadline=now,
+            budget_tokens=100000,
+            input_schema={"type": "object", "properties": {"x": {"type": "string"}}},
+            output_schema={"type": "object"},
+            acceptance_criteria=["tests pass", "coverage > 80%", "no lint errors"],
+            constraints=["must use RS256", "backward compatible"],
+            context_refs=[
+                {"type": "file", "path": "src/main.py", "description": "entry point"},
+                {"type": "url", "url": "https://docs.example.com", "description": "docs"},
+            ],
+            subtask_ids=["sub-1", "sub-2"],
+            quality_thresholds={"coverage_pct": 80, "quality_score": 85},
+            estimated_effort_minutes=120,
+            agent_instructions="Use pytest for testing",
+            preferred_agent_type="code",
+            retry_count=1,
+        )
+        assert task.task_type == "feature"
+        assert task.kind == "task"
+        assert task.timeout_seconds == 7200
+        assert task.max_retries == 3
+        assert task.deadline == now
+        assert task.budget_tokens == 100000
+        assert "type" in task.input_schema
+        assert len(task.acceptance_criteria) == 3
+        assert len(task.constraints) == 2
+        assert len(task.context_refs) == 2
+        assert task.context_refs[0]["type"] == "file"
+        assert task.subtask_ids == ["sub-1", "sub-2"]
+        assert task.quality_thresholds["coverage_pct"] == 80
+        assert task.estimated_effort_minutes == 120
+        assert task.agent_instructions == "Use pytest for testing"
+        assert task.preferred_agent_type == "code"
+        assert task.retry_count == 1
+
+    def test_enriched_fields_json_roundtrip(self) -> None:
+        task = Task(
+            title="Roundtrip enriched",
+            task_type="bugfix",
+            acceptance_criteria=["fix the bug", "add regression test"],
+            context_refs=[{"type": "task", "id": "parent-1", "description": "parent"}],
+            quality_thresholds={"coverage_pct": 90},
+            timeout_seconds=3600,
+        )
+        json_str = task.model_dump_json()
+        restored = Task.model_validate_json(json_str)
+        assert restored.task_type == "bugfix"
+        assert restored.acceptance_criteria == ["fix the bug", "add regression test"]
+        assert restored.context_refs[0]["type"] == "task"
+        assert restored.quality_thresholds == {"coverage_pct": 90}
+        assert restored.timeout_seconds == 3600
+
+    def test_enriched_field_count(self) -> None:
+        assert len(Task.model_fields) >= 42
+
 
 # ── TaskCreate ─────────────────────────────────────────────────────────────
 
@@ -194,6 +277,40 @@ class TestTaskCreate:
         assert tc.required_tools == ["pytest", "ruff"]
         assert tc.estimated_complexity == "high"
 
+    def test_enriched_create_defaults(self) -> None:
+        tc = TaskCreate(title="Enriched defaults")
+        assert tc.task_type is None
+        assert tc.kind == "task"
+        assert tc.timeout_seconds is None
+        assert tc.max_retries == 0
+        assert tc.acceptance_criteria == []
+        assert tc.constraints == []
+        assert tc.context_refs == []
+        assert tc.subtask_ids == []
+        assert tc.quality_thresholds == {}
+        assert tc.estimated_effort_minutes is None
+        assert tc.agent_instructions is None
+        assert tc.preferred_agent_type is None
+
+    def test_enriched_create_populated(self) -> None:
+        tc = TaskCreate(
+            title="Feature",
+            task_type="feature",
+            kind="task",
+            timeout_seconds=3600,
+            acceptance_criteria=["it works"],
+            constraints=["no breaking changes"],
+            context_refs=[{"type": "file", "path": "README.md", "description": "readme"}],
+            quality_thresholds={"coverage_pct": 80},
+            estimated_effort_minutes=60,
+            agent_instructions="Be thorough",
+            preferred_agent_type="code",
+        )
+        assert tc.task_type == "feature"
+        assert tc.timeout_seconds == 3600
+        assert len(tc.acceptance_criteria) == 1
+        assert tc.quality_thresholds["coverage_pct"] == 80
+
 
 # ── TaskUpdate ─────────────────────────────────────────────────────────────
 
@@ -208,6 +325,19 @@ class TestTaskUpdate:
         tu = TaskUpdate(title="New title", priority=TaskPriority.HIGH)
         non_none = {k: v for k, v in tu.model_dump().items() if v is not None}
         assert set(non_none.keys()) == {"title", "priority"}
+
+    def test_enriched_update_fields(self) -> None:
+        tu = TaskUpdate(
+            task_type="bugfix",
+            timeout_seconds=1800,
+            acceptance_criteria=["bug is fixed"],
+            retry_count=2,
+        )
+        data = tu.model_dump(exclude_unset=True)
+        assert data["task_type"] == "bugfix"
+        assert data["timeout_seconds"] == 1800
+        assert data["acceptance_criteria"] == ["bug is fixed"]
+        assert data["retry_count"] == 2
 
 
 # ── TaskFilter ─────────────────────────────────────────────────────────────
@@ -228,6 +358,16 @@ class TestTaskFilter:
             limit=10,
         )
         assert len(tf.status) == 2
+
+    def test_enriched_filter_fields(self) -> None:
+        tf = TaskFilter(
+            task_type="feature",
+            kind="task",
+            preferred_agent_type="code",
+        )
+        assert tf.task_type == "feature"
+        assert tf.kind == "task"
+        assert tf.preferred_agent_type == "code"
 
 
 # ── TaskEvent ──────────────────────────────────────────────────────────────

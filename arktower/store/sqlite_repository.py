@@ -108,6 +108,23 @@ class SqliteTaskRepository:
             updated_at=_parse_dt(row["updated_at"]),
             started_at=_parse_dt(row["started_at"]),
             completed_at=_parse_dt(row["completed_at"]),
+            task_type=row["task_type"],
+            kind=row["kind"],
+            timeout_seconds=row["timeout_seconds"],
+            max_retries=row["max_retries"],
+            deadline=_parse_dt(row["deadline"]),
+            budget_tokens=row["budget_tokens"],
+            input_schema=json.loads(row["input_schema"]),
+            output_schema=json.loads(row["output_schema"]),
+            acceptance_criteria=json.loads(row["acceptance_criteria"]),
+            constraints=json.loads(row["constraints"]),
+            context_refs=json.loads(row["context_refs"]),
+            subtask_ids=json.loads(row["subtask_ids"]),
+            quality_thresholds=json.loads(row["quality_thresholds"]),
+            estimated_effort_minutes=row["estimated_effort_minutes"],
+            agent_instructions=row["agent_instructions"],
+            preferred_agent_type=row["preferred_agent_type"],
+            retry_count=row["retry_count"],
         )
 
     def _row_to_event(self, row: sqlite3.Row) -> TaskEvent:
@@ -172,8 +189,14 @@ class SqliteTaskRepository:
                 parameters, output, error, labels, template_id,
                 max_steps, capabilities, required_tools,
                 estimated_complexity, version, created_at, updated_at,
-                started_at, completed_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                started_at, completed_at,
+                task_type, kind, timeout_seconds, max_retries, deadline,
+                budget_tokens, input_schema, output_schema,
+                acceptance_criteria, constraints, context_refs,
+                subtask_ids, quality_thresholds, estimated_effort_minutes,
+                agent_instructions, preferred_agent_type, retry_count)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
+                       ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
                 task.id,
                 task.title,
@@ -199,6 +222,23 @@ class SqliteTaskRepository:
                 self._dt_str(task.updated_at) or now,
                 self._dt_str(task.started_at),
                 self._dt_str(task.completed_at),
+                task.task_type,
+                task.kind,
+                task.timeout_seconds,
+                task.max_retries,
+                self._dt_str(task.deadline),
+                task.budget_tokens,
+                json.dumps(task.input_schema),
+                json.dumps(task.output_schema),
+                json.dumps(task.acceptance_criteria),
+                json.dumps(task.constraints),
+                json.dumps(task.context_refs),
+                json.dumps(task.subtask_ids),
+                json.dumps(task.quality_thresholds),
+                task.estimated_effort_minutes,
+                task.agent_instructions,
+                task.preferred_agent_type,
+                task.retry_count,
             ),
         )
         self._insert_tags(task.id, task.tags)
@@ -223,17 +263,24 @@ class SqliteTaskRepository:
         update_data = updates.model_dump(exclude_unset=True)
         tags_changed = False
 
+        _json_fields = {
+            "labels", "parameters", "capabilities", "required_tools",
+            "input_schema", "output_schema", "acceptance_criteria",
+            "constraints", "context_refs", "subtask_ids", "quality_thresholds",
+        }
+        _dt_fields = {"started_at", "completed_at", "deadline"}
+
         for key, value in update_data.items():
             if key == "tags":
                 tags_changed = True
                 continue
-            if key in ("labels", "parameters", "capabilities", "required_tools"):
+            if key in _json_fields:
                 fields[key] = json.dumps(value)
             elif key == "priority":
                 fields[key] = value.value if isinstance(value, TaskPriority) else value
             elif key == "status":
                 fields[key] = value.value if isinstance(value, TaskStatus) else value
-            elif key in ("started_at", "completed_at"):
+            elif key in _dt_fields:
                 fields[key] = self._dt_str(value) if value is not None else None
             else:
                 fields[key] = value
@@ -319,6 +366,18 @@ class SqliteTaskRepository:
                 f"EXISTS (SELECT 1 FROM tags WHERE task_id = t.id AND tag IN ({placeholders}))"
             )
             params.extend(filters.tags)
+
+        if filters.task_type is not None:
+            clauses.append("t.task_type = ?")
+            params.append(filters.task_type)
+
+        if filters.kind is not None:
+            clauses.append("t.kind = ?")
+            params.append(filters.kind)
+
+        if filters.preferred_agent_type is not None:
+            clauses.append("t.preferred_agent_type = ?")
+            params.append(filters.preferred_agent_type)
 
         where = " WHERE " + " AND ".join(clauses) if clauses else ""
         return base + where, params

@@ -23,8 +23,8 @@ class TestMigrationRunner:
         with DatabaseConnection(":memory:") as db:
             runner = MigrationRunner(db, MIGRATIONS_DIR)
             count = runner.run_migrations()
-            assert count == 3
-            assert runner.get_current_version() == 3
+            assert count == 4
+            assert runner.get_current_version() == 4
 
     def test_run_migrations_idempotent(self) -> None:
         with DatabaseConnection(":memory:") as db:
@@ -32,13 +32,13 @@ class TestMigrationRunner:
             runner.run_migrations()
             second_run = runner.run_migrations()
             assert second_run == 0
-            assert runner.get_current_version() == 3
+            assert runner.get_current_version() == 4
 
     def test_pending_migrations_before_run(self) -> None:
         with DatabaseConnection(":memory:") as db:
             runner = MigrationRunner(db, MIGRATIONS_DIR)
             pending = runner.get_pending_migrations()
-            assert len(pending) == 3
+            assert len(pending) == 4
             assert pending[0].name.startswith("001")
 
     def test_pending_migrations_after_run(self) -> None:

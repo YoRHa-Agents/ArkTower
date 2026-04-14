@@ -80,6 +80,35 @@ class Task(BaseModel):
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
+    # Task Typing & Classification
+    task_type: str | None = None
+    kind: str = "task"
+
+    # Execution Constraints
+    timeout_seconds: int | None = None
+    max_retries: int = 0
+    deadline: datetime | None = None
+    budget_tokens: int | None = None
+
+    # Input/Output Contracts
+    input_schema: dict[str, Any] = Field(default_factory=dict)
+    output_schema: dict[str, Any] = Field(default_factory=dict)
+    acceptance_criteria: list[str] = Field(default_factory=list)
+    constraints: list[str] = Field(default_factory=list)
+
+    # Context References
+    context_refs: list[dict[str, str]] = Field(default_factory=list)
+    subtask_ids: list[str] = Field(default_factory=list)
+
+    # Quality & Metrics
+    quality_thresholds: dict[str, Any] = Field(default_factory=dict)
+    estimated_effort_minutes: int | None = None
+
+    # Agent Interaction
+    agent_instructions: str | None = None
+    preferred_agent_type: str | None = None
+    retry_count: int = 0
+
 
 class TaskCreate(BaseModel):
     title: str
@@ -96,6 +125,34 @@ class TaskCreate(BaseModel):
     capabilities: list[str] = Field(default_factory=list)
     required_tools: list[str] = Field(default_factory=list)
     estimated_complexity: str | None = None
+
+    # Task Typing & Classification
+    task_type: str | None = None
+    kind: str = "task"
+
+    # Execution Constraints
+    timeout_seconds: int | None = None
+    max_retries: int = 0
+    deadline: datetime | None = None
+    budget_tokens: int | None = None
+
+    # Input/Output Contracts
+    input_schema: dict[str, Any] = Field(default_factory=dict)
+    output_schema: dict[str, Any] = Field(default_factory=dict)
+    acceptance_criteria: list[str] = Field(default_factory=list)
+    constraints: list[str] = Field(default_factory=list)
+
+    # Context References
+    context_refs: list[dict[str, str]] = Field(default_factory=list)
+    subtask_ids: list[str] = Field(default_factory=list)
+
+    # Quality & Metrics
+    quality_thresholds: dict[str, Any] = Field(default_factory=dict)
+    estimated_effort_minutes: int | None = None
+
+    # Agent Interaction
+    agent_instructions: str | None = None
+    preferred_agent_type: str | None = None
 
 
 class TaskUpdate(BaseModel):
@@ -114,6 +171,35 @@ class TaskUpdate(BaseModel):
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
+    # Task Typing & Classification
+    task_type: str | None = None
+    kind: str | None = None
+
+    # Execution Constraints
+    timeout_seconds: int | None = None
+    max_retries: int | None = None
+    deadline: datetime | None = None
+    budget_tokens: int | None = None
+
+    # Input/Output Contracts
+    input_schema: dict[str, Any] | None = None
+    output_schema: dict[str, Any] | None = None
+    acceptance_criteria: list[str] | None = None
+    constraints: list[str] | None = None
+
+    # Context References
+    context_refs: list[dict[str, str]] | None = None
+    subtask_ids: list[str] | None = None
+
+    # Quality & Metrics
+    quality_thresholds: dict[str, Any] | None = None
+    estimated_effort_minutes: int | None = None
+
+    # Agent Interaction
+    agent_instructions: str | None = None
+    preferred_agent_type: str | None = None
+    retry_count: int | None = None
+
 
 class TaskFilter(BaseModel):
     status: list[TaskStatus] | None = None
@@ -123,6 +209,9 @@ class TaskFilter(BaseModel):
     parent_id: str | None = None
     context_id: str | None = None
     search: str | None = None
+    task_type: str | None = None
+    kind: str | None = None
+    preferred_agent_type: str | None = None
     limit: int = 50
     offset: int = 0
 
