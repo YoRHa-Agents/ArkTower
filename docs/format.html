@@ -538,49 +538,115 @@
           <span class="code-label">JSON SCHEMA</span>
           <div class="code-block-wrapper">
             <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
-            <pre><code>{
+            <pre><code class="json-schema-code">{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ArkTower Task",
   "type": "object",
   "required": ["title"],
   "properties": {
-    "id":                   { "type": "string", "format": "uuid" },
-    "title":                { "type": "string", "minLength": 1 },
-    "description":          { "type": "string" },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
     "status": {
       "type": "string",
-      "enum": ["submitted","queued","in_progress","review",
-               "input_required","blocked","completed",
-               "failed","canceled","timed_out"]
+      "enum": [
+        "submitted",
+        "queued",
+        "in_progress",
+        "review",
+        "input_required",
+        "blocked",
+        "completed",
+        "failed",
+        "canceled",
+        "timed_out"
+      ]
     },
     "priority": {
       "type": "string",
-      "enum": ["critical","high","medium","low"],
+      "enum": ["critical", "high", "medium", "low"],
       "default": "medium"
     },
-    "tags":                 { "type": "array", "items": { "type": "string" } },
-    "labels":               { "type": "object", "additionalProperties": { "type": "string" } },
-    "capabilities":         { "type": "array", "items": { "type": "string" } },
-    "required_tools":       { "type": "array", "items": { "type": "string" } },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "required_tools": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
     "estimated_complexity": {
       "type": "string",
-      "enum": ["trivial","low","medium","high","extreme"]
+      "enum": ["trivial", "low", "medium", "high", "extreme"]
     },
-    "parent_id":            { "type": ["string","null"] },
-    "context_id":           { "type": ["string","null"] },
-    "owner_id":             { "type": "string", "default": "system" },
-    "assigned_to":          { "type": ["string","null"] },
-    "assigned_type":        { "type": ["string","null"] },
-    "parameters":           { "type": "object" },
-    "output":               { "type": ["string","null"] },
-    "error":                { "type": ["string","null"] },
-    "template_id":          { "type": ["string","null"] },
-    "max_steps":            { "type": ["integer","null"], "minimum": 1 },
-    "version":              { "type": "integer", "minimum": 1 },
-    "created_at":           { "type": "string", "format": "date-time" },
-    "updated_at":           { "type": "string", "format": "date-time" },
-    "started_at":           { "type": ["string","null"], "format": "date-time" },
-    "completed_at":         { "type": ["string","null"], "format": "date-time" }
+    "parent_id": {
+      "type": ["string", "null"]
+    },
+    "context_id": {
+      "type": ["string", "null"]
+    },
+    "owner_id": {
+      "type": "string",
+      "default": "system"
+    },
+    "assigned_to": {
+      "type": ["string", "null"]
+    },
+    "assigned_type": {
+      "type": ["string", "null"]
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "output": {
+      "type": ["string", "null"]
+    },
+    "error": {
+      "type": ["string", "null"]
+    },
+    "template_id": {
+      "type": ["string", "null"]
+    },
+    "max_steps": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "started_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    }
   },
   "additionalProperties": false
 }</code></pre>

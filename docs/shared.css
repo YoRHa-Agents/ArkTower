@@ -634,6 +634,13 @@ section {
   word-break: break-word;
 }
 
+/* SPEC.005 JSON Schema: preserve exact 2-space indentation (no reflow) */
+.code-block pre code.json-schema-code {
+  white-space: pre;
+  word-break: normal;
+  overflow-x: auto;
+}
+
 .code-block .comment {
   color: var(--text-dim);
 }
