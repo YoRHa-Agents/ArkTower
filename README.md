@@ -20,19 +20,18 @@
 
 ArkTower provides a **universal task pool** where tasks are uniformly structured, pre-decomposed, and ready for agent dispatch or automatic claiming. It does not execute tasks itself — it serves as the **foundation for agent-driven workflows**.
 
-```
-[CAPABILITIES]
-├── Universal Task Format    YAML frontmatter + Markdown body (.task.md)
-├── 10-State Lifecycle       submitted → queued → in_progress → ... → completed
-├── Named-Trigger Engine     Verbs (claim, complete, block) with gate checks
-├── Pre-Analysis Pipeline    Automatic complexity scoring + tag extraction
-├── Local-First Storage      SQLite WAL mode, FTS5 search, zero dependencies
-├── REST API + WebSocket     Full CRUD, real-time events via FastAPI
-├── MCP Integration          Native Cursor / Claude / MCP-compatible tools
-├── CLI Interface            Rich terminal interface via Typer
-├── Web Dashboard            Real-time NiceGUI dashboard — YoRHa Tower theme
-└── Task Archival            Snapshot to JSON, export CSV/NDJSON/Markdown
-```
+**[CAPABILITIES]**
+
+- **Universal Task Format** — YAML frontmatter + Markdown body (`.task.md`)
+- **10-State Lifecycle** — `submitted → queued → in_progress → … → completed`
+- **Named-Trigger Engine** — Verbs (claim, complete, block) with gate checks
+- **Pre-Analysis Pipeline** — Automatic complexity scoring + tag extraction
+- **Local-First Storage** — SQLite WAL mode, FTS5 search, zero dependencies
+- **REST API + WebSocket** — Full CRUD, real-time events via FastAPI
+- **MCP Integration** — Native Cursor / Claude / MCP-compatible tools
+- **CLI Interface** — Rich terminal interface via Typer
+- **Web Dashboard** — Real-time NiceGUI dashboard — YoRHa Tower theme
+- **Task Archival** — Snapshot to JSON, export CSV/NDJSON/Markdown
 
 ---
 
@@ -97,66 +96,43 @@ ArkTower registers as an MCP server for Cursor. Configuration in `.cursor/mcp.js
 }
 ```
 
-```
-[MCP TOOLS]
-├── create_task       Create new task entry
-├── list_tasks        Query with filters
-├── get_task          Retrieve by ID
-├── claim_task        Agent claims ownership
-├── complete_task     Mark task complete
-├── search_tasks      Full-text search
-├── get_pool_stats    Pool metrics
-└── get_next_task     Priority-based dispatch
-```
+**[MCP TOOLS]**
+
+| Tool | Purpose |
+|------|---------|
+| `create_task` | Create new task entry |
+| `list_tasks` | Query with filters |
+| `get_task` | Retrieve by ID |
+| `claim_task` | Agent claims ownership |
+| `complete_task` | Mark task complete |
+| `search_tasks` | Full-text search |
+| `get_pool_stats` | Pool metrics |
+| `get_next_task` | Priority-based dispatch |
 
 ---
 
 ## > ARCHITECTURE.DIAGRAM
 
-```
-+--------------------------------------------------------------------+
-|                     [EXTERNAL CONSUMERS]                          |
-|   Cursor (MCP)  |  OpenClaw  |  REST API  |  Dashboard  |  CLI   |
-+--------------------------------------------------------------------+
-|                                                                    |
-|   ┌────────────┐  ┌────────────┐  ┌─────────┐  ┌──────────────┐  |
-|   │ MCP Server │  │ REST API   │  │   CLI   │  │   NiceGUI    │  |
-|   │  (stdio)   │  │ (FastAPI)  │  │ (Typer) │  │  Dashboard   │  |
-|   └─────┬──────┘  └─────┬──────┘  └────┬────┘  └──────┬───────┘  |
-|         └───────────────┬┘──────────────┘──────────────┘          |
-|                         │                                          |
-|              ┌──────────▼──────────┐                               |
-|              │    Task Service     │◄──── EventBus (pub/sub)       |
-|              └──────────┬──────────┘                               |
-|              ┌──────────▼──────────┐                               |
-|              │   State Machine     │  15 triggers × 10 states      |
-|              └──────────┬──────────┘                               |
-|              ┌──────────▼──────────┐                               |
-|              │  SQLite (WAL mode)  │  FTS5 · JSON1 · Indexes      |
-|              └─────────────────────┘                               |
-|                                                                    |
-+--------------------------------------------------------------------+
-```
+<p align="center">
+  <img src="docs/architecture.svg" alt="ArkTower Architecture" width="700"/>
+</p>
 
 ---
 
 ## > PROJECT.STRUCTURE
 
-```
-arktower/
-├── core/          # Domain models, state machine, event bus, task service
-├── store/         # SQLite repository, connection, migrations
-├── api/           # FastAPI REST + WebSocket endpoints
-├── mcp/           # MCP server (tools, resources, prompts)
-├── cli/           # Typer CLI commands
-├── web/           # NiceGUI dashboard — YoRHa Tower theme
-│   ├── theme.py        # Design tokens, colors, global CSS
-│   ├── dashboard.py    # Layout, navigation, scanline overlay
-│   ├── components/     # Status badges, task cards, priority indicators
-│   └── pages/          # Pool overview, task board, detail, analytics, graph
-├── analysis/      # Pre-analysis pipeline (complexity, tags)
-└── archive/       # Task archival, snapshots, export formats
-```
+- **`arktower/core/`** — Domain models, state machine, event bus, task service
+- **`arktower/store/`** — SQLite repository, connection, migrations
+- **`arktower/api/`** — FastAPI REST + WebSocket endpoints
+- **`arktower/mcp/`** — MCP server (tools, resources, prompts)
+- **`arktower/cli/`** — Typer CLI commands
+- **`arktower/web/`** — NiceGUI dashboard — YoRHa Tower theme
+  - `theme.py` — Design tokens, colors, global CSS
+  - `dashboard.py` — Layout, navigation, scanline overlay
+  - `components/` — Status badges, task cards, priority indicators
+  - `pages/` — Pool overview, task board, detail, analytics, graph
+- **`arktower/analysis/`** — Pre-analysis pipeline (complexity, tags)
+- **`arktower/archive/`** — Task archival, snapshots, export formats
 
 ---
 

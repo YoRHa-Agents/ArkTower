@@ -1,6 +1,6 @@
 # ArkTower Self-Evaluation System
 
-> Last modified: 2026-04-14T05:10:00Z
+> Last modified: 2026-04-14T12:00:00Z
 
 ## Overview
 
@@ -73,11 +73,10 @@ Configuration in `nines.toml`. The evaluation framework aligns with NineS capabi
 
 ## Architecture
 
-```
-arktower/evaluation/
-├── __init__.py           # Public API exports
-├── dimensions.py         # EvalDimension enum, DimensionScore, EvalReport models
-├── evaluators.py         # 8 concrete evaluators with gap-detection checks
-├── golden_tasks.py       # 12 golden test tasks for format validation
-└── runner.py             # EvalRunner orchestrator + __main__ entry point
-```
+Package layout under `arktower/evaluation/`:
+
+- `__init__.py` — Public API exports
+- `dimensions.py` — `EvalDimension` enum, `DimensionScore`, `EvalReport` models
+- `evaluators.py` — Eight concrete evaluators with gap-detection checks
+- `golden_tasks.py` — Twelve golden test tasks for format validation
+- `runner.py` — `EvalRunner` orchestrator and `__main__` entry point
