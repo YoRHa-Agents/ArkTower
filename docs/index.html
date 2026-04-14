@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArkTower — Agent-Oriented Task Pool System</title>
+  <meta name="description" content="ArkTower: format, normalize, pre-analyze, and dispatch tasks for AI agents. NieR:Automata Tower-themed task pool system.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      border-radius: 0 !important;
+    }
+
+    :root {
+      --bg: #0D0D0D;
+      --bg-card: #1A1A1A;
+      --bg-code: #111111;
+      --text: #DAD4BB;
+      --text-dim: #8A8470;
+      --accent: #C7372F;
+      --border: #333333;
+      --border-hover: #C7372F;
+      --font-main: 'Rajdhani', 'Segoe UI', sans-serif;
+      --font-mono: 'Courier New', 'Consolas', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 72px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scanline overlay ── */
+    .scanline-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(13, 13, 13, 0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-brand {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    /* ── Main container ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      padding: 120px 0 100px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .hero-serial {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 10vw, 96px);
+      font-weight: 700;
+      letter-spacing: 16px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 20px;
+      animation: heroGlow 4s ease-in-out infinite;
+    }
+
+    .hero-title .accent {
+      color: var(--accent);
+    }
+
+    @keyframes heroGlow {
+      0%, 100% { text-shadow: 0 0 20px rgba(199, 55, 47, 0.0); opacity: 1; }
+      25% { text-shadow: 0 0 30px rgba(199, 55, 47, 0.15); opacity: 0.98; }
+      50% { text-shadow: 0 0 40px rgba(199, 55, 47, 0.25); opacity: 1; }
+      75% { text-shadow: 0 0 20px rgba(199, 55, 47, 0.1); opacity: 0.97; }
+    }
+
+    @keyframes flicker {
+      0%, 97%, 100% { opacity: 1; }
+      98% { opacity: 0.85; }
+      99% { opacity: 0.95; }
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text-dim);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #8BAA7F;
+      border: 1px solid #8BAA7F;
+      padding: 6px 20px;
+      letter-spacing: 3px;
+      animation: flicker 5s infinite;
+    }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .hero-meta-item span {
+      color: var(--text);
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .section-desc {
+      margin-top: 16px;
+      max-width: 720px;
+      color: var(--text-dim);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    /* ── Feature grid ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .feature-card::before {
+      content: attr(data-index);
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      opacity: 0.4;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      border: 1px solid rgba(199, 55, 47, 0.3);
+      padding: 2px 8px;
+      margin-top: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* ── Architecture ── */
+    .arch-diagram {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      padding: 32px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre;
+    }
+
+    .arch-diagram .layer-label {
+      color: var(--accent);
+    }
+
+    /* ── Code blocks ── */
+    .code-block {
+      position: relative;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .code-block .comment {
+      color: var(--text-dim);
+    }
+
+    .code-block .command {
+      color: #8BAA7F;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      background: var(--bg-card);
+      border-left: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 4px 12px;
+      letter-spacing: 1px;
+    }
+
+    /* ── Status display ── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+
+    .status-row:hover {
+      border-color: var(--border-hover);
+    }
+
+    .status-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+    }
+
+    .status-value {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .status-bar {
+      flex: 1;
+      height: 3px;
+      background: #222;
+      margin: 0 20px;
+      position: relative;
+    }
+
+    .status-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      transition: width 0.6s ease;
+    }
+
+    .status-perfect { color: #8BAA7F; }
+    .status-good { color: var(--text); }
+    .status-warn { color: #D4A853; }
+
+    .status-overall {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-overall-label {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .status-overall-value {
+      font-family: var(--font-mono);
+      font-size: 36px;
+      font-weight: 700;
+      color: #8BAA7F;
+    }
+
+    .status-overall-gate {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* ── About content ── */
+    .about-content {
+      max-width: 800px;
+    }
+
+    .about-content p {
+      font-size: 17px;
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    .about-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .inline-code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+    }
+
+    /* ── Links ── */
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: text-decoration 0.2s;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .footer-quote {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* ── Lifecycle diagram ── */
+    .lifecycle-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .lifecycle-node {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      letter-spacing: 1px;
+    }
+
+    .lifecycle-arrow {
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .lifecycle-node.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .lifecycle-branch {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: rgba(13, 13, 13, 0.98);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        gap: 16px;
+      }
+      .nav-toggle { display: block; }
+      .container { padding: 0 20px; }
+      .hero { padding: 80px 0 60px; }
+      .hero-title { letter-spacing: 8px; }
+      .hero-meta { gap: 20px; }
+      section { padding: 60px 0; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: 1fr; }
+      .status-overall { flex-direction: column; gap: 12px; text-align: center; }
+      .arch-diagram { font-size: 11px; padding: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { letter-spacing: 4px; }
+      .hero-subtitle { font-size: 14px; letter-spacing: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand"><span>Ark</span>Tower</a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">≡ MENU</button>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#init">Quick Start</a></li>
+      <li><a href="#status">Status</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-serial">SN: ARK-TWR-001 &nbsp;│&nbsp; BUILD 0.1.0 &nbsp;│&nbsp; PYTHON 3.11+</div>
+    <h1 class="hero-title"><span class="accent">Ark</span>Tower</h1>
+    <p class="hero-subtitle">Agent-Oriented Task Pool System</p>
+    <div class="hero-badge">[SYSTEM ONLINE]</div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">TESTS: <span>293 PASSED</span></div>
+      <div class="hero-meta-item">COVERAGE: <span>71%</span></div>
+      <div class="hero-meta-item">EVAL SCORE: <span>0.9179</span></div>
+      <div class="hero-meta-item">LICENSE: <span>MIT</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- About -->
+<section id="overview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SEC 001 — PRIMARY DIRECTIVE</div>
+      <h2 class="section-title">[SYSTEM.OVERVIEW]</h2>
+    </div>
+    <div class="about-content">
+      <p>
+        ArkTower provides a <strong>universal task pool</strong> where tasks are uniformly structured,
+        pre-decomposed, and ready for agent dispatch or automatic claiming. It does not execute tasks itself — it
+        serves as the <strong>foundation for agent-driven workflows</strong>.
+      </p>
+      <p>
+        Tasks enter the system as structured YAML frontmatter + Markdown body
+        (<span class="inline-code">.task.md</span>), pass through a <strong>10-state lifecycle</strong> with
+        named triggers, undergo <strong>automatic pre-analysis</strong> for complexity scoring and tag extraction,
+        and are dispatched to AI agents based on capability matching.
+      </p>
+      <p>
+        The system integrates natively with <strong>Cursor</strong>, <strong>Claude</strong>, and any
+        <strong>MCP-compatible</strong> client via 12 dedicated tools. A real-time REST API, WebSocket events, CLI,
+        and NiceGUI web dashboard provide full operational control.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="capabilities">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SEC 002 — OPERATIONAL PARAMETERS</div>
+      <h2 class="section-title">[CAPABILITIES]</h2>
+      <p class="section-desc">Core system capabilities and integration interfaces.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card" data-index="01">
+        <h3>10-State Lifecycle</h3>
+        <p>Full state machine with 15 named triggers — submit, enqueue, claim, complete, block, unblock, cancel, timeout, review, approve, reject, fail, and more. Every transition audited.</p>
+        <span class="feature-tag">STATE_MACHINE</span>
+      </div>
+      <div class="feature-card" data-index="02">
+        <h3>MCP Server</h3>
+        <p>12 tools registered for Cursor and Claude integration. Create, claim, complete, search tasks directly from your IDE via stdio transport.</p>
+        <span class="feature-tag">12 TOOLS</span>
+      </div>
+      <div class="feature-card" data-index="03">
+        <h3>REST API + WebSocket</h3>
+        <p>Full CRUD via FastAPI at <span class="inline-code">/api/v1/*</span>. Real-time events pushed over WebSocket for live dashboard updates and agent coordination.</p>
+        <span class="feature-tag">FASTAPI</span>
+      </div>
+      <div class="feature-card" data-index="04">
+        <h3>Pre-Analysis Engine</h3>
+        <p>Automatic complexity scoring (heuristic) and keyword-based tag extraction on task submission. Agents receive enriched, analysis-ready task data.</p>
+        <span class="feature-tag">ANALYSIS</span>
+      </div>
+      <div class="feature-card" data-index="05">
+        <h3>SQLite Local-First</h3>
+        <p>WAL mode for concurrent reads, FTS5 full-text search, JSON1 extension, migration runner. Zero external database dependencies.</p>
+        <span class="feature-tag">SQLITE_WAL</span>
+      </div>
+      <div class="feature-card" data-index="06">
+        <h3>NiceGUI Dashboard</h3>
+        <p>Real-time web dashboard with YoRHa Tower theme. Pool overview, task board, detail views, analytics charts, and dependency graph visualization.</p>
+        <span class="feature-tag">NICEGUI</span>
+      </div>
+      <div class="feature-card" data-index="07">
+        <h3>CLI Interface</h3>
+        <p>Rich terminal interface via Typer. Task CRUD, pool operations, server management, and evaluation commands. JSON output mode for scripting.</p>
+        <span class="feature-tag">TYPER+RICH</span>
+      </div>
+      <div class="feature-card" data-index="08">
+        <h3>Self-Evaluation System</h3>
+        <p>8-dimension benchmarking framework with weighted scoring, gap detection, golden task validation, and quality gates. Drives iteration cycles.</p>
+        <span class="feature-tag">8 DIMENSIONS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SEC 003 — SYSTEM TOPOLOGY</div>
+      <h2 class="section-title">[ARCHITECTURE]</h2>
+      <p class="section-desc">Multi-layer architecture with unified task service facade.</p>
+    </div>
+    <div class="arch-diagram">╔════════════════════════════════════════════════════════════════════╗
+║                     <span class="layer-label">[EXTERNAL CONSUMERS]</span>                          ║
+║   Cursor (MCP)  │  OpenClaw  │  REST API  │  Dashboard  │  CLI   ║
+╠════════════════════════════════════════════════════════════════════╣
+║                                                                    ║
+║   ┌────────────┐  ┌────────────┐  ┌─────────┐  ┌──────────────┐  ║
+║   │ MCP Server │  │ REST API   │  │   CLI   │  │   NiceGUI    │  ║
+║   │  (stdio)   │  │ (FastAPI)  │  │ (Typer) │  │  Dashboard   │  ║
+║   └─────┬──────┘  └─────┬──────┘  └────┬────┘  └──────┬───────┘  ║
+║         └───────────────┬┘──────────────┘──────────────┘          ║
+║                         │                                          ║
+║              ┌──────────▼──────────┐                               ║
+║              │    <span class="layer-label">Task Service</span>     │◄──── EventBus (pub/sub)       ║
+║              └──────────┬──────────┘                               ║
+║              ┌──────────▼──────────┐                               ║
+║              │   <span class="layer-label">State Machine</span>     │  15 triggers × 10 states      ║
+║              └──────────┬──────────┘                               ║
+║              ┌──────────▼──────────┐                               ║
+║              │  <span class="layer-label">SQLite (WAL mode)</span>  │  FTS5 · JSON1 · Indexes      ║
+║              └─────────────────────┘                               ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝</div>
+
+    <div style="margin-top: 40px;">
+      <div class="section-label" style="margin-bottom: 16px;">TASK LIFECYCLE FLOW</div>
+      <div class="lifecycle-flow">
+        <span class="lifecycle-node">submitted</span>
+        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-node">queued</span>
+        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-node active">in_progress</span>
+        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-branch">[ review │ input_required │ blocked ]</span>
+        <span class="lifecycle-arrow">→</span>
+        <span class="lifecycle-node">completed</span>
+        <span class="lifecycle-branch">│ failed │ canceled │ timed_out</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section id="init">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SEC 004 — DEPLOYMENT PROTOCOL</div>
+      <h2 class="section-title">[INITIALIZATION]</h2>
+      <p class="section-desc">Get operational in under 60 seconds.</p>
+    </div>
+
+    <div class="code-block">
+      <span class="code-label">BASH</span>
+      <code><span class="comment"># [INSTALL] Clone and install</span>
+<span class="command">pip install -e ".[dev]"</span>
+
+<span class="comment"># [MIGRATE] Initialize the database</span>
+<span class="command">arktower server migrate</span>
+
+<span class="comment"># [DEPLOY] Start the dashboard (NiceGUI + API)</span>
+<span class="command">arktower server start</span>
+
+<span class="comment"># [DEPLOY] API-only mode</span>
+<span class="command">arktower server start --mode api</span>
+
+<span class="comment"># [DEPLOY] MCP server for Cursor integration</span>
+<span class="command">arktower server mcp</span></code>
+    </div>
+
+    <div class="code-block">
+      <span class="code-label">OPERATIONS</span>
+      <code><span class="comment"># [CREATE] New task entry</span>
+<span class="command">arktower task create "Implement JWT authentication" \
+  --priority high \
+  --tags "python,api,auth" \
+  --description "Add JWT-based auth to the API gateway"</span>
+
+<span class="comment"># [QUERY] List and filter tasks</span>
+<span class="command">arktower task list --status queued --json</span>
+
+<span class="comment"># [ADVANCE] Task lifecycle transitions</span>
+<span class="command">arktower task advance &lt;task-id&gt; enqueue</span>
+<span class="command">arktower task claim &lt;task-id&gt; agent-1</span>
+<span class="command">arktower task complete &lt;task-id&gt; --output "Implemented in PR #42"</span></code>
+    </div>
+
+    <div class="code-block">
+      <span class="code-label">MCP CONFIG</span>
+      <code><span class="comment">// .cursor/mcp.json</span>
+{
+  "mcpServers": {
+    "arktower": {
+      "command": "python",
+      "args": ["-m", "arktower.mcp.server"]
+    }
+  }
+}</code>
+    </div>
+  </div>
+</section>
+
+<!-- Status -->
+<section id="status">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">SEC 005 — SYSTEM DIAGNOSTICS</div>
+      <h2 class="section-title">[SYSTEM.STATUS]</h2>
+      <p class="section-desc">Self-evaluation scores across 8 agent-oriented capability dimensions.</p>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-row">
+        <span class="status-label">lifecycle_correctness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">search_effectiveness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">analysis_accuracy</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">archive_integrity</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">concurrency_safety</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:100%; background:#8BAA7F;"></div></div>
+        <span class="status-value status-perfect">1.00</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">api_completeness</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:95%; background:#DAD4BB;"></div></div>
+        <span class="status-value status-good">0.95</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">task_format_quality</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:87%; background:#DAD4BB;"></div></div>
+        <span class="status-value status-good">0.87</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">dispatch_reliability</span>
+        <div class="status-bar"><div class="status-bar-fill" style="width:71%; background:#D4A853;"></div></div>
+        <span class="status-value status-warn">0.71</span>
+      </div>
+    </div>
+
+    <div class="status-overall">
+      <div>
+        <div class="status-overall-label">Composite Score</div>
+        <div class="status-overall-gate">GATE: STANDARD (≥ 0.85) — PASSED</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="status-overall-value">0.9179</div>
+        <div class="status-overall-gate">WEIGHTED AVERAGE / 8 DIMENSIONS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p class="footer-quote">"Glory to Mankind." — YoRHa</p>
+    <div class="footer-links">
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="#overview">Documentation</a>
+      <a href="#init">Quick Start</a>
+    </div>
+    <p class="footer-copy">ArkTower v0.1.0 &nbsp;│&nbsp; MIT License &nbsp;│&nbsp; Python 3.11+</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+[project]
+name = "arktower"
+version = "0.1.0"
+description = "Agent-oriented task pool system"
+
+[paths]
+src = "arktower"
+tests = "tests"
+golden = "data/golden_test_set"
+samples = "data/eval_samples"
+
+[eval]
+dimensions = [
+    "lifecycle_correctness",
+    "task_format_quality",
+    "dispatch_reliability",
+    "search_effectiveness",
+    "api_completeness",
+    "analysis_accuracy",
+    "archive_integrity",
+    "concurrency_safety",
+]
+
+[eval.weights]
+lifecycle_correctness = 0.20
+task_format_quality = 0.15
+dispatch_reliability = 0.20
+search_effectiveness = 0.10
+api_completeness = 0.10
+analysis_accuracy = 0.10
+archive_integrity = 0.10
+concurrency_safety = 0.05
+
+[benchmark]
+rounds = 3
+convergence_threshold = 0.05
+
+[iterate]
+max_rounds = 5
+threshold = 0.05
