@@ -5,15 +5,16 @@ from __future__ import annotations
 from nicegui import ui
 
 from arktower.core.task_service import TaskService
-from arktower.web.theme import YORHA_COLORS
+from arktower.web.i18n import t
+from arktower.web.theme import get_colors
 
 
 def render_analytics(svc: TaskService) -> None:
     """Render the analytics page."""
-    c = YORHA_COLORS
+    c = get_colors()
     stats = svc.get_stats()
 
-    ui.label("[ANALYTICS] TASK POOL METRICS").style(
+    ui.label(t("analytics.title")).style(
         f"color: {c['text_muted']}; font-size: 0.85rem; letter-spacing: 2px;"
         " font-family: 'Rajdhani', monospace; margin-bottom: 16px;"
     )
@@ -22,7 +23,7 @@ def render_analytics(svc: TaskService) -> None:
         with ui.card().style(
             f"flex: 1; background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
         ):
-            ui.label("[METRICS] COMPLETION").style(
+            ui.label(t("analytics.completion")).style(
                 f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 8px;"
             )
@@ -41,16 +42,16 @@ def render_analytics(svc: TaskService) -> None:
                     f"color: {rate_color}; font-size: 3rem; font-weight: 700;"
                     " font-family: 'Rajdhani', monospace; line-height: 1;"
                 )
-                ui.label("SUCCESS RATE").style(
+                ui.label(t("analytics.success_rate")).style(
                     f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                     " font-family: 'Rajdhani', monospace;"
                 )
             else:
-                ui.label("[NO DATA]").style(
+                ui.label(t("analytics.no_data")).style(
                     f"color: {c['text_dim']}; font-family: 'Rajdhani', monospace;"
                     " letter-spacing: 1px;"
                 )
-                ui.label("No completed tasks yet").style(
+                ui.label(t("analytics.no_tasks")).style(
                     f"color: {c['text_dim']}; font-size: 0.8rem;"
                 )
 
@@ -60,7 +61,7 @@ def render_analytics(svc: TaskService) -> None:
                     f"color: {c['text_primary']}; font-size: 1.4rem; font-weight: 600;"
                     " font-family: 'Rajdhani', monospace; margin-top: 12px;"
                 )
-                ui.label("AVG COMPLETION TIME").style(
+                ui.label(t("analytics.avg_time")).style(
                     f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                     " font-family: 'Rajdhani', monospace;"
                 )
@@ -68,25 +69,25 @@ def render_analytics(svc: TaskService) -> None:
         with ui.card().style(
             f"flex: 1; background: {c['bg_surface']}; border: 1px solid {c['border']}; border-radius: 0;"
         ):
-            ui.label("[STATUS] QUEUE HEALTH").style(
+            ui.label(t("analytics.queue_health")).style(
                 f"color: {c['text_dim']}; font-size: 0.7rem; letter-spacing: 2px;"
                 " font-family: 'Rajdhani', monospace; margin-bottom: 8px;"
             )
             queued = stats.by_status.get("queued", 0)
             in_progress = stats.by_status.get("in_progress", 0)
 
-            _queue_metric("QUEUED", str(queued), "#7FDBCA")
-            _queue_metric("IN PROGRESS", str(in_progress), c["text_primary"])
+            _queue_metric(t("analytics.queued"), str(queued), "#7FDBCA")
+            _queue_metric(t("analytics.in_progress"), str(in_progress), c["text_primary"])
 
             if stats.oldest_queued_age_seconds is not None:
                 age_mins = stats.oldest_queued_age_seconds / 60
                 color = c["accent"] if age_mins > 60 else "#D4A574" if age_mins > 15 else "#8BAA7F"
-                _queue_metric("OLDEST QUEUED", f"{age_mins:.0f} MIN", color)
+                _queue_metric(t("analytics.oldest"), f"{age_mins:.0f} MIN", color)
 
 
 def _queue_metric(label: str, value: str, color: str) -> None:
     """Render a single queue health metric line."""
-    c = YORHA_COLORS
+    c = get_colors()
     with ui.row().classes("items-center gap-3 mt-2"):
         ui.label(value).style(
             f"color: {color}; font-size: 1.4rem; font-weight: 600;"

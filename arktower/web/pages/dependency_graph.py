@@ -7,42 +7,52 @@ from nicegui import ui
 from arktower.core.models import TaskFilter
 from arktower.core.task_service import TaskService
 from arktower.web.components.status_badge import STATUS_COLORS
-from arktower.web.theme import YORHA_COLORS
+from arktower.web.i18n import t
+from arktower.web.theme import get_colors, get_theme_mode
 
 
 def render_dependency_graph(svc: TaskService) -> None:
-    """Render a dependency graph using Mermaid with YoRHa dark theme."""
-    c = YORHA_COLORS
+    """Render a dependency graph using Mermaid with YoRHa theming."""
+    c = get_colors()
     tasks = svc.list_tasks(TaskFilter(limit=100))
     repo = svc._repo
 
+    is_light = get_theme_mode() == "light"
+    mermaid_theme = "default" if is_light else "dark"
+    node_fill = c["bg_surface"]
+    node_text = c["text_primary"]
+    node_border = c["border"]
+    line_color = c["text_dim"]
+
     mermaid_lines = [
-        "%%{init: {'theme': 'dark', 'themeVariables': {"
-        "'primaryColor': '#1A1A1A', 'primaryTextColor': '#DAD4BB',"
-        "'primaryBorderColor': '#333', 'lineColor': '#555',"
-        "'secondaryColor': '#242424', 'tertiaryColor': '#0D0D0D'"
-        "}}}%%",
+        f"%%{{init: {{'theme': '{mermaid_theme}', 'themeVariables': {{"
+        f"'primaryColor': '{node_fill}', 'primaryTextColor': '{node_text}',"
+        f"'primaryBorderColor': '{node_border}', 'lineColor': '{line_color}',"
+        f"'secondaryColor': '{c['bg_elevated']}', 'tertiaryColor': '{c['bg_primary']}'"
+        "}}}}%%",
         "graph TD",
     ]
     for task in tasks:
-        colors = STATUS_COLORS.get(task.status.value, {"border": "#555"})
+        colors = STATUS_COLORS.get(task.status.value, {"border": c["border"]})
         short_id = task.id[:8]
         label = task.title[:30].replace('"', "'")
         mermaid_lines.append(f'    {short_id}["{label}"]')
-        mermaid_lines.append(f"    style {short_id} stroke:{colors['border']},fill:#1A1A1A,color:#DAD4BB")
+        mermaid_lines.append(
+            f"    style {short_id} stroke:{colors['border']},fill:{node_fill},color:{node_text}"
+        )
 
         deps = repo.get_dependencies(task.id)
         for dep in deps:
             dep_short = dep.to_task_id[:8]
             mermaid_lines.append(f"    {short_id} --> {dep_short}")
 
-    ui.label("[TOPOLOGY] DEPENDENCY GRAPH").style(
+    ui.label(t("graph.title")).style(
         f"color: {c['text_muted']}; font-size: 0.85rem; letter-spacing: 2px;"
         " font-family: 'Rajdhani', monospace; margin-bottom: 16px;"
     )
 
     if len(tasks) == 0:
-        ui.label("[NO DATA] No tasks to display.").style(
+        ui.label(t("graph.empty")).style(
             f"color: {c['text_dim']}; font-family: 'Rajdhani', monospace;"
             " letter-spacing: 1px;"
         )

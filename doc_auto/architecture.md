@@ -1,6 +1,6 @@
 # ArkTower Architecture Summary
 
-> Last modified: 2026-04-14T18:00:00Z
+> Last modified: 2026-04-14T21:30:00Z
 
 ## Overview
 
@@ -26,7 +26,7 @@ ArkTower is an agent-oriented task pool system built with Python 3.11+. It forma
 - `arktower/api/` — FastAPI app factory, REST routes (`/api/v1/*` + `/api/v1/health`), WebSocket manager
 - `arktower/mcp/` — MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor
 - `arktower/cli/` — Typer CLI: `task`, `pool`, `server`, `eval` subcommands
-- `arktower/web/` — NiceGUI dashboard with YoRHa Tower theme: theme.py (design tokens, CSS), dashboard.py (layout, scanline overlay), components/ (status badges, task cards), pages/ (pool overview, task board, task detail, analytics, dependency graph)
+- `arktower/web/` — NiceGUI dashboard with YoRHa Tower theme: i18n.py (EN/ZH translations, `t()` helper, `app.storage.user` language persistence), theme.py (dual dark/light design tokens and CSS, `get_colors()`/`get_theme_mode()` dynamic getters, `app.storage.user` theme persistence), dashboard.py (layout, header language + theme toggle buttons, scanline overlay), components/ (status badges, task cards — all using dynamic color getters), pages/ (pool overview, task board, task detail, analytics, dependency graph — all i18n-ized)
 - `arktower/analysis/` — Pre-analysis pipeline: complexity scorer (heuristic), tag extractor (keyword-based)
 - `arktower/archive/` — Snapshot writer (JSON), export formats (JSON/NDJSON/CSV/Markdown), archive service
 - `arktower/evaluation/` — Self-benchmarking: 8 dimensions, gap detection, EvalRunner, golden tasks
