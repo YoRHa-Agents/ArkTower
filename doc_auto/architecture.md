@@ -1,8 +1,8 @@
 # ArkTower Architecture Summary
 
-> Last modified: 2026-04-14T18:00:00Z
+> Last modified: 2026-04-14T20:30:00Z
 
-_GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`. `docs/format.html` SPEC.004 task examples use tabbed `.task.md` / `.task.json` views (`.format-tabs` in `docs/shared.css`)._
+_GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`. `docs/format.html` SPEC.004 task examples use tabbed `.task.md` / `.task.json` views (`.format-tabs` in `docs/shared.css`). SPEC.005 JSON Schema uses pretty-printed JSON in `<pre><code class="json-schema-code">` with `white-space: pre` (see `docs/shared.css`)._
 
 ## Overview
 
