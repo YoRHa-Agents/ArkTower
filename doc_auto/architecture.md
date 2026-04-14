@@ -1,8 +1,8 @@
 # ArkTower Architecture Summary
 
-> Last modified: 2026-04-14T12:30:00Z
+> Last modified: 2026-04-14T18:00:00Z
 
-_GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`._
+_GitHub Pages (`docs/*.html`): code blocks use `<pre><code>` with copy buttons; styles in `docs/shared.css`. `docs/format.html` SPEC.004 task examples use tabbed `.task.md` / `.task.json` views (`.format-tabs` in `docs/shared.css`)._
 
 ## Overview
 
@@ -71,7 +71,7 @@ Tasks include `capabilities`, `required_tools`, and `estimated_complexity` field
 - `.workflow/config.yaml` — DevolaFlow self-update hooks and quality gates
 - `docs/index.html` — GitHub Pages landing page (NieR:Automata Tower / YoRHa aesthetic)
 - `docs/shared.css` — Shared design system (CSS variables, components, responsive utilities)
-- `docs/format.html` — Task format specification page (YAML+MD format, field reference, state machine)
+- `docs/format.html` — Task format specification page (YAML+MD format, field reference, state machine, dual-format task examples with tabs)
 - `docs/demo.html` — Interactive client-side demo (task pool simulation, lifecycle controls, pre-analysis)
 - `docs/docs.html` — Documentation hub (architecture, API reference, CLI, evaluation, configuration)
 

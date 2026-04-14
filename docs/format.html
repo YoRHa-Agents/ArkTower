@@ -298,16 +298,22 @@
     <div class="section-header">
       <div class="section-label" data-i18n="examples.label">SPEC.004 -- EXEMPLARS</div>
       <h2 class="section-title" data-i18n="examples.title">[TASK EXAMPLES]</h2>
-      <p class="section-desc" data-i18n="examples.desc">Three complete .task.md files demonstrating the format for different task types.</p>
+      <p class="section-desc" data-i18n="examples.desc">Three complete task examples in both .task.md and .task.json, demonstrating the format for different task types.</p>
     </div>
 
     <div class="lined-code">
       <div class="code-header">
         <span data-i18n="examples.ex1">EXAMPLE 1 -- FEATURE TASK</span>
-        <span>jwt-auth.task.md</span>
+        <span>jwt-auth.task.md / jwt-auth.task.json</span>
       </div>
-      <div class="code-block-wrapper">
-        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <div class="format-tabs">
+        <div class="tab-header">
+          <button type="button" class="tab-btn active" onclick="switchTab(this, 'md')">.task.md</button>
+          <button type="button" class="tab-btn" onclick="switchTab(this, 'json')">.task.json</button>
+        </div>
+        <div class="tab-content active" data-tab="md">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">id:</span> <span class="yaml-val">a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
 <span class="ln"> 3</span><span class="yaml-key">title:</span> <span class="yaml-str">Implement JWT Authentication for API Gateway</span>
@@ -342,16 +348,58 @@
 <span class="ln">32</span><span class="md-body">- [ ] Protected endpoints return 401 without valid token</span>
 <span class="ln">33</span><span class="md-body">- [ ] Token refresh endpoint implemented</span>
 <span class="ln">34</span><span class="md-body">- [ ] Unit tests for auth middleware</span></pre>
+          </div>
+        </div>
+        <div class="tab-content" data-tab="json">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre><span class="ln"> 1</span>{
+<span class="ln"> 2</span>  <span class="yaml-key">"id"</span>: <span class="yaml-str">"a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span>,
+<span class="ln"> 3</span>  <span class="yaml-key">"title"</span>: <span class="yaml-str">"Implement JWT Authentication for API Gateway"</span>,
+<span class="ln"> 4</span>  <span class="yaml-key">"status"</span>: <span class="yaml-str">"queued"</span>,
+<span class="ln"> 5</span>  <span class="yaml-key">"priority"</span>: <span class="yaml-str">"high"</span>,
+<span class="ln"> 6</span>  <span class="yaml-key">"tags"</span>: [
+<span class="ln"> 7</span>    <span class="yaml-str">"python"</span>,
+<span class="ln"> 8</span>    <span class="yaml-str">"api"</span>,
+<span class="ln"> 9</span>    <span class="yaml-str">"auth"</span>,
+<span class="ln">10</span>    <span class="yaml-str">"security"</span>
+<span class="ln">11</span>  ],
+<span class="ln">12</span>  <span class="yaml-key">"capabilities"</span>: [
+<span class="ln">13</span>    <span class="yaml-str">"python"</span>,
+<span class="ln">14</span>    <span class="yaml-str">"fastapi"</span>,
+<span class="ln">15</span>    <span class="yaml-str">"jwt"</span>
+<span class="ln">16</span>  ],
+<span class="ln">17</span>  <span class="yaml-key">"required_tools"</span>: [
+<span class="ln">18</span>    <span class="yaml-str">"create_task"</span>,
+<span class="ln">19</span>    <span class="yaml-str">"complete_task"</span>
+<span class="ln">20</span>  ],
+<span class="ln">21</span>  <span class="yaml-key">"estimated_complexity"</span>: <span class="yaml-str">"high"</span>,
+<span class="ln">22</span>  <span class="yaml-key">"owner_id"</span>: <span class="yaml-str">"team-backend"</span>,
+<span class="ln">23</span>  <span class="yaml-key">"max_steps"</span>: <span class="yaml-val">50</span>,
+<span class="ln">24</span>  <span class="yaml-key">"parameters"</span>: {
+<span class="ln">25</span>    <span class="yaml-key">"algorithm"</span>: <span class="yaml-str">"RS256"</span>,
+<span class="ln">26</span>    <span class="yaml-key">"token_expiry"</span>: <span class="yaml-val">3600</span>
+<span class="ln">27</span>  },
+<span class="ln">28</span>  <span class="yaml-key">"description"</span>: <span class="yaml-str">"## Description\nAdd JWT-based authentication to the FastAPI gateway. Tokens\nshould use RS256 signing with 1-hour expiry.\n\n## Acceptance Criteria\n- [ ] POST /auth/login returns signed JWT\n- [ ] Protected endpoints return 401 without valid token\n- [ ] Token refresh endpoint implemented\n- [ ] Unit tests for auth middleware"</span>
+<span class="ln">29</span>}</pre>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="lined-code">
       <div class="code-header">
         <span data-i18n="examples.ex2">EXAMPLE 2 -- BUGFIX TASK</span>
-        <span>hotfix-null-ref.task.md</span>
+        <span>hotfix-null-ref.task.md / hotfix-null-ref.task.json</span>
       </div>
-      <div class="code-block-wrapper">
-        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <div class="format-tabs">
+        <div class="tab-header">
+          <button type="button" class="tab-btn active" onclick="switchTab(this, 'md')">.task.md</button>
+          <button type="button" class="tab-btn" onclick="switchTab(this, 'json')">.task.json</button>
+        </div>
+        <div class="tab-content active" data-tab="md">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Fix NullReference in task claim under concurrent load</span>
 <span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">critical</span>
@@ -375,16 +423,44 @@
 <span class="ln">21</span><span class="md-body">1. Submit 10 tasks concurrently</span>
 <span class="ln">22</span><span class="md-body">2. Claim all from 5 parallel agents</span>
 <span class="ln">23</span><span class="md-body">3. Race condition on atomic_claim</span></pre>
+          </div>
+        </div>
+        <div class="tab-content" data-tab="json">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre><span class="ln"> 1</span>{
+<span class="ln"> 2</span>  <span class="yaml-key">"title"</span>: <span class="yaml-str">"Fix NullReference in task claim under concurrent load"</span>,
+<span class="ln"> 3</span>  <span class="yaml-key">"priority"</span>: <span class="yaml-str">"critical"</span>,
+<span class="ln"> 4</span>  <span class="yaml-key">"tags"</span>: [
+<span class="ln"> 5</span>    <span class="yaml-str">"bugfix"</span>,
+<span class="ln"> 6</span>    <span class="yaml-str">"production"</span>,
+<span class="ln"> 7</span>    <span class="yaml-str">"concurrency"</span>
+<span class="ln"> 8</span>  ],
+<span class="ln"> 9</span>  <span class="yaml-key">"estimated_complexity"</span>: <span class="yaml-str">"medium"</span>,
+<span class="ln">10</span>  <span class="yaml-key">"labels"</span>: {
+<span class="ln">11</span>    <span class="yaml-key">"severity"</span>: <span class="yaml-str">"P0"</span>,
+<span class="ln">12</span>    <span class="yaml-key">"environment"</span>: <span class="yaml-str">"production"</span>
+<span class="ln">13</span>  },
+<span class="ln">14</span>  <span class="yaml-key">"description"</span>: <span class="yaml-str">"## Error Context\n```\nTypeError: 'NoneType' object has no attribute 'status'\n  at arktower/core/task_service.py:218\n```\n\n## Steps to Reproduce\n1. Submit 10 tasks concurrently\n2. Claim all from 5 parallel agents\n3. Race condition on atomic_claim"</span>
+<span class="ln">15</span>}</pre>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="lined-code">
       <div class="code-header">
         <span data-i18n="examples.ex3">EXAMPLE 3 -- RESEARCH TASK</span>
-        <span>dist-scheduling-survey.task.md</span>
+        <span>dist-scheduling-survey.task.md / dist-scheduling-survey.task.json</span>
       </div>
-      <div class="code-block-wrapper">
-        <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <div class="format-tabs">
+        <div class="tab-header">
+          <button type="button" class="tab-btn active" onclick="switchTab(this, 'md')">.task.md</button>
+          <button type="button" class="tab-btn" onclick="switchTab(this, 'json')">.task.json</button>
+        </div>
+        <div class="tab-content active" data-tab="md">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
       <pre><span class="ln"> 1</span><span class="yaml-key">---</span>
 <span class="ln"> 2</span><span class="yaml-key">title:</span> <span class="yaml-str">Survey distributed task scheduling strategies</span>
 <span class="ln"> 3</span><span class="yaml-key">priority:</span> <span class="yaml-val">medium</span>
@@ -412,6 +488,35 @@
 <span class="ln">25</span><span class="md-body">- [ ] Comparison matrix of 4+ strategies</span>
 <span class="ln">26</span><span class="md-body">- [ ] Recommendation with trade-off analysis</span>
 <span class="ln">27</span><span class="md-body">- [ ] Prototype implementation sketch</span></pre>
+          </div>
+        </div>
+        <div class="tab-content" data-tab="json">
+          <div class="code-block-wrapper">
+            <button type="button" class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre><span class="ln"> 1</span>{
+<span class="ln"> 2</span>  <span class="yaml-key">"title"</span>: <span class="yaml-str">"Survey distributed task scheduling strategies"</span>,
+<span class="ln"> 3</span>  <span class="yaml-key">"priority"</span>: <span class="yaml-str">"medium"</span>,
+<span class="ln"> 4</span>  <span class="yaml-key">"tags"</span>: [
+<span class="ln"> 5</span>    <span class="yaml-str">"research"</span>,
+<span class="ln"> 6</span>    <span class="yaml-str">"architecture"</span>,
+<span class="ln"> 7</span>    <span class="yaml-str">"scheduling"</span>
+<span class="ln"> 8</span>  ],
+<span class="ln"> 9</span>  <span class="yaml-key">"capabilities"</span>: [
+<span class="ln">10</span>    <span class="yaml-str">"research"</span>,
+<span class="ln">11</span>    <span class="yaml-str">"distributed-systems"</span>
+<span class="ln">12</span>  ],
+<span class="ln">13</span>  <span class="yaml-key">"estimated_complexity"</span>: <span class="yaml-str">"high"</span>,
+<span class="ln">14</span>  <span class="yaml-key">"parameters"</span>: {
+<span class="ln">15</span>    <span class="yaml-key">"scope"</span>: <span class="yaml-str">"multi-agent task dispatch"</span>,
+<span class="ln">16</span>    <span class="yaml-key">"context_refs"</span>: [
+<span class="ln">17</span>      <span class="yaml-str">"doc_auto/architecture.md"</span>,
+<span class="ln">18</span>      <span class="yaml-str">"arktower/core/task_service.py"</span>
+<span class="ln">19</span>    ]
+<span class="ln">20</span>  },
+<span class="ln">21</span>  <span class="yaml-key">"description"</span>: <span class="yaml-str">"## Objective\nEvaluate scheduling strategies for multi-agent task pools:\npriority queues, capability-weighted dispatch, work-stealing,\nand fair-share scheduling.\n\n## Deliverables\n- [ ] Comparison matrix of 4+ strategies\n- [ ] Recommendation with trade-off analysis\n- [ ] Prototype implementation sketch"</span>
+<span class="ln">22</span>}</pre>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -538,6 +643,14 @@
 </footer>
 
 <script>
+function switchTab(btn, type) {
+  var tabs = btn.closest('.format-tabs');
+  tabs.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  tabs.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  tabs.querySelector('[data-tab="' + type + '"]').classList.add('active');
+}
+
 function copyCode(btn) {
   var block = btn.closest('.code-block-wrapper').querySelector('pre, code');
   if (!block) {
@@ -643,7 +756,7 @@ function copyCode(btn) {
     'states.th.to': { en: 'To State', zh: '\u76EE\u6807\u72B6\u6001' },
     'examples.label': { en: 'SPEC.004 -- EXEMPLARS', zh: 'SPEC.004 -- \u793A\u4F8B' },
     'examples.title': { en: '[TASK EXAMPLES]', zh: '[\u4EFB\u52A1\u793A\u4F8B]' },
-    'examples.desc': { en: 'Three complete .task.md files demonstrating the format for different task types.', zh: '\u4E09\u4E2A\u5B8C\u6574\u7684 .task.md \u6587\u4EF6\uFF0C\u5C55\u793A\u4E0D\u540C\u4EFB\u52A1\u7C7B\u578B\u7684\u683C\u5F0F\u3002' },
+    'examples.desc': { en: 'Three complete task examples in both .task.md and .task.json, demonstrating the format for different task types.', zh: '\u4E09\u4E2A\u5B8C\u6574\u7684\u4EFB\u52A1\u793A\u4F8B\uFF08\u540C\u65F6\u63D0\u4F9B .task.md \u4E0E .task.json\uFF09\uFF0C\u5C55\u793A\u4E0D\u540C\u4EFB\u52A1\u7C7B\u578B\u7684\u683C\u5F0F\u3002' },
     'examples.ex1': { en: 'EXAMPLE 1 -- FEATURE TASK', zh: '\u793A\u4F8B 1 -- \u529F\u80FD\u4EFB\u52A1' },
     'examples.ex2': { en: 'EXAMPLE 2 -- BUGFIX TASK', zh: '\u793A\u4F8B 2 -- \u4FEE\u590D\u4EFB\u52A1' },
     'examples.ex3': { en: 'EXAMPLE 3 -- RESEARCH TASK', zh: '\u793A\u4F8B 3 -- \u7814\u7A76\u4EFB\u52A1' },

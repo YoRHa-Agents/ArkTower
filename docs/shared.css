@@ -997,6 +997,50 @@ details .detail-content {
 .lined-code .yaml-str { color: var(--text); }
 .lined-code .md-body { color: var(--text-muted); }
 
+/* -- Format spec tabs (.task.md / .task.json) -- */
+.format-tabs {
+  margin: 16px 0;
+}
+
+.tab-header {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  color: var(--text-dim);
+  font-family: 'Rajdhani', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-card);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 /* -- Two-column layout -- */
 .two-col {
   display: grid;
