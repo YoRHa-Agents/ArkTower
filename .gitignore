@@ -1,13 +1,28 @@
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
+*.egg
 dist/
 build/
-*.db
+
+# Test / lint caches
 .coverage
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-*.egg
-.local/
+
+# IDE / editor
+.cursor/
+
+# Runtime data
+.nicegui/
+*.db
+
+# Environment
 .env
+
+# Local workspace (jobs, benchmarks, tasks)
+.local/
+.benchmarks/
+devola-flow/
