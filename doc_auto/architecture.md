@@ -23,8 +23,8 @@ ArkTower is an agent-oriented task pool system built with Python 3.11+. It forma
 
 ## Module Map
 
-- `arktower/core/` — Domain models (`Task` with agent capabilities, `TaskStatus`, `Trigger`), state machine (15 triggers, 10 states), event bus, task service facade, task normalizer
-- `arktower/store/` — `TaskRepository` Protocol, `SqliteTaskRepository` (CRUD, FTS5, atomic claim), migration runner (3 migrations)
+- `arktower/core/` — Domain models (`Task` with 42 fields incl. enriched agent-oriented fields, `TaskStatus`, `Trigger`), state machine (15 triggers, 10 states), event bus, task service facade, task normalizer
+- `arktower/store/` — `TaskRepository` Protocol, `SqliteTaskRepository` (CRUD, FTS5, atomic claim), migration runner (4 migrations)
 - `arktower/api/` — FastAPI app factory, REST routes (`/api/v1/*` + `/api/v1/health`), WebSocket manager
 - `arktower/mcp/` — MCP server with 12 tools, 1 resource, 2 prompts. Stdio transport for Cursor
 - `arktower/cli/` — Typer CLI: `task`, `pool`, `server`, `eval` subcommands
@@ -42,6 +42,16 @@ All transitions are validated by the `StateMachine` class and recorded as `TaskE
 ## Agent Capability Matching
 
 Tasks include `capabilities`, `required_tools`, and `estimated_complexity` fields. `TaskService.get_next_task_for_agent(capabilities)` matches queued tasks to agent capabilities.
+
+## Enriched Task Fields (DevolaFlow-derived)
+
+Six field groups added for agent-oriented dispatch:
+- **Typing & Classification**: `task_type` (feature/bugfix/refactor/...), `kind` (task/subtask/workflow)
+- **Execution Constraints**: `timeout_seconds`, `max_retries`, `deadline`, `budget_tokens`
+- **Input/Output Contracts**: `input_schema`, `output_schema`, `acceptance_criteria`, `constraints`
+- **Context References**: `context_refs` (file/url/task/snippet refs), `subtask_ids`
+- **Quality & Metrics**: `quality_thresholds`, `estimated_effort_minutes`
+- **Agent Interaction**: `agent_instructions`, `preferred_agent_type`, `retry_count`
 
 ## Self-Evaluation System
 
@@ -62,7 +72,7 @@ Tasks include `capabilities`, `required_tools`, and `estimated_complexity` field
 
 ## Test Coverage
 
-293 tests, 71%+ overall coverage. Core modules at 96-100%.
+301 tests, 71%+ overall coverage. Core modules at 96-100%.
 
 ## Integration
 
@@ -75,4 +85,4 @@ Tasks include `capabilities`, `required_tools`, and `estimated_complexity` field
 - `docs/demo.html` — Interactive client-side demo (task pool simulation, lifecycle controls, pre-analysis)
 - `docs/docs.html` — Documentation hub (architecture, API reference, CLI, evaluation, configuration)
 
-> Last modified: 2026-04-14T06:20:00Z (docs pages added)
+> Last modified: 2026-04-14T22:00:00Z (enriched task fields added)

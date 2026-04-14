@@ -122,6 +122,35 @@
         <tr><td><code>updated_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.updated_at">ISO 8601 last-update timestamp</td></tr>
         <tr><td><code>started_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.started_at">When task entered <code>in_progress</code></td></tr>
         <tr><td><code>completed_at</code></td><td>datetime</td><td>auto</td><td data-i18n="fields.completed_at">When task reached a terminal state</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Task Typing &amp; Classification</td></tr>
+        <tr><td><code>task_type</code></td><td>string</td><td>no</td><td><code>feature</code> | <code>bugfix</code> | <code>refactor</code> | <code>research</code> | <code>review</code> | <code>test</code> | <code>design</code> | <code>benchmark</code></td></tr>
+        <tr><td><code>kind</code></td><td>string</td><td>no</td><td>Hierarchy kind: <code>task</code> | <code>subtask</code> | <code>workflow</code> (default: <code>task</code>)</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Execution Constraints</td></tr>
+        <tr><td><code>timeout_seconds</code></td><td>integer</td><td>no</td><td>Hard timeout for agent execution (seconds)</td></tr>
+        <tr><td><code>max_retries</code></td><td>integer</td><td>no</td><td>Retries allowed on failure (default: 0)</td></tr>
+        <tr><td><code>deadline</code></td><td>datetime</td><td>no</td><td>Absolute deadline (ISO 8601)</td></tr>
+        <tr><td><code>budget_tokens</code></td><td>integer</td><td>no</td><td>Token budget cap for agent execution</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Input/Output Contracts</td></tr>
+        <tr><td><code>input_schema</code></td><td>object</td><td>no</td><td>JSON Schema defining expected inputs (default: <code>{}</code>)</td></tr>
+        <tr><td><code>output_schema</code></td><td>object</td><td>no</td><td>JSON Schema defining expected output (default: <code>{}</code>)</td></tr>
+        <tr><td><code>acceptance_criteria</code></td><td>array[string]</td><td>no</td><td>Testable done-when conditions</td></tr>
+        <tr><td><code>constraints</code></td><td>array[string]</td><td>no</td><td>Non-negotiable boundaries for task execution</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Context References</td></tr>
+        <tr><td><code>context_refs</code></td><td>array[object]</td><td>no</td><td>References: each <code>{"type": "file|url|task|snippet", "path"/"url"/"id": "...", "description": "..."}</code></td></tr>
+        <tr><td><code>subtask_ids</code></td><td>array[string]</td><td>no</td><td>Child task IDs for hierarchical decomposition</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Quality &amp; Metrics</td></tr>
+        <tr><td><code>quality_thresholds</code></td><td>object</td><td>no</td><td>Quality gates, e.g. <code>{"coverage_pct": 80, "quality_score": 85}</code></td></tr>
+        <tr><td><code>estimated_effort_minutes</code></td><td>integer</td><td>no</td><td>Estimated effort in minutes</td></tr>
+
+        <tr><td colspan="4" style="background:var(--bg-code);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:12px 16px;">Agent Interaction</td></tr>
+        <tr><td><code>agent_instructions</code></td><td>string</td><td>no</td><td>Specific instructions for the claiming agent</td></tr>
+        <tr><td><code>preferred_agent_type</code></td><td>string</td><td>no</td><td>Preferred agent type (e.g. <code>code</code>, <code>research</code>, <code>review</code>)</td></tr>
+        <tr><td><code>retry_count</code></td><td>integer</td><td>auto</td><td>Current retry counter (default: 0)</td></tr>
       </tbody>
     </table>
   </div>
@@ -319,35 +348,66 @@
 <span class="ln"> 3</span><span class="yaml-key">title:</span> <span class="yaml-str">Implement JWT Authentication for API Gateway</span>
 <span class="ln"> 4</span><span class="yaml-key">status:</span> <span class="yaml-val">queued</span>
 <span class="ln"> 5</span><span class="yaml-key">priority:</span> <span class="yaml-val">high</span>
-<span class="ln"> 6</span><span class="yaml-key">tags:</span>
-<span class="ln"> 7</span>  <span class="yaml-val">- python</span>
-<span class="ln"> 8</span>  <span class="yaml-val">- api</span>
-<span class="ln"> 9</span>  <span class="yaml-val">- auth</span>
-<span class="ln">10</span>  <span class="yaml-val">- security</span>
-<span class="ln">11</span><span class="yaml-key">capabilities:</span>
-<span class="ln">12</span>  <span class="yaml-val">- python</span>
-<span class="ln">13</span>  <span class="yaml-val">- fastapi</span>
-<span class="ln">14</span>  <span class="yaml-val">- jwt</span>
-<span class="ln">15</span><span class="yaml-key">required_tools:</span>
-<span class="ln">16</span>  <span class="yaml-val">- create_task</span>
-<span class="ln">17</span>  <span class="yaml-val">- complete_task</span>
-<span class="ln">18</span><span class="yaml-key">estimated_complexity:</span> <span class="yaml-val">high</span>
-<span class="ln">19</span><span class="yaml-key">owner_id:</span> <span class="yaml-val">team-backend</span>
-<span class="ln">20</span><span class="yaml-key">max_steps:</span> <span class="yaml-val">50</span>
-<span class="ln">21</span><span class="yaml-key">parameters:</span>
-<span class="ln">22</span>  <span class="yaml-key">algorithm:</span> <span class="yaml-val">RS256</span>
-<span class="ln">23</span>  <span class="yaml-key">token_expiry:</span> <span class="yaml-val">3600</span>
-<span class="ln">24</span><span class="yaml-key">---</span>
-<span class="ln">25</span>
-<span class="ln">26</span><span class="md-body">## Description</span>
-<span class="ln">27</span><span class="md-body">Add JWT-based authentication to the FastAPI gateway. Tokens</span>
-<span class="ln">28</span><span class="md-body">should use RS256 signing with 1-hour expiry.</span>
-<span class="ln">29</span>
-<span class="ln">30</span><span class="md-body">## Acceptance Criteria</span>
-<span class="ln">31</span><span class="md-body">- [ ] POST /auth/login returns signed JWT</span>
-<span class="ln">32</span><span class="md-body">- [ ] Protected endpoints return 401 without valid token</span>
-<span class="ln">33</span><span class="md-body">- [ ] Token refresh endpoint implemented</span>
-<span class="ln">34</span><span class="md-body">- [ ] Unit tests for auth middleware</span></pre>
+<span class="ln"> 6</span><span class="yaml-key">task_type:</span> <span class="yaml-val">feature</span>
+<span class="ln"> 7</span><span class="yaml-key">kind:</span> <span class="yaml-val">task</span>
+<span class="ln"> 8</span><span class="yaml-key">tags:</span>
+<span class="ln"> 9</span>  <span class="yaml-val">- python</span>
+<span class="ln">10</span>  <span class="yaml-val">- api</span>
+<span class="ln">11</span>  <span class="yaml-val">- auth</span>
+<span class="ln">12</span>  <span class="yaml-val">- security</span>
+<span class="ln">13</span><span class="yaml-key">capabilities:</span>
+<span class="ln">14</span>  <span class="yaml-val">- python</span>
+<span class="ln">15</span>  <span class="yaml-val">- fastapi</span>
+<span class="ln">16</span>  <span class="yaml-val">- jwt</span>
+<span class="ln">17</span><span class="yaml-key">required_tools:</span>
+<span class="ln">18</span>  <span class="yaml-val">- create_task</span>
+<span class="ln">19</span>  <span class="yaml-val">- complete_task</span>
+<span class="ln">20</span><span class="yaml-key">estimated_complexity:</span> <span class="yaml-val">high</span>
+<span class="ln">21</span><span class="yaml-key">owner_id:</span> <span class="yaml-val">team-backend</span>
+<span class="ln">22</span><span class="yaml-key">max_steps:</span> <span class="yaml-val">50</span>
+<span class="ln">23</span><span class="yaml-key">timeout_seconds:</span> <span class="yaml-val">7200</span>
+<span class="ln">24</span><span class="yaml-key">estimated_effort_minutes:</span> <span class="yaml-val">120</span>
+<span class="ln">25</span><span class="yaml-key">preferred_agent_type:</span> <span class="yaml-val">code</span>
+<span class="ln">26</span><span class="yaml-key">parameters:</span>
+<span class="ln">27</span>  <span class="yaml-key">algorithm:</span> <span class="yaml-val">RS256</span>
+<span class="ln">28</span>  <span class="yaml-key">token_expiry:</span> <span class="yaml-val">3600</span>
+<span class="ln">29</span><span class="yaml-key">acceptance_criteria:</span>
+<span class="ln">30</span>  <span class="yaml-val">- POST /auth/login returns signed JWT</span>
+<span class="ln">31</span>  <span class="yaml-val">- Protected endpoints return 401 without valid token</span>
+<span class="ln">32</span>  <span class="yaml-val">- Token refresh endpoint implemented</span>
+<span class="ln">33</span>  <span class="yaml-val">- Unit tests for auth middleware with &gt;80% coverage</span>
+<span class="ln">34</span><span class="yaml-key">constraints:</span>
+<span class="ln">35</span>  <span class="yaml-val">- Must use RS256 signing (no symmetric keys)</span>
+<span class="ln">36</span>  <span class="yaml-val">- Backward compatible with existing session auth</span>
+<span class="ln">37</span><span class="yaml-key">input_schema:</span>
+<span class="ln">38</span>  <span class="yaml-key">type:</span> <span class="yaml-val">object</span>
+<span class="ln">39</span>  <span class="yaml-key">properties:</span>
+<span class="ln">40</span>    <span class="yaml-key">algorithm:</span> <span class="yaml-val">{type: string}</span>
+<span class="ln">41</span>    <span class="yaml-key">token_expiry:</span> <span class="yaml-val">{type: integer}</span>
+<span class="ln">42</span><span class="yaml-key">output_schema:</span>
+<span class="ln">43</span>  <span class="yaml-key">type:</span> <span class="yaml-val">object</span>
+<span class="ln">44</span>  <span class="yaml-key">properties:</span>
+<span class="ln">45</span>    <span class="yaml-key">endpoints_added:</span> <span class="yaml-val">{type: array, items: {type: string}}</span>
+<span class="ln">46</span>    <span class="yaml-key">test_coverage:</span> <span class="yaml-val">{type: number}</span>
+<span class="ln">47</span><span class="yaml-key">context_refs:</span>
+<span class="ln">48</span>  <span class="yaml-val">- type: file</span>
+<span class="ln">49</span>    <span class="yaml-key">path:</span> <span class="yaml-val">arktower/api/rest_routes.py</span>
+<span class="ln">50</span>    <span class="yaml-key">description:</span> <span class="yaml-val">Existing API routes to protect</span>
+<span class="ln">51</span>  <span class="yaml-val">- type: url</span>
+<span class="ln">52</span>    <span class="yaml-key">url:</span> <span class="yaml-val">https://pyjwt.readthedocs.io/en/stable/</span>
+<span class="ln">53</span>    <span class="yaml-key">description:</span> <span class="yaml-val">PyJWT library documentation</span>
+<span class="ln">54</span>  <span class="yaml-val">- type: file</span>
+<span class="ln">55</span>    <span class="yaml-key">path:</span> <span class="yaml-val">doc_auto/architecture.md</span>
+<span class="ln">56</span>    <span class="yaml-key">description:</span> <span class="yaml-val">System architecture reference</span>
+<span class="ln">57</span><span class="yaml-key">quality_thresholds:</span>
+<span class="ln">58</span>  <span class="yaml-key">coverage_pct:</span> <span class="yaml-val">80</span>
+<span class="ln">59</span>  <span class="yaml-key">quality_score:</span> <span class="yaml-val">85</span>
+<span class="ln">60</span>  <span class="yaml-key">max_blocker_findings:</span> <span class="yaml-val">0</span>
+<span class="ln">61</span><span class="yaml-key">---</span>
+<span class="ln">62</span>
+<span class="ln">63</span><span class="md-body">## Description</span>
+<span class="ln">64</span><span class="md-body">Add JWT-based authentication to the FastAPI gateway. Tokens</span>
+<span class="ln">65</span><span class="md-body">should use RS256 signing with 1-hour expiry.</span></pre>
           </div>
         </div>
         <div class="tab-content" data-tab="json">
@@ -358,30 +418,54 @@
 <span class="ln"> 3</span>  <span class="yaml-key">"title"</span>: <span class="yaml-str">"Implement JWT Authentication for API Gateway"</span>,
 <span class="ln"> 4</span>  <span class="yaml-key">"status"</span>: <span class="yaml-str">"queued"</span>,
 <span class="ln"> 5</span>  <span class="yaml-key">"priority"</span>: <span class="yaml-str">"high"</span>,
-<span class="ln"> 6</span>  <span class="yaml-key">"tags"</span>: [
-<span class="ln"> 7</span>    <span class="yaml-str">"python"</span>,
-<span class="ln"> 8</span>    <span class="yaml-str">"api"</span>,
-<span class="ln"> 9</span>    <span class="yaml-str">"auth"</span>,
-<span class="ln">10</span>    <span class="yaml-str">"security"</span>
-<span class="ln">11</span>  ],
-<span class="ln">12</span>  <span class="yaml-key">"capabilities"</span>: [
-<span class="ln">13</span>    <span class="yaml-str">"python"</span>,
-<span class="ln">14</span>    <span class="yaml-str">"fastapi"</span>,
-<span class="ln">15</span>    <span class="yaml-str">"jwt"</span>
-<span class="ln">16</span>  ],
-<span class="ln">17</span>  <span class="yaml-key">"required_tools"</span>: [
-<span class="ln">18</span>    <span class="yaml-str">"create_task"</span>,
-<span class="ln">19</span>    <span class="yaml-str">"complete_task"</span>
-<span class="ln">20</span>  ],
-<span class="ln">21</span>  <span class="yaml-key">"estimated_complexity"</span>: <span class="yaml-str">"high"</span>,
-<span class="ln">22</span>  <span class="yaml-key">"owner_id"</span>: <span class="yaml-str">"team-backend"</span>,
-<span class="ln">23</span>  <span class="yaml-key">"max_steps"</span>: <span class="yaml-val">50</span>,
-<span class="ln">24</span>  <span class="yaml-key">"parameters"</span>: {
-<span class="ln">25</span>    <span class="yaml-key">"algorithm"</span>: <span class="yaml-str">"RS256"</span>,
-<span class="ln">26</span>    <span class="yaml-key">"token_expiry"</span>: <span class="yaml-val">3600</span>
-<span class="ln">27</span>  },
-<span class="ln">28</span>  <span class="yaml-key">"description"</span>: <span class="yaml-str">"## Description\nAdd JWT-based authentication to the FastAPI gateway. Tokens\nshould use RS256 signing with 1-hour expiry.\n\n## Acceptance Criteria\n- [ ] POST /auth/login returns signed JWT\n- [ ] Protected endpoints return 401 without valid token\n- [ ] Token refresh endpoint implemented\n- [ ] Unit tests for auth middleware"</span>
-<span class="ln">29</span>}</pre>
+<span class="ln"> 6</span>  <span class="yaml-key">"task_type"</span>: <span class="yaml-str">"feature"</span>,
+<span class="ln"> 7</span>  <span class="yaml-key">"kind"</span>: <span class="yaml-str">"task"</span>,
+<span class="ln"> 8</span>  <span class="yaml-key">"tags"</span>: [<span class="yaml-str">"python"</span>, <span class="yaml-str">"api"</span>, <span class="yaml-str">"auth"</span>, <span class="yaml-str">"security"</span>],
+<span class="ln"> 9</span>  <span class="yaml-key">"capabilities"</span>: [<span class="yaml-str">"python"</span>, <span class="yaml-str">"fastapi"</span>, <span class="yaml-str">"jwt"</span>],
+<span class="ln">10</span>  <span class="yaml-key">"required_tools"</span>: [<span class="yaml-str">"create_task"</span>, <span class="yaml-str">"complete_task"</span>],
+<span class="ln">11</span>  <span class="yaml-key">"estimated_complexity"</span>: <span class="yaml-str">"high"</span>,
+<span class="ln">12</span>  <span class="yaml-key">"owner_id"</span>: <span class="yaml-str">"team-backend"</span>,
+<span class="ln">13</span>  <span class="yaml-key">"max_steps"</span>: <span class="yaml-val">50</span>,
+<span class="ln">14</span>  <span class="yaml-key">"timeout_seconds"</span>: <span class="yaml-val">7200</span>,
+<span class="ln">15</span>  <span class="yaml-key">"estimated_effort_minutes"</span>: <span class="yaml-val">120</span>,
+<span class="ln">16</span>  <span class="yaml-key">"preferred_agent_type"</span>: <span class="yaml-str">"code"</span>,
+<span class="ln">17</span>  <span class="yaml-key">"parameters"</span>: {<span class="yaml-key">"algorithm"</span>: <span class="yaml-str">"RS256"</span>, <span class="yaml-key">"token_expiry"</span>: <span class="yaml-val">3600</span>},
+<span class="ln">18</span>  <span class="yaml-key">"acceptance_criteria"</span>: [
+<span class="ln">19</span>    <span class="yaml-str">"POST /auth/login returns signed JWT"</span>,
+<span class="ln">20</span>    <span class="yaml-str">"Protected endpoints return 401 without valid token"</span>,
+<span class="ln">21</span>    <span class="yaml-str">"Token refresh endpoint implemented"</span>,
+<span class="ln">22</span>    <span class="yaml-str">"Unit tests for auth middleware with &gt;80% coverage"</span>
+<span class="ln">23</span>  ],
+<span class="ln">24</span>  <span class="yaml-key">"constraints"</span>: [
+<span class="ln">25</span>    <span class="yaml-str">"Must use RS256 signing (no symmetric keys)"</span>,
+<span class="ln">26</span>    <span class="yaml-str">"Backward compatible with existing session auth"</span>
+<span class="ln">27</span>  ],
+<span class="ln">28</span>  <span class="yaml-key">"input_schema"</span>: {
+<span class="ln">29</span>    <span class="yaml-key">"type"</span>: <span class="yaml-str">"object"</span>,
+<span class="ln">30</span>    <span class="yaml-key">"properties"</span>: {
+<span class="ln">31</span>      <span class="yaml-key">"algorithm"</span>: {<span class="yaml-key">"type"</span>: <span class="yaml-str">"string"</span>},
+<span class="ln">32</span>      <span class="yaml-key">"token_expiry"</span>: {<span class="yaml-key">"type"</span>: <span class="yaml-str">"integer"</span>}
+<span class="ln">33</span>    }
+<span class="ln">34</span>  },
+<span class="ln">35</span>  <span class="yaml-key">"output_schema"</span>: {
+<span class="ln">36</span>    <span class="yaml-key">"type"</span>: <span class="yaml-str">"object"</span>,
+<span class="ln">37</span>    <span class="yaml-key">"properties"</span>: {
+<span class="ln">38</span>      <span class="yaml-key">"endpoints_added"</span>: {<span class="yaml-key">"type"</span>: <span class="yaml-str">"array"</span>, <span class="yaml-key">"items"</span>: {<span class="yaml-key">"type"</span>: <span class="yaml-str">"string"</span>}},
+<span class="ln">39</span>      <span class="yaml-key">"test_coverage"</span>: {<span class="yaml-key">"type"</span>: <span class="yaml-str">"number"</span>}
+<span class="ln">40</span>    }
+<span class="ln">41</span>  },
+<span class="ln">42</span>  <span class="yaml-key">"context_refs"</span>: [
+<span class="ln">43</span>    {<span class="yaml-key">"type"</span>: <span class="yaml-str">"file"</span>, <span class="yaml-key">"path"</span>: <span class="yaml-str">"arktower/api/rest_routes.py"</span>, <span class="yaml-key">"description"</span>: <span class="yaml-str">"Existing API routes"</span>},
+<span class="ln">44</span>    {<span class="yaml-key">"type"</span>: <span class="yaml-str">"url"</span>, <span class="yaml-key">"url"</span>: <span class="yaml-str">"https://pyjwt.readthedocs.io/en/stable/"</span>, <span class="yaml-key">"description"</span>: <span class="yaml-str">"PyJWT docs"</span>},
+<span class="ln">45</span>    {<span class="yaml-key">"type"</span>: <span class="yaml-str">"file"</span>, <span class="yaml-key">"path"</span>: <span class="yaml-str">"doc_auto/architecture.md"</span>, <span class="yaml-key">"description"</span>: <span class="yaml-str">"Architecture ref"</span>}
+<span class="ln">46</span>  ],
+<span class="ln">47</span>  <span class="yaml-key">"quality_thresholds"</span>: {
+<span class="ln">48</span>    <span class="yaml-key">"coverage_pct"</span>: <span class="yaml-val">80</span>,
+<span class="ln">49</span>    <span class="yaml-key">"quality_score"</span>: <span class="yaml-val">85</span>,
+<span class="ln">50</span>    <span class="yaml-key">"max_blocker_findings"</span>: <span class="yaml-val">0</span>
+<span class="ln">51</span>  },
+<span class="ln">52</span>  <span class="yaml-key">"description"</span>: <span class="yaml-str">"## Description\nAdd JWT-based authentication to the FastAPI gateway. Tokens\nshould use RS256 signing with 1-hour expiry."</span>
+<span class="ln">53</span>}</pre>
           </div>
         </div>
       </div>
@@ -646,6 +730,82 @@
     "completed_at": {
       "type": ["string", "null"],
       "format": "date-time"
+    },
+    "task_type": {
+      "type": ["string", "null"],
+      "enum": ["feature", "bugfix", "refactor", "research", "review", "test", "design", "benchmark", null]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["task", "subtask", "workflow"],
+      "default": "task"
+    },
+    "timeout_seconds": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "max_retries": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "deadline": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "budget_tokens": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "input_schema": {
+      "type": "object"
+    },
+    "output_schema": {
+      "type": "object"
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "context_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["file", "url", "task", "snippet"] },
+          "path": { "type": "string" },
+          "url": { "type": "string" },
+          "id": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["type"]
+      }
+    },
+    "subtask_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "quality_thresholds": {
+      "type": "object"
+    },
+    "estimated_effort_minutes": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "agent_instructions": {
+      "type": ["string", "null"]
+    },
+    "preferred_agent_type": {
+      "type": ["string", "null"]
+    },
+    "retry_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
     }
   },
   "additionalProperties": false
@@ -690,6 +850,20 @@
              5. Maps use nested YAML key-value syntax</p>
           <span class="feature-tag">DESERIALIZE &rarr; EMIT</span>
         </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px;">
+      <div class="section-label" style="margin-bottom: 12px;">COMPLEX FIELD SERIALIZATION</div>
+      <div class="feature-card">
+        <h3>Enriched Fields — Conversion Notes</h3>
+        <p>Complex fields introduced in the enriched schema follow these rules:<br>
+           <strong>acceptance_criteria, constraints, subtask_ids</strong> — JSON arrays in <span class="inline-code">.task.json</span>; YAML lists in <span class="inline-code">.task.md</span> frontmatter<br>
+           <strong>context_refs</strong> — JSON array of objects in <span class="inline-code">.task.json</span>; YAML list of maps in <span class="inline-code">.task.md</span><br>
+           <strong>input_schema, output_schema, quality_thresholds</strong> — JSON objects in <span class="inline-code">.task.json</span>; nested YAML maps in <span class="inline-code">.task.md</span><br>
+           <strong>deadline</strong> — ISO 8601 datetime string in both formats<br>
+           Empty collections (<span class="inline-code">[]</span>, <span class="inline-code">{}</span>) and zero-value defaults (<span class="inline-code">max_retries: 0</span>) MAY be omitted from <span class="inline-code">.task.md</span> frontmatter</p>
+        <span class="feature-tag">ENRICHED_FIELDS</span>
       </div>
     </div>
   </div>
